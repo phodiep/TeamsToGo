@@ -1,0 +1,474 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
+		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
+		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
+		1DF01F861A8068E6008F514C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F851A8068E6008F514C /* ViewController.m */; };
+		1DF01F891A8068E6008F514C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1DF01F871A8068E6008F514C /* Main.storyboard */; };
+		1DF01F8B1A8068E6008F514C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1DF01F8A1A8068E6008F514C /* Images.xcassets */; };
+		1DF01F8E1A8068E6008F514C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DF01F8C1A8068E6008F514C /* LaunchScreen.xib */; };
+		1DF01F9A1A8068E6008F514C /* TeamsToGoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F991A8068E6008F514C /* TeamsToGoTests.m */; };
+		1DF01FA71A806B45008F514C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 1DF01FA61A806B45008F514C /* .gitignore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1DF01F941A8068E6008F514C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1DF01F6F1A8068E6008F514C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1DF01F761A8068E6008F514C;
+			remoteInfo = TeamsToGo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1DF01F7E1A8068E6008F514C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1DF01F7F1A8068E6008F514C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1DF01F821A8068E6008F514C /* TeamsToGo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TeamsToGo.xcdatamodel; sourceTree = "<group>"; };
+		1DF01F841A8068E6008F514C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		1DF01F851A8068E6008F514C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		1DF01F881A8068E6008F514C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1DF01F8A1A8068E6008F514C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1DF01F8D1A8068E6008F514C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		1DF01F931A8068E6008F514C /* TeamsToGoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TeamsToGoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF01F981A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1DF01F991A8068E6008F514C /* TeamsToGoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TeamsToGoTests.m; sourceTree = "<group>"; };
+		1DF01FA61A806B45008F514C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1DF01F741A8068E6008F514C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DF01F901A8068E6008F514C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1DF01F6E1A8068E6008F514C = {
+			isa = PBXGroup;
+			children = (
+				1DF01FA61A806B45008F514C /* .gitignore */,
+				1DF01F791A8068E6008F514C /* TeamsToGo */,
+				1DF01F961A8068E6008F514C /* TeamsToGoTests */,
+				1DF01F781A8068E6008F514C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1DF01F781A8068E6008F514C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1DF01F771A8068E6008F514C /* TeamsToGo.app */,
+				1DF01F931A8068E6008F514C /* TeamsToGoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1DF01F791A8068E6008F514C /* TeamsToGo */ = {
+			isa = PBXGroup;
+			children = (
+				1DF01FA51A806908008F514C /* Models */,
+				1DF01FA41A806902008F514C /* Views */,
+				1DF01FA31A8068F9008F514C /* Controllers */,
+				1DF01F7E1A8068E6008F514C /* AppDelegate.h */,
+				1DF01F7F1A8068E6008F514C /* AppDelegate.m */,
+				1DF01F841A8068E6008F514C /* ViewController.h */,
+				1DF01F851A8068E6008F514C /* ViewController.m */,
+				1DF01F871A8068E6008F514C /* Main.storyboard */,
+				1DF01F8A1A8068E6008F514C /* Images.xcassets */,
+				1DF01F8C1A8068E6008F514C /* LaunchScreen.xib */,
+				1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */,
+				1DF01F7A1A8068E6008F514C /* Supporting Files */,
+			);
+			path = TeamsToGo;
+			sourceTree = "<group>";
+		};
+		1DF01F7A1A8068E6008F514C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1DF01F7B1A8068E6008F514C /* Info.plist */,
+				1DF01F7C1A8068E6008F514C /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1DF01F961A8068E6008F514C /* TeamsToGoTests */ = {
+			isa = PBXGroup;
+			children = (
+				1DF01F991A8068E6008F514C /* TeamsToGoTests.m */,
+				1DF01F971A8068E6008F514C /* Supporting Files */,
+			);
+			path = TeamsToGoTests;
+			sourceTree = "<group>";
+		};
+		1DF01F971A8068E6008F514C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1DF01F981A8068E6008F514C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1DF01FA31A8068F9008F514C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		1DF01FA41A806902008F514C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		1DF01FA51A806908008F514C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1DF01F761A8068E6008F514C /* TeamsToGo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DF01F9D1A8068E6008F514C /* Build configuration list for PBXNativeTarget "TeamsToGo" */;
+			buildPhases = (
+				1DF01F731A8068E6008F514C /* Sources */,
+				1DF01F741A8068E6008F514C /* Frameworks */,
+				1DF01F751A8068E6008F514C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TeamsToGo;
+			productName = TeamsToGo;
+			productReference = 1DF01F771A8068E6008F514C /* TeamsToGo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1DF01F921A8068E6008F514C /* TeamsToGoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DF01FA01A8068E6008F514C /* Build configuration list for PBXNativeTarget "TeamsToGoTests" */;
+			buildPhases = (
+				1DF01F8F1A8068E6008F514C /* Sources */,
+				1DF01F901A8068E6008F514C /* Frameworks */,
+				1DF01F911A8068E6008F514C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1DF01F951A8068E6008F514C /* PBXTargetDependency */,
+			);
+			name = TeamsToGoTests;
+			productName = TeamsToGoTests;
+			productReference = 1DF01F931A8068E6008F514C /* TeamsToGoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1DF01F6F1A8068E6008F514C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Pho Diep";
+				TargetAttributes = {
+					1DF01F761A8068E6008F514C = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					1DF01F921A8068E6008F514C = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 1DF01F761A8068E6008F514C;
+					};
+				};
+			};
+			buildConfigurationList = 1DF01F721A8068E6008F514C /* Build configuration list for PBXProject "TeamsToGo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1DF01F6E1A8068E6008F514C;
+			productRefGroup = 1DF01F781A8068E6008F514C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1DF01F761A8068E6008F514C /* TeamsToGo */,
+				1DF01F921A8068E6008F514C /* TeamsToGoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1DF01F751A8068E6008F514C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DF01FA71A806B45008F514C /* .gitignore in Resources */,
+				1DF01F891A8068E6008F514C /* Main.storyboard in Resources */,
+				1DF01F8E1A8068E6008F514C /* LaunchScreen.xib in Resources */,
+				1DF01F8B1A8068E6008F514C /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DF01F911A8068E6008F514C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1DF01F731A8068E6008F514C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */,
+				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
+				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
+				1DF01F7D1A8068E6008F514C /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DF01F8F1A8068E6008F514C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DF01F9A1A8068E6008F514C /* TeamsToGoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1DF01F951A8068E6008F514C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1DF01F761A8068E6008F514C /* TeamsToGo */;
+			targetProxy = 1DF01F941A8068E6008F514C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1DF01F871A8068E6008F514C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DF01F881A8068E6008F514C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1DF01F8C1A8068E6008F514C /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DF01F8D1A8068E6008F514C /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DF01F9B1A8068E6008F514C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1DF01F9C1A8068E6008F514C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1DF01F9E1A8068E6008F514C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TeamsToGo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1DF01F9F1A8068E6008F514C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TeamsToGo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1DF01FA11A8068E6008F514C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TeamsToGoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TeamsToGo.app/TeamsToGo";
+			};
+			name = Debug;
+		};
+		1DF01FA21A8068E6008F514C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = TeamsToGoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TeamsToGo.app/TeamsToGo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DF01F721A8068E6008F514C /* Build configuration list for PBXProject "TeamsToGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DF01F9B1A8068E6008F514C /* Debug */,
+				1DF01F9C1A8068E6008F514C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DF01F9D1A8068E6008F514C /* Build configuration list for PBXNativeTarget "TeamsToGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DF01F9E1A8068E6008F514C /* Debug */,
+				1DF01F9F1A8068E6008F514C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1DF01FA01A8068E6008F514C /* Build configuration list for PBXNativeTarget "TeamsToGoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DF01FA11A8068E6008F514C /* Debug */,
+				1DF01FA21A8068E6008F514C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1DF01F821A8068E6008F514C /* TeamsToGo.xcdatamodel */,
+			);
+			currentVersion = 1DF01F821A8068E6008F514C /* TeamsToGo.xcdatamodel */;
+			path = TeamsToGo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 1DF01F6F1A8068E6008F514C /* Project object */;
+}
