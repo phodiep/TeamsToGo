@@ -20,6 +20,7 @@
 		1DF01FB11A807388008F514C /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB01A807388008F514C /* NetworkController.m */; };
 		1DF01FB41A807712008F514C /* Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB31A807712008F514C /* Hashes.m */; };
 		1DF01FB61A8077B2008F514C /* HashesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB51A8077B2008F514C /* HashesTest.m */; };
+		1DF01FB81A807F63008F514C /* NetworkControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB71A807F63008F514C /* NetworkControllerTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		1DF01FB21A807712008F514C /* Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hashes.h; sourceTree = "<group>"; };
 		1DF01FB31A807712008F514C /* Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hashes.m; sourceTree = "<group>"; };
 		1DF01FB51A8077B2008F514C /* HashesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HashesTest.m; sourceTree = "<group>"; };
+		1DF01FB71A807F63008F514C /* NetworkControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkControllerTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				1DF01F991A8068E6008F514C /* TeamsToGoTests.m */,
 				1DF01F971A8068E6008F514C /* Supporting Files */,
 				1DF01FB51A8077B2008F514C /* HashesTest.m */,
+				1DF01FB71A807F63008F514C /* NetworkControllerTest.m */,
 			);
 			path = TeamsToGoTests;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DF01FB81A807F63008F514C /* NetworkControllerTest.m in Sources */,
 				1DF01FB61A8077B2008F514C /* HashesTest.m in Sources */,
 				1DF01FAE1A806ED8008F514C /* ApiKeysTest.m in Sources */,
 				1DF01F9A1A8068E6008F514C /* TeamsToGoTests.m in Sources */,

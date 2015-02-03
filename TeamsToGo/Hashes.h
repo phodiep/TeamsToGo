@@ -10,7 +10,6 @@
 
 @interface Hashes : NSString
 
-//@property (nonatomic, readonly) NSString *sha1;
 - (NSString *)sha1:(NSString *)str;
 
 @end

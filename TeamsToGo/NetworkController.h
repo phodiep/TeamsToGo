@@ -10,4 +10,7 @@
 
 @interface NetworkController : NSObject
 
++ (instancetype)sharedInstance;
+- (NSString *)requestSignature:(NSString *)reqMethod methodBeingCalled:(NSString *)methodCall parameters:(NSArray *)parameters;
+
 @end
