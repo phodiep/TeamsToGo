@@ -16,6 +16,10 @@
 		1DF01F9A1A8068E6008F514C /* TeamsToGoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F991A8068E6008F514C /* TeamsToGoTests.m */; };
 		1DF01FA71A806B45008F514C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 1DF01FA61A806B45008F514C /* .gitignore */; };
 		1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FA91A806BD7008F514C /* ApiKeys.m */; };
+		1DF01FAE1A806ED8008F514C /* ApiKeysTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FAD1A806ED8008F514C /* ApiKeysTest.m */; };
+		1DF01FB11A807388008F514C /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB01A807388008F514C /* NetworkController.m */; };
+		1DF01FB41A807712008F514C /* Hashes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB31A807712008F514C /* Hashes.m */; };
+		1DF01FB61A8077B2008F514C /* HashesTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01FB51A8077B2008F514C /* HashesTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +49,12 @@
 		1DF01FA61A806B45008F514C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		1DF01FA81A806BD7008F514C /* ApiKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiKeys.h; sourceTree = "<group>"; };
 		1DF01FA91A806BD7008F514C /* ApiKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiKeys.m; sourceTree = "<group>"; };
+		1DF01FAD1A806ED8008F514C /* ApiKeysTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiKeysTest.m; sourceTree = "<group>"; };
+		1DF01FAF1A807388008F514C /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
+		1DF01FB01A807388008F514C /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkController.m; sourceTree = "<group>"; };
+		1DF01FB21A807712008F514C /* Hashes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hashes.h; sourceTree = "<group>"; };
+		1DF01FB31A807712008F514C /* Hashes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hashes.m; sourceTree = "<group>"; };
+		1DF01FB51A8077B2008F514C /* HashesTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HashesTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,8 +124,10 @@
 		1DF01F961A8068E6008F514C /* TeamsToGoTests */ = {
 			isa = PBXGroup;
 			children = (
+				1DF01FAD1A806ED8008F514C /* ApiKeysTest.m */,
 				1DF01F991A8068E6008F514C /* TeamsToGoTests.m */,
 				1DF01F971A8068E6008F514C /* Supporting Files */,
+				1DF01FB51A8077B2008F514C /* HashesTest.m */,
 			);
 			path = TeamsToGoTests;
 			sourceTree = "<group>";
@@ -131,6 +143,8 @@
 		1DF01FA31A8068F9008F514C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1DF01FAF1A807388008F514C /* NetworkController.h */,
+				1DF01FB01A807388008F514C /* NetworkController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -147,6 +161,8 @@
 			children = (
 				1DF01FA81A806BD7008F514C /* ApiKeys.h */,
 				1DF01FA91A806BD7008F514C /* ApiKeys.m */,
+				1DF01FB21A807712008F514C /* Hashes.h */,
+				1DF01FB31A807712008F514C /* Hashes.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -255,6 +271,8 @@
 				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
+				1DF01FB11A807388008F514C /* NetworkController.m in Sources */,
+				1DF01FB41A807712008F514C /* Hashes.m in Sources */,
 				1DF01F7D1A8068E6008F514C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,6 +281,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DF01FB61A8077B2008F514C /* HashesTest.m in Sources */,
+				1DF01FAE1A806ED8008F514C /* ApiKeysTest.m in Sources */,
 				1DF01F9A1A8068E6008F514C /* TeamsToGoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
