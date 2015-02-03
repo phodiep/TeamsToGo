@@ -58,6 +58,7 @@ DerivedData
 *.xcuserstate
 *ApiKeys.h
 *ApiKeys.m
+*ApiKeysTest.m
 
 # CocoaPods
 #
