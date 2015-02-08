@@ -10,14 +10,14 @@
 #import "NetworkController.h"
 #import "ApiKeys.h"
 #import "Hashes.h"
+#import <CoreFoundation/CoreFoundation.h>
 
 #pragma mark - interface
 @interface NetworkController()
 
-//@property (strong, nonatomic) NSString *privateKey;
 @property (strong, nonatomic) NSString *httpEndPoint;
 @property (strong, nonatomic) NSString *httpsEndPoint;
-@property (strong, nonatomic) NSString *requestToken;
+@property (strong, nonatomic) NSString *userToken;
 
 
 @end
@@ -38,7 +38,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-//        self.privateKey = [[ApiKeys sharedInstance] getPrivateKey];
         self.httpEndPoint = @"http://api.teamcowboy.com/v1";
         self.httpsEndPoint = @"https://api.teamcowboy.com/v1";
     }
@@ -46,7 +45,7 @@
 }
 
 #pragma mark - RequestSignature
-- (NSString *)getNounce {
++ (NSString *)getNonce {
     //unique 8+ character long value
     long low = 10000000;
     long high = 9999999999;
@@ -54,41 +53,104 @@
     return [NSString stringWithFormat:@"%ld", random];
 }
 
-- (NSString *)getTimestamp {
++ (NSString *)getTimestamp {
     //UNIX timestamp
     return [NSString stringWithFormat:@"%d", (int)[[NSDate date] timeIntervalSince1970]];
 }
 
-- (NSString *)requestSignature:(NSString *)reqMethod methodBeingCalled:(NSString *)methodCall parameters:(NSArray *)parameters {
-    NSString *privateKey = [[ApiKeys instance] getPrivateKey];
-    NSString *nounce = self.getNounce;
-    NSString *timestamp = self.getTimestamp;
++ (NSString*)urlEncode:(NSString *)victim {
+//todo autorelease pool and +1 ref count
+    return (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(
+                                            NULL,
+                                            (CFStringRef) victim,
+                                            NULL,
+                                            (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                            kCFStringEncodingUTF8 );
+}
 
-    NSString *keyStr = [[NSString stringWithFormat:@"api_key=%@", privateKey] lowercaseString];
-    NSString *nounceStr = [[NSString stringWithFormat:@"nounce=%@", nounce] lowercaseString];
-    NSString *timestampStr = [[NSString stringWithFormat:@"timestamp=%@", timestamp] lowercaseString];
++ (NSDictionary *)encodeValues:(NSDictionary *)queryParameters {
+    NSMutableDictionary *encodedDictionary = [[NSMutableDictionary alloc]init];
+    
+    [queryParameters enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [encodedDictionary setObject:[NetworkController urlEncode:obj] forKey:key];
+    }];
+    
+    return encodedDictionary;
+}
 
-    //create concatinated request string, sorted alphabetically
-    NSMutableArray *concatArray = [parameters mutableCopy];
-    [concatArray addObject:keyStr];
-    [concatArray addObject:nounceStr];
-    [concatArray addObject:timestampStr];
-    NSArray *sortedConcatArray = [concatArray sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    NSString *concat = [sortedConcatArray componentsJoinedByString:@"&"];
++ (NSArray *)sortByKey:(NSDictionary *)queryParameters {
+    NSArray *sortedKeys = [queryParameters allKeys];
+    [sortedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    NSMutableArray *sortedPairs = [[NSMutableArray alloc]init];
+    
+    for (id key in sortedKeys) {
+        NSArray *keyValuePair = @[key, [queryParameters valueForKey:key]];
+        [sortedPairs addObject:keyValuePair];
+    }
+    return sortedPairs;
+}
 
-    NSString *signature = [NSString stringWithFormat:@"%@|%@|%@|%@|%@|%@", privateKey, reqMethod, methodCall, timestamp, nounce, concat];
-    NSString *encryptedSignature = [[Hashes alloc] sha1:signature];
-    return encryptedSignature;
++ (NSString *)queryStringForParameters:(NSArray *)parameters {
+    NSMutableArray *concat = [[NSMutableArray alloc] init];
+    for (id param in parameters) {
+        NSString *concatParam = [param componentsJoinedByString:@"="];
+        [concat addObject:concatParam];
+    }
+    
+    return [concat componentsJoinedByString:@"&"];
+    
+}
+
++ (NSString *)computeSignatureForQuery:(NSString*)queryString usingHttpMethod:(NSString*)httpMethod toApiMethod:(NSString*)apiMethod timestamp:(NSString*)timestamp nonce:(NSString*)nonce {
+
+    NSString *toSign = [@[[[ApiKeys instance] getPrivateKey],
+       httpMethod,
+       apiMethod,
+       timestamp,
+       nonce,
+       queryString
+       ] componentsJoinedByString:@"|" ];
+    
+    return [[Hashes alloc] sha1:toSign];
+}
+
+-(NSHTTPURLResponse*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)params {
+    
+    NSString *timestamp = [NetworkController getTimestamp];
+    NSString *nonce = [NetworkController getNonce];
+    NSString *endPoint = usingSSL ? self.httpsEndPoint : self.httpEndPoint;
+
+
+    NSDictionary *encodedParams = [NetworkController encodeValues:params];
+    NSArray *sortedParams = [NetworkController sortByKey:encodedParams];
+    NSMutableString *joinedQuery = [[NSMutableString alloc] initWithString:[NetworkController queryStringForParameters:sortedParams]];
+    
+    NSString *sig = [NetworkController computeSignatureForQuery:joinedQuery usingHttpMethod:httpMethod toApiMethod:apiMethod timestamp:timestamp nonce:nonce];
+    [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", sig]];
+    
+    //http call TODO
+    
+    
+    
+}
+
+
+#pragma mark - RequestToken
+- (void)getUserToken {
+
+    NSString *requestMethod = @"POST";
+    NSString *methodCall = @"Auth_GetUserToken";
+    
+    
+    
+    
+    
+    
 }
 
 
 
-
-//get request token
-
-//get authorize token
-
-//get access token
 
 
 
