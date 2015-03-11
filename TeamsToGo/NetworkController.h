@@ -11,6 +11,12 @@
 @interface NetworkController : NSObject
 
 + (instancetype)sharedInstance;
-- (NSString *)requestSignature:(NSString *)reqMethod methodBeingCalled:(NSString *)methodCall parameters:(NSArray *)parameters;
+
+-(NSDictionary*)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)params;
+-(NSDictionary*)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams;
+
+//-(NSData*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)inputParams;
+
+//- (void)getUserToken;
 
 @end

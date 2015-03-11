@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D134E151A88133B005510B0 /* ResponseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E141A88133B005510B0 /* ResponseError.m */; };
+		1D134E181A8815EA005510B0 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E171A8815EA005510B0 /* Response.m */; };
+		1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
 		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
@@ -34,6 +37,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D134E131A88133B005510B0 /* ResponseError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponseError.h; sourceTree = "<group>"; };
+		1D134E141A88133B005510B0 /* ResponseError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponseError.m; sourceTree = "<group>"; };
+		1D134E161A8815EA005510B0 /* Response.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Response.h; sourceTree = "<group>"; };
+		1D134E171A8815EA005510B0 /* Response.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Response.m; sourceTree = "<group>"; };
+		1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamCowboyClient.h; sourceTree = "<group>"; };
+		1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamCowboyClient.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -148,6 +157,8 @@
 			children = (
 				1DF01FAF1A807388008F514C /* NetworkController.h */,
 				1DF01FB01A807388008F514C /* NetworkController.m */,
+				1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */,
+				1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +177,10 @@
 				1DF01FA91A806BD7008F514C /* ApiKeys.m */,
 				1DF01FB21A807712008F514C /* Hashes.h */,
 				1DF01FB31A807712008F514C /* Hashes.m */,
+				1D134E131A88133B005510B0 /* ResponseError.h */,
+				1D134E141A88133B005510B0 /* ResponseError.m */,
+				1D134E161A8815EA005510B0 /* Response.h */,
+				1D134E171A8815EA005510B0 /* Response.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -273,8 +288,11 @@
 				1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */,
 				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
+				1D134E151A88133B005510B0 /* ResponseError.m in Sources */,
+				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
 				1DF01FB11A807388008F514C /* NetworkController.m in Sources */,
+				1D134E181A8815EA005510B0 /* Response.m in Sources */,
 				1DF01FB41A807712008F514C /* Hashes.m in Sources */,
 				1DF01F7D1A8068E6008F514C /* main.m in Sources */,
 			);
@@ -464,6 +482,7 @@
 				1DF01F9F1A8068E6008F514C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1DF01FA01A8068E6008F514C /* Build configuration list for PBXNativeTarget "TeamsToGoTests" */ = {
 			isa = XCConfigurationList;
@@ -472,6 +491,7 @@
 				1DF01FA21A8068E6008F514C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

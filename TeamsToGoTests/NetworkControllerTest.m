@@ -43,7 +43,7 @@
     NSString *methodCall = @"Team_Get";
     NSArray *param = @[@"method=team_get"];
 
-    NSLog([self.sharedInstance requestSignature:requestName methodBeingCalled:methodCall parameters:param]);
+//    NSLog([self.sharedInstance requestSignature:requestName methodBeingCalled:methodCall parameters:param]);
 
     XCTAssertTrue(true);
 }

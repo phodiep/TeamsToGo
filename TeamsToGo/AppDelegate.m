@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "NetworkController.h"
+#import "TeamCowboyClient.h"
 
 @interface AppDelegate ()
 
@@ -22,6 +24,10 @@
     [self.window makeKeyAndVisible];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
     self.window.rootViewController = navigationController;
+    
+//    [[NetworkController sharedInstance]getUserToken];
+    [[TeamCowboyClient alloc] testPostRequest];
+    
     return YES;
 }
 

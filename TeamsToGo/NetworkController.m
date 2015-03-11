@@ -10,6 +10,8 @@
 #import "NetworkController.h"
 #import "ApiKeys.h"
 #import "Hashes.h"
+#import "Response.h"
+#import "ResponseError.h"
 #import <CoreFoundation/CoreFoundation.h>
 
 #pragma mark - interface
@@ -18,7 +20,7 @@
 @property (strong, nonatomic) NSString *httpEndPoint;
 @property (strong, nonatomic) NSString *httpsEndPoint;
 @property (strong, nonatomic) NSString *userToken;
-
+@property (strong, nonatomic) NSURLSession *urlSession;
 
 @end
 
@@ -38,28 +40,32 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.httpEndPoint = @"http://api.teamcowboy.com/v1";
-        self.httpsEndPoint = @"https://api.teamcowboy.com/v1";
+//        self.httpEndPoint = @"http://api.teamcowboy.com/v1";
+//        self.httpsEndPoint = @"https://api.teamcowboy.com/v1";
+        
+        NSURLSessionConfiguration *ephemeralConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        self.urlSession = [NSURLSession sessionWithConfiguration:ephemeralConfig];
     }
     return self;
 }
 
-#pragma mark - RequestSignature
-+ (NSString *)getNonce {
-    //unique 8+ character long value
-    long low = 10000000;
-    long high = 9999999999;
-    long random = (arc4random() % high) + low; //get random int between low and high
-    return [NSString stringWithFormat:@"%ld", random];
-}
+//#pragma mark - RequestSignature Components
+//+ (NSString *)getNonce {
+//    //unique 8+ character long value
+//    long low = 10000000;
+//    long high = 9999999999;
+//    long random = (arc4random() % high) + low; //get random int between low and high
+//    return [NSString stringWithFormat:@"%ld", random];
+//}
+//
+//+ (NSString *)getTimestamp {
+//    //UNIX timestamp
+//    return [NSString stringWithFormat:@"%d", (int)[[NSDate date] timeIntervalSince1970]];
+//}
 
-+ (NSString *)getTimestamp {
-    //UNIX timestamp
-    return [NSString stringWithFormat:@"%d", (int)[[NSDate date] timeIntervalSince1970]];
-}
-
+#pragma mark - url
 + (NSString*)urlEncode:(NSString *)victim {
-//todo autorelease pool and +1 ref count
+    //todo autorelease pool and +1 ref count
     return (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(
                                             NULL,
                                             (CFStringRef) victim,
@@ -79,8 +85,8 @@
 }
 
 + (NSArray *)sortByKey:(NSDictionary *)queryParameters {
-    NSArray *sortedKeys = [queryParameters allKeys];
-    [sortedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    NSArray *unsortedKeys = (NSMutableArray*)[queryParameters allKeys];
+    NSArray* sortedKeys = [unsortedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     
     NSMutableArray *sortedPairs = [[NSMutableArray alloc]init];
     
@@ -98,30 +104,100 @@
         [concat addObject:concatParam];
     }
     
-    return [concat componentsJoinedByString:@"&"];
-    
+    NSString *queryString = [concat componentsJoinedByString:@"&"];
+//    return [queryString lowercaseString];
+    return queryString;
 }
 
 + (NSString *)computeSignatureForQuery:(NSString*)queryString usingHttpMethod:(NSString*)httpMethod toApiMethod:(NSString*)apiMethod timestamp:(NSString*)timestamp nonce:(NSString*)nonce {
+    
+    NSString* lowercaseQueryString = [queryString lowercaseString];
 
     NSString *toSign = [@[[[ApiKeys instance] getPrivateKey],
        httpMethod,
        apiMethod,
        timestamp,
        nonce,
-       queryString
+       lowercaseQueryString
        ] componentsJoinedByString:@"|" ];
-    
+        NSLog(@"toSign: %@", toSign); //>>>
     return [[Hashes alloc] sha1:toSign];
 }
 
--(NSHTTPURLResponse*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)params {
+-(NSDictionary*)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams {
     
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
+    [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
+    [params setObject:@"json" forKey:@"response_type"];
+    
+    NSDictionary *encodedParams = [NetworkController encodeValues:params];
+    NSArray *sortedParams = [NetworkController sortByKey:encodedParams];
+    NSMutableString *joinedQuery = [[NSMutableString alloc] initWithString:[NetworkController queryStringForParameters:sortedParams]];
+    
+    NSString *signature = [NetworkController computeSignatureForQuery:joinedQuery
+                                                      usingHttpMethod:@"GET"
+                                                          toApiMethod:apiMethod
+                                                            timestamp:params[@"timestamp"]
+                                                                nonce:params[@"nonce"]];
+    
+    [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", signature]];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    return [NetworkController makeSynchronousApiRequest:request];
+    
+}
+
+-(NSDictionary*)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams {
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
+    [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
+    [params setObject:@"json" forKey:@"response_type"];
+    
+    NSDictionary *encodedParams = [NetworkController encodeValues:params];
+    NSArray *sortedParams = [NetworkController sortByKey:encodedParams];
+    NSMutableString *joinedQuery = [[NSMutableString alloc] initWithString:[NetworkController queryStringForParameters:sortedParams]];
+    
+    NSString *signature = [NetworkController computeSignatureForQuery:joinedQuery
+                                                      usingHttpMethod:@"POST"
+                                                          toApiMethod:apiMethod
+                                                            timestamp:params[@"timestamp"]
+                                                                nonce:params[@"nonce"]];
+    
+    [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", signature]];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    return [NetworkController makeSynchronousApiRequest:request];
+    
+}
+
+
+
+
+
+
+/*
+-(NSData*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)inputParams {
+    
+    //gather pieces
     NSString *timestamp = [NetworkController getTimestamp];
     NSString *nonce = [NetworkController getNonce];
     NSString *endPoint = usingSSL ? self.httpsEndPoint : self.httpEndPoint;
-
-
+    
+    //add pieces to params
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
+    [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
+    [params setObject:apiMethod forKey:@"method"];
+    [params setObject:timestamp forKey:@"timestamp"];
+    [params setObject:nonce forKey:@"nonce"];
+    [params setObject:@"json" forKey:@"response_type"];
+    
+    //encode, sort, join
     NSDictionary *encodedParams = [NetworkController encodeValues:params];
     NSArray *sortedParams = [NetworkController sortByKey:encodedParams];
     NSMutableString *joinedQuery = [[NSMutableString alloc] initWithString:[NetworkController queryStringForParameters:sortedParams]];
@@ -129,7 +205,74 @@
     NSString *sig = [NetworkController computeSignatureForQuery:joinedQuery usingHttpMethod:httpMethod toApiMethod:apiMethod timestamp:timestamp nonce:nonce];
     [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", sig]];
     
-    //http call TODO
+    NSLog(@"%@", joinedQuery);
+    NSString *nonSecureEndPoint = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
+//    NSURL *url = [[NSURL alloc] initWithString:endPoint];
+    NSURL *url = [[NSURL alloc] initWithString:nonSecureEndPoint];
+    
+//    NSData *bodyString = [joinedQuery dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:true];
+//    NSData *bodyString = [joinedQuery dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+//    NSString *bodyLength = [NSString stringWithFormat:@"%lu", (unsigned long)[bodyString length]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+//    request.HTTPMethod = httpMethod;
+//    request.HTTPBody = bodyString;
+
+//    [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    return [NetworkController makeSynchronousApiRequest:request];
+    
+}
+ */
+
+
++ (NSDictionary*)makeSynchronousApiRequest:(NSURLRequest*)request {
+    NSURLResponse* response;
+    NSError* error = nil;
+    
+    NSData* result = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    if (error != nil) {
+        NSLog(@"\n\nRequest Error: %@", error);
+        return nil;
+    }
+    
+    Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
+    NSLog(@"results: %@", [finalResponse getResults]); //>>>
+
+    if ([NetworkController goodReponseCode:response] == false) {
+        //deal w/ bad response
+        return nil;
+    }
+    return [finalResponse getResults];
+    
+}
+
+
++ (BOOL)goodReponseCode:(NSURLResponse*)response {
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+    
+    switch (httpResponse.statusCode) {
+        case 200: //OK
+            return true;
+        case 400: //Bad request
+            return false;
+        case 401: //Unauthorized
+            return false;
+        case 403: //Forbidden
+            return false;
+        case 404: //Not Found
+            return false;
+        case 405: //Method not allowed
+            return false;
+        case 500: //Internal server error
+            return false;
+        case 501: //Not implemented
+            return false;
+        default: //unknown
+            return false;
+    }
     
     
     
@@ -142,9 +285,9 @@
     NSString *requestMethod = @"POST";
     NSString *methodCall = @"Auth_GetUserToken";
     
+    NSDictionary *params = @{@"username": @"pho_test", @"password": @"testTC15"};
     
-    
-    
+//    NSData *responseObject = [self makeApiRequest:methodCall usingHttpMethod:requestMethod usingSSL:true withParams:params];
     
     
 }
