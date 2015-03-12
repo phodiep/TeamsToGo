@@ -189,51 +189,6 @@
 
 
 
-/*
--(NSData*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)inputParams {
-    
-    //gather pieces
-    NSString *timestamp = [NetworkController getTimestamp];
-    NSString *nonce = [NetworkController getNonce];
-    NSString *endPoint = usingSSL ? self.httpsEndPoint : self.httpEndPoint;
-    
-    //add pieces to params
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
-    [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
-    [params setObject:apiMethod forKey:@"method"];
-    [params setObject:timestamp forKey:@"timestamp"];
-    [params setObject:nonce forKey:@"nonce"];
-    [params setObject:@"json" forKey:@"response_type"];
-    
-    //encode, sort, join
-    NSDictionary *encodedParams = [NetworkController encodeValues:params];
-    NSArray *sortedParams = [NetworkController sortByKey:encodedParams];
-    NSMutableString *joinedQuery = [[NSMutableString alloc] initWithString:[NetworkController queryStringForParameters:sortedParams]];
-    
-    NSString *sig = [NetworkController computeSignatureForQuery:joinedQuery usingHttpMethod:httpMethod toApiMethod:apiMethod timestamp:timestamp nonce:nonce];
-    [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", sig]];
-    
-    NSLog(@"%@", joinedQuery);
-    NSString *nonSecureEndPoint = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
-//    NSURL *url = [[NSURL alloc] initWithString:endPoint];
-    NSURL *url = [[NSURL alloc] initWithString:nonSecureEndPoint];
-    
-//    NSData *bodyString = [joinedQuery dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:true];
-//    NSData *bodyString = [joinedQuery dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-//    NSString *bodyLength = [NSString stringWithFormat:@"%lu", (unsigned long)[bodyString length]];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-//    request.HTTPMethod = httpMethod;
-//    request.HTTPBody = bodyString;
-
-//    [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    return [NetworkController makeSynchronousApiRequest:request];
-    
-}
- */
-
 
 + (NSDictionary*)makeSynchronousApiRequest:(NSURLRequest*)request {
     NSURLResponse* response;
@@ -247,7 +202,7 @@
     }
     
     Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
-    NSLog(@"results: %@", [finalResponse getResults]); //>>>
+    NSLog(@"\n\nresults: %@\n\n", [finalResponse getResults]); //>>>
 
     if ([NetworkController goodReponseCode:response] == false) {
         //deal w/ bad response
@@ -281,28 +236,6 @@
         default: //unknown
             return false;
     }
-    
-    
-    
 }
-
-
-#pragma mark - RequestToken
-- (void)getUserToken {
-
-    NSString *requestMethod = @"POST";
-    NSString *methodCall = @"Auth_GetUserToken";
-    
-    NSDictionary *params = @{@"username": @"pho_test", @"password": @"testTC15"};
-    
-//    NSData *responseObject = [self makeApiRequest:methodCall usingHttpMethod:requestMethod usingSSL:true withParams:params];
-    
-    
-}
-
-
-
-
-
 
 @end

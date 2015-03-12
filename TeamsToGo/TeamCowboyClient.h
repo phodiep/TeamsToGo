@@ -13,6 +13,6 @@
 
 -(void)testGetRequest;
 -(void)testPostRequest;
-
+-(void)authGetUserToken;
 
 @end

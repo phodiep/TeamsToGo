@@ -8,6 +8,7 @@
 
 #import "TeamCowboyClient.h"
 #import "NetworkController.h"
+#import "ApiKeys.h"
 
 @interface TeamCowboyClient ()
 
@@ -47,7 +48,7 @@
 #pragma mark - Test_GetRequest
 -(void)testGetRequest {
     NSString *methodCall = @"Test_GetRequest";
-    BOOL *usingSSL = false;
+    BOOL usingSSL = false;
 
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
@@ -61,9 +62,8 @@
 
 #pragma mark - Test_GetRequest
 -(void)testPostRequest {
-    
     NSString *methodCall = @"Test_PostRequest";
-    BOOL *usingSSL = false;
+    BOOL usingSSL = false;
     
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
@@ -73,9 +73,28 @@
     [[NetworkController sharedInstance] makeApiPostRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
                                            withParameters:param];
-
 }
 
+#pragma mark - Auth_GetUserToken
+-(void)authGetUserToken {
+    NSString *methodCall = @"Auth_GetUserToken";
+    BOOL usingSSL = true;
+    
+    NSString *username = [[ApiKeys instance] getUsername];
+    NSString *password = [[ApiKeys instance] getPassword];
+    
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"username" : username,
+                            @"password" : password};
+    
+    [[NetworkController sharedInstance] makeApiPostRequest:methodCall
+                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                            withParameters:param];
+    
+    
+}
 
 
 

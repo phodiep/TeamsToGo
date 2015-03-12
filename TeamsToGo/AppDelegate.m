@@ -25,9 +25,7 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
     self.window.rootViewController = navigationController;
     
-//    [[NetworkController sharedInstance]getUserToken];
-    [[TeamCowboyClient alloc] testGetRequest];
-    [[TeamCowboyClient alloc] testPostRequest];
+    [[TeamCowboyClient alloc] authGetUserToken];
     
     return YES;
 }
