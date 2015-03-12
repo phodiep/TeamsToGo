@@ -10,6 +10,7 @@
 		1D134E151A88133B005510B0 /* ResponseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E141A88133B005510B0 /* ResponseError.m */; };
 		1D134E181A8815EA005510B0 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E171A8815EA005510B0 /* Response.m */; };
 		1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */; };
+		1D4D27C41AB1D55600849911 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C31AB1D55600849911 /* User.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
 		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
@@ -43,6 +44,8 @@
 		1D134E171A8815EA005510B0 /* Response.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Response.m; sourceTree = "<group>"; };
 		1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamCowboyClient.h; sourceTree = "<group>"; };
 		1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamCowboyClient.m; sourceTree = "<group>"; };
+		1D4D27C21AB1D55600849911 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		1D4D27C31AB1D55600849911 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -181,6 +184,8 @@
 				1D134E141A88133B005510B0 /* ResponseError.m */,
 				1D134E161A8815EA005510B0 /* Response.h */,
 				1D134E171A8815EA005510B0 /* Response.m */,
+				1D4D27C21AB1D55600849911 /* User.h */,
+				1D4D27C31AB1D55600849911 /* User.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				1D134E151A88133B005510B0 /* ResponseError.m in Sources */,
 				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
+				1D4D27C41AB1D55600849911 /* User.m in Sources */,
 				1DF01FB11A807388008F514C /* NetworkController.m in Sources */,
 				1D134E181A8815EA005510B0 /* Response.m in Sources */,
 				1DF01FB41A807712008F514C /* Hashes.m in Sources */,

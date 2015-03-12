@@ -44,7 +44,6 @@
     return [NSString stringWithFormat:@"%.4f", [[NSDate date] timeIntervalSince1970]];
 }
 
-
 #pragma mark - Test_GetRequest
 -(void)testGetRequest {
     NSString *methodCall = @"Test_GetRequest";
@@ -106,6 +105,27 @@
                                              [[NSUserDefaults standardUserDefaults]synchronize];
                                          }
      }];
+}
+
+#pragma mark - User_Get
+-(void)userGet {
+    NSString *methodCall = @"User_Get";
+    BOOL usingSSL = false;
+    
+    NSString *userToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"];
+    
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"userToken" : userToken};
+    
+    [[NetworkController sharedInstance] makeApiPostRequest:methodCall
+                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                            withParameters:param
+                                     withCompletionHandler:^(NSDictionary *results) {
+                                         //code
+                                     }];
+    
 }
 
 

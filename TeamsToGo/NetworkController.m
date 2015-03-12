@@ -193,14 +193,16 @@
         NSLog(@"\n\nRequest Error: %@", error);
         return nil;
     }
-    
-    Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
-    NSLog(@"\n\nresults: %@\n\n", [finalResponse getResults]); //>>>
 
     if ([NetworkController goodReponseCode:response] == false) {
         //deal w/ bad response
         return nil;
     }
+
+    
+    Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
+    NSLog(@"\n\nresults: %@\n\n", [finalResponse getResults]); //>>>
+
     return [finalResponse getResults];
     
 }
