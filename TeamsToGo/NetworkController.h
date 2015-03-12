@@ -13,10 +13,7 @@
 + (instancetype)sharedInstance;
 
 -(NSDictionary*)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)params;
--(NSDictionary*)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams;
+-(void)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSDictionary *results))completionHandler;
 
-//-(NSData*) makeApiRequest:(NSString*)apiMethod usingHttpMethod:(NSString*)httpMethod usingSSL:(BOOL)usingSSL withParams:(NSDictionary*)inputParams;
-
-//- (void)getUserToken;
 
 @end

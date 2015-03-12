@@ -72,7 +72,10 @@
     
     [[NetworkController sharedInstance] makeApiPostRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
-                                           withParameters:param];
+                                           withParameters:param
+                                    withCompletionHandler:^(NSDictionary *results) {
+        //code
+    }];
 }
 
 #pragma mark - Auth_GetUserToken
@@ -80,8 +83,9 @@
     NSString *methodCall = @"Auth_GetUserToken";
     BOOL usingSSL = true;
     
-    NSString *username = [[ApiKeys instance] getUsername];
-    NSString *password = [[ApiKeys instance] getPassword];
+    [ApiKeys instance];
+    NSString *username = [[NSUserDefaults standardUserDefaults]objectForKey:@"username"];
+    NSString *password = [[NSUserDefaults standardUserDefaults]objectForKey:@"password"];
     
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
@@ -91,9 +95,17 @@
     
     [[NetworkController sharedInstance] makeApiPostRequest:methodCall
                                              toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
-                                            withParameters:param];
-    
-    
+                                            withParameters:param
+                                     withCompletionHandler:^(NSDictionary *results) {
+
+                                         if (results != nil) {
+                                             [[NSUserDefaults standardUserDefaults]setObject:results[@"userId"]
+                                                                                      forKey:@"userId"];
+                                             [[NSUserDefaults standardUserDefaults]setObject:results[@"token"]
+                                                                                      forKey:@"userToken"];
+                                             [[NSUserDefaults standardUserDefaults]synchronize];
+                                         }
+     }];
 }
 
 

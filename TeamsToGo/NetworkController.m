@@ -149,7 +149,7 @@
     
 }
 
--(NSDictionary*)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams {
+-(void)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSDictionary *results))completionHandler {
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
     [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
@@ -177,18 +177,11 @@
     request.HTTPBody = bodyString;
     
     [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     
-    return [NetworkController makeSynchronousApiRequest:request];
+    completionHandler([NetworkController makeSynchronousApiRequest:request]);
     
 }
-
-
-
-
-
-
 
 + (NSDictionary*)makeSynchronousApiRequest:(NSURLRequest*)request {
     NSURLResponse* response;
