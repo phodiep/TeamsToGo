@@ -14,7 +14,7 @@
 - (instancetype)init:(NSDictionary*)data;
 
 -(BOOL)getSuccess;
--(NSDictionary*)getResults;
+-(NSObject*)getResults;
 -(ResponseError*)getResponseError;
 
 @end

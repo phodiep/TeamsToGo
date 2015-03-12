@@ -15,21 +15,28 @@
 @property (strong, nonatomic) NSString *lastName;
 @property (strong, nonatomic) NSString *fullName;
 @property (strong, nonatomic) NSString *displayName;
-@property (strong, nonatomic) NSString *emailAddress1;
-@property (strong, nonatomic) NSString *phone1;
+@property (strong, nonatomic) NSString *emailAddress;
+@property (strong, nonatomic) NSString *phone;
 @property (strong, nonatomic) NSString *gender;
-@property (strong, nonatomic) NSString *birthDate_month;
-@property (strong, nonatomic) NSString *birthDate_day;
-@property (strong, nonatomic) NSString *birthDate_year;
-@property (strong, nonatomic) NSString *profilePhotoUrlFull;
-@property (strong, nonatomic) NSString *profilePhotoUrlSmall;
-@property (strong, nonatomic) NSString *profilePhotoUrlThumb;
-@property (strong, nonatomic) NSDate *dateLastSignIn;
-
 
 @end
 
 @implementation User
+
+-(instancetype)initWithJson:(NSDictionary*)jsonDictionary {
+    self = [super init];
+    if (self) {
+        self.userId = jsonDictionary[@"userId"];
+        self.firstName = jsonDictionary[@"firstName"];
+        self.lastName = jsonDictionary[@"lastName"];
+        self.fullName = jsonDictionary[@"fullName"];
+        self.displayName = jsonDictionary[@"displayName"];
+        self.emailAddress = jsonDictionary[@"emailAddress1"];
+        self.phone = jsonDictionary[@"phone1"];
+        self.gender = jsonDictionary[@"gender"];
+    }
+    return self;
+}
 
 
 

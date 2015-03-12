@@ -14,5 +14,9 @@
 -(void)testGetRequest;
 -(void)testPostRequest;
 -(void)authGetUserToken;
+-(void)userGet;
+-(void)userGetTeams;
+
+
 
 @end

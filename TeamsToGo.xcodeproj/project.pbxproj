@@ -11,6 +11,7 @@
 		1D134E181A8815EA005510B0 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E171A8815EA005510B0 /* Response.m */; };
 		1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */; };
 		1D4D27C41AB1D55600849911 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C31AB1D55600849911 /* User.m */; };
+		1D4D27C71AB23C0900849911 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C61AB23C0900849911 /* Team.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
 		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
@@ -46,6 +47,8 @@
 		1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamCowboyClient.m; sourceTree = "<group>"; };
 		1D4D27C21AB1D55600849911 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		1D4D27C31AB1D55600849911 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		1D4D27C51AB23C0900849911 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		1D4D27C61AB23C0900849911 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 				1D134E171A8815EA005510B0 /* Response.m */,
 				1D4D27C21AB1D55600849911 /* User.h */,
 				1D4D27C31AB1D55600849911 /* User.m */,
+				1D4D27C51AB23C0900849911 /* Team.h */,
+				1D4D27C61AB23C0900849911 /* Team.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -294,6 +299,7 @@
 				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
 				1D134E151A88133B005510B0 /* ResponseError.m in Sources */,
+				1D4D27C71AB23C0900849911 /* Team.m in Sources */,
 				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
 				1D4D27C41AB1D55600849911 /* User.m in Sources */,

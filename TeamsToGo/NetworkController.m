@@ -122,7 +122,7 @@
     return [[Hashes alloc] sha1:toSign];
 }
 
--(NSDictionary*)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams {
+-(void)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSObject *results))completionHandler {
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
     [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
@@ -145,11 +145,11 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = @"GET";
     
-    return [NetworkController makeSynchronousApiRequest:request];
+    completionHandler([NetworkController makeSynchronousApiRequest:request]);
     
 }
 
--(void)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSDictionary *results))completionHandler {
+-(void)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSObject *results))completionHandler {
     
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
     [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
@@ -166,7 +166,6 @@
                                                                 nonce:params[@"nonce"]];
     
     [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", signature]];
-    NSLog(@"\n\n%@\n\n%@", joinedQuery, endPoint);
     NSURL *url = [[NSURL alloc] initWithString:endPoint];
     
     NSData *bodyString = [joinedQuery dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -183,7 +182,7 @@
     
 }
 
-+ (NSDictionary*)makeSynchronousApiRequest:(NSURLRequest*)request {
++ (NSObject*)makeSynchronousApiRequest:(NSURLRequest*)request {
     NSURLResponse* response;
     NSError* error = nil;
     
@@ -199,9 +198,7 @@
         return nil;
     }
 
-    
     Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
-    NSLog(@"\n\nresults: %@\n\n", [finalResponse getResults]); //>>>
 
     return [finalResponse getResults];
     

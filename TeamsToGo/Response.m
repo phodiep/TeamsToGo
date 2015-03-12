@@ -45,7 +45,7 @@
     return self.requestSeconds;
 }
 
--(NSDictionary*)getResults {
+-(NSObject*)getResults {
     return self.result;
 }
 

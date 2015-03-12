@@ -24,11 +24,21 @@
     [self.window makeKeyAndVisible];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
     self.window.rootViewController = navigationController;
+
     
-    [[TeamCowboyClient alloc] authGetUserToken];
+    [self getUserTokenIfNecessary];
+    [[TeamCowboyClient alloc] userGetTeams];
     
     return YES;
 }
+
+- (void)getUserTokenIfNecessary {
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"userToken"] == nil) {
+        [[TeamCowboyClient alloc] authGetUserToken];
+    }
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -1,5 +1,5 @@
 //
-//  User.h
+//  Team.h
 //  TeamsToGo
 //
 //  Created by Pho Diep on 3/12/15.
@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface User : NSObject
+@interface Team : NSObject
 
--(instancetype)initWithJson:(NSDictionary*)jsonDictionary;
+- (instancetype)initWithJson:(NSDictionary*)json;
+- (NSArray*)arrayOfTeamsWithJson:(NSArray*)json;
+
 
 @end
