@@ -105,7 +105,6 @@
     }
     
     NSString *queryString = [concat componentsJoinedByString:@"&"];
-//    return [queryString lowercaseString];
     return queryString;
 }
 
@@ -120,7 +119,6 @@
        nonce,
        lowercaseQueryString
        ] componentsJoinedByString:@"|" ];
-        NSLog(@"toSign: %@", toSign); //>>>
     return [[Hashes alloc] sha1:toSign];
 }
 
@@ -142,9 +140,10 @@
     
     [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", signature]];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
+    NSString *urlString = [NSString stringWithFormat:@"%@?%@", endPoint, joinedQuery];
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"GET";
     
     return [NetworkController makeSynchronousApiRequest:request];
     
@@ -167,10 +166,19 @@
                                                                 nonce:params[@"nonce"]];
     
     [joinedQuery appendString:[NSString stringWithFormat:@"&sig=%@", signature]];
+    NSLog(@"\n\n%@\n\n%@", joinedQuery, endPoint);
+    NSURL *url = [[NSURL alloc] initWithString:endPoint];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@/?%@", endPoint, joinedQuery];
-    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSData *bodyString = [joinedQuery dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *bodyLength = [NSString stringWithFormat:@"%lu", (unsigned long)[bodyString length]];
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = bodyString;
+    
+    [request setValue:bodyLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     
     return [NetworkController makeSynchronousApiRequest:request];
     

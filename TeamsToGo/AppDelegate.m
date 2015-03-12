@@ -26,6 +26,7 @@
     self.window.rootViewController = navigationController;
     
 //    [[NetworkController sharedInstance]getUserToken];
+    [[TeamCowboyClient alloc] testGetRequest];
     [[TeamCowboyClient alloc] testPostRequest];
     
     return YES;
