@@ -38,6 +38,10 @@
     return self;
 }
 
+-(NSString*)fullName {
+    return self.fullName;
+}
+
 
 
 @end

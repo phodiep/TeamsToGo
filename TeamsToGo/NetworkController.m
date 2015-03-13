@@ -17,9 +17,7 @@
 #pragma mark - interface
 @interface NetworkController()
 
-@property (strong, nonatomic) NSString *httpEndPoint;
-@property (strong, nonatomic) NSString *httpsEndPoint;
-@property (strong, nonatomic) NSString *userToken;
+//@property (strong, nonatomic) NSString *userToken;
 @property (strong, nonatomic) NSURLSession *urlSession;
 
 @end
@@ -40,8 +38,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-//        self.httpEndPoint = @"http://api.teamcowboy.com/v1";
-//        self.httpsEndPoint = @"https://api.teamcowboy.com/v1";
         
         NSURLSessionConfiguration *ephemeralConfig = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         self.urlSession = [NSURLSession sessionWithConfiguration:ephemeralConfig];
@@ -49,19 +45,6 @@
     return self;
 }
 
-//#pragma mark - RequestSignature Components
-//+ (NSString *)getNonce {
-//    //unique 8+ character long value
-//    long low = 10000000;
-//    long high = 9999999999;
-//    long random = (arc4random() % high) + low; //get random int between low and high
-//    return [NSString stringWithFormat:@"%ld", random];
-//}
-//
-//+ (NSString *)getTimestamp {
-//    //UNIX timestamp
-//    return [NSString stringWithFormat:@"%d", (int)[[NSDate date] timeIntervalSince1970]];
-//}
 
 #pragma mark - url
 + (NSString*)urlEncode:(NSString *)victim {

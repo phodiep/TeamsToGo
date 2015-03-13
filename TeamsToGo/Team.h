@@ -13,5 +13,6 @@
 - (instancetype)initWithJson:(NSDictionary*)json;
 - (NSArray*)arrayOfTeamsWithJson:(NSArray*)json;
 
+-(NSString*)getName;
 
 @end

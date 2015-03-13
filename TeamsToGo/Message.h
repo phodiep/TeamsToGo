@@ -1,5 +1,5 @@
 //
-//  User.h
+//  Message.h
 //  TeamsToGo
 //
 //  Created by Pho Diep on 3/12/15.
@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface User : NSObject
-
--(instancetype)initWithJson:(NSDictionary*)jsonDictionary;
-
--(NSString*)fullName;
+@interface Message : NSObject
 
 @end

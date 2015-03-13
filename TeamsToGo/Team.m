@@ -15,7 +15,6 @@
 @property (strong, nonatomic) NSString *activity;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) User *manager;
-@property (strong, nonatomic) User *captain;
 
 @end
 
@@ -25,13 +24,9 @@
     self = [super init];
     if (self) {
         self.teamId = json[@"teamId"];
-
-        NSDictionary *activityDictionary = json[@"activity"];
-        self.activity = activityDictionary[@"name"];
-        
+        self.activity = json[@"activity"][@"name"];
         self.name = json[@"name"];
         self.manager = [[User alloc] initWithJson:json[@"managerUser"]];
-        self.captain = [[User alloc] initWithJson:json[@"captainUser"]];
     }
     return self;
 }
@@ -41,7 +36,23 @@
     for (NSDictionary *teamData in json) {
         [teams addObject:[[Team alloc] initWithJson:teamData]];
     }
-    return [[NSArray alloc] initWithArray:teams];
+    return teams;
+}
+
+-(NSString*)getName {
+    return self.name;
+}
+
+-(NSString*)getActivity {
+    return self.activity;
+}
+
+-(NSString*)getTeamId {
+    return self.teamId;
+}
+
+-(NSString*)getManagerName {
+    return [self.manager fullName];
 }
 
 @end

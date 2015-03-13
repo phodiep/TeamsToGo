@@ -19,8 +19,7 @@
 @property (strong, nonatomic) NSString *timestamp;
 @property (strong, nonatomic) NSString *nonce;
 
-@property (strong, nonatomic) User *user;
-@property (strong, nonatomic) NSArray *teams;
+
 
 @end
 
@@ -154,11 +153,36 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+                                            [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
                                         }
                                     }];
 }
 
+#pragma mark - User_GetTeamMessages
+-(void)userGetTeamMessagesForTeam:(NSString*)teamId {
+    NSString *methodCall = @"User_GetTeamMessages";
+    BOOL usingSSL = false;
+    
+    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"userToken" : userToken,
+                            @"teamId" : teamId};
+    
+    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+                                            toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                           withParameters:param
+                                    withCompletionHandler:^(NSObject *results) {
+                                        if (results != nil) {
+                                            NSArray *json = (NSArray*)results;
+                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+                                        }
+                                    }];
+
+    
+}
 
 
 @end

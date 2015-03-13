@@ -10,24 +10,33 @@
 #import "ViewController.h"
 #import "NetworkController.h"
 #import "TeamCowboyClient.h"
+#import "LoginViewController.h"
+#import "SettingsViewController.h"
+#import "TeamsViewController.h"
+#import "ScheduleViewController.h"
+#import "MessagesViewController.h"
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) UITabBarController *tabBar;
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
-    self.window.rootViewController = navigationController;
 
-    
+//    [self promptUserToLoginIfNecessary];
+//    
     [self getUserTokenIfNecessary];
     [[TeamCowboyClient alloc] userGetTeams];
+
+//    [self setupTabBar];
+    
+//    self.window.rootViewController = self.tabBar;
     
     return YES;
 }
@@ -37,6 +46,42 @@
         [[TeamCowboyClient alloc] authGetUserToken];
     }
 }
+
+- (void)promptUserToLoginIfNecessary {
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"username"] == nil ||
+        [[NSUserDefaults standardUserDefaults]objectForKey:@"password"] == nil) {
+//        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        
+        
+    }
+}
+
+-(void)setupTabBar {
+    self.tabBar = [[UITabBarController alloc] init];
+    
+    ScheduleViewController *scheduleVC = [[ScheduleViewController alloc] init];
+    scheduleVC.tabBarItem.title = @"Schedule";
+    scheduleVC.tabBarItem.image = [UIImage imageNamed:@"calendar"];
+    
+    TeamsViewController *teamsVC = [[TeamsViewController alloc] init];
+    teamsVC.tabBarItem.title = @"Teams";
+    teamsVC.tabBarItem.image = [UIImage imageNamed:@"team"];
+    
+    MessagesViewController *messagesVC = [[MessagesViewController alloc] init];
+    messagesVC.tabBarItem.title = @"Messages";
+    messagesVC.tabBarItem.image = [UIImage imageNamed:@"message"];
+    
+    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    settingsVC.tabBarItem.title = @"Settings";
+    settingsVC.tabBarItem.image = [UIImage imageNamed:@"settings"];
+    
+    self.tabBar.viewControllers = @[scheduleVC,
+                                    teamsVC,
+                                    messagesVC,
+                                    settingsVC];
+    self.tabBar.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+}
+
 
 
 

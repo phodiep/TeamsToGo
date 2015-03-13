@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "User.h"
 
 @interface TeamCowboyClient : NSObject
 
@@ -17,6 +17,7 @@
 -(void)userGet;
 -(void)userGetTeams;
 
-
+@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) NSArray *teams;
 
 @end
