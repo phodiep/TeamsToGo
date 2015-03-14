@@ -34,9 +34,9 @@
     [self getUserTokenIfNecessary];
     [[TeamCowboyClient alloc] userGetTeams];
 
-//    [self setupTabBar];
+    [self setupTabBar];
     
-//    self.window.rootViewController = self.tabBar;
+    self.window.rootViewController = self.tabBar;
     
     return YES;
 }

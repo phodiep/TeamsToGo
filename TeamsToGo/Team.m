@@ -24,9 +24,16 @@
     self = [super init];
     if (self) {
         self.teamId = json[@"teamId"];
-        self.activity = json[@"activity"][@"name"];
-        self.name = json[@"name"];
-        self.manager = [[User alloc] initWithJson:json[@"managerUser"]];
+        
+        if (json[@"activity"][@"name"]) {
+            self.activity = json[@"activity"][@"name"];
+        }
+        if (json[@"name"]) {
+            self.name = json[@"name"];
+        }
+        if (json[@"managerUser"]) {
+            self.manager = [[User alloc] initWithJson:json[@"managerUser"]];
+        }
     }
     return self;
 }

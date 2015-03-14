@@ -12,20 +12,34 @@
 
 @interface TeamsViewController () <UITableViewDataSource>
 
+@property (strong, nonatomic) UIView *rootView;
+@property (strong, nonatomic) NSMutableDictionary *views;
 @property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray *teams;
+@property (strong, nonatomic) NSArray *teams;
 
 @end
 
 @implementation TeamsViewController
 
 -(void)loadView {
-    self.teams = [[NSMutableArray alloc]init];
-    UIView *rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    self.tableView = [[UITableView alloc] init];
+    self.teams = [[NSArray alloc]init];
+    self.views = [[NSMutableDictionary alloc] init];
+    self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
-//    [[TeamCowboyClient alloc] userGetTeams];
+    [[TeamCowboyClient alloc] userGetTeams];
     
-    self.view = rootView;
+    [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
+    
+    [self.rootView addSubview:self.tableView];
+    
+    [self.views setObject:self.tableView forKey:@"tableView"];
+    
+    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[tableView]-55-|" options:0 metrics:0 views:self.views]];
+
+    
+    self.view = self.rootView;
     
 }
 
@@ -39,7 +53,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    self.teams = [[TeamCowboyClient alloc] teams];
+    self.teams = [[TeamCowboyClient alloc] teams];
 }
 
 #pragma mark - UITableViewDataSource
