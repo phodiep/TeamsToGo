@@ -67,7 +67,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
 
-    cell.textLabel.text = [(Team*)self.teams[indexPath.row] getName];
+//    cell.textLabel.text = [(Team*)self.teams[indexPath.row] getName];
     
     return cell;
 }

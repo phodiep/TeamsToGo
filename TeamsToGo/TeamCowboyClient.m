@@ -10,8 +10,9 @@
 #import "NetworkController.h"
 #import "ApiKeys.h"
 //#import "User.h"
-#import "UserExtension.h"
-#import "Team.h"
+//#import "UserExtension.h"
+//#import "Team.h"
+#import "TeamCowboyService.h"
 
 @interface TeamCowboyClient ()
 
@@ -131,7 +132,7 @@
                                      withCompletionHandler:^(NSObject *results) {
                                          if (results != nil) {
                                              NSDictionary *json = (NSDictionary*)results;
-                                             self.user = [[User alloc] initWithJson:json];
+//                                             self.user = [[User alloc] initWithJson:json];
                                          }
                                      }];
 }
@@ -154,7 +155,9 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+//                                            [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+                                            [[TeamCowboyService sharedService] addMultipleTeams:json];
+                                            
                                         }
                                     }];
 }
@@ -178,7 +181,7 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+//                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
                                         }
                                     }];
 
