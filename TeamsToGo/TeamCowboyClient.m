@@ -9,7 +9,8 @@
 #import "TeamCowboyClient.h"
 #import "NetworkController.h"
 #import "ApiKeys.h"
-#import "User.h"
+//#import "User.h"
+#import "UserExtension.h"
 #import "Team.h"
 
 @interface TeamCowboyClient ()

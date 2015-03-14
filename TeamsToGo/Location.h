@@ -7,17 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Location : NSObject
+@class Event;
 
--(instancetype)initWithJson:(NSDictionary*)json;
+@interface Location : NSManagedObject
 
--(NSString*)locationId;
--(NSString*)name;
--(NSString*)partOfTown;
--(NSString*)address;
--(NSString*)googleMapsUrl;
--(NSString*)comments;
+@property (nonatomic, retain) NSString * locationId;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * address;
+@property (nonatomic, retain) NSString * googleMapsUrl;
+@property (nonatomic, retain) NSDate * lastSignIn;
+@property (nonatomic, retain) NSSet *events;
+@end
 
+@interface Location (CoreDataGeneratedAccessors)
+
+- (void)addEventsObject:(Event *)value;
+- (void)removeEventsObject:(Event *)value;
+- (void)addEvents:(NSSet *)values;
+- (void)removeEvents:(NSSet *)values;
 
 @end

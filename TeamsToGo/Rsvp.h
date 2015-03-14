@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Rsvp : NSObject
+@class User;
+
+@interface Rsvp : NSManagedObject
+
+@property (nonatomic, retain) NSString * status;
+@property (nonatomic, retain) NSString * addlMale;
+@property (nonatomic, retain) NSString * addlFemale;
+@property (nonatomic, retain) NSString * comments;
+@property (nonatomic, retain) NSManagedObject *event;
+@property (nonatomic, retain) User *user;
 
 @end
