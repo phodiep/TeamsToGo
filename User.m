@@ -7,6 +7,8 @@
 //
 
 #import "User.h"
+#import "Rsvp.h"
+#import "Team.h"
 
 
 @implementation User
@@ -16,6 +18,7 @@
 @dynamic emailAddress;
 @dynamic phone;
 @dynamic gender;
+@dynamic lastUpdated;
 @dynamic teamManager;
 @dynamic rsvps;
 

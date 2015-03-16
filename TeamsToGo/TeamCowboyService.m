@@ -36,35 +36,24 @@
     return self;
 }
 
--(Team*)addNewTeam:(NSString*)name teamId:(NSString*)teamId forActivity:(NSString*)activity lastUpdate:(NSDate*)lastUpdate {
-    if (name != nil && teamId != nil && lastUpdate != nil) {
-        Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:self.context];
-        team.teamId = teamId;
-        team.activity = activity;
-        team.name = name;
-        team.lastUpdate = lastUpdate;
-        
-        NSError *saveError;
-        [self.context save:&saveError];
-        if (saveError == nil) {
-            return team;
-        }
-    }
-    return nil;
-}
-
+#pragma mark - Team
 -(Team*)addNewTeamWithJson:(NSDictionary*)json {
     if (json != nil) {
         Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:self.context];
         team.teamId = [NSString stringWithFormat:@"%@",json[@"teamId"]];
         team.activity = json[@"activity"][@"name"];
         team.name = json[@"name"];
-//        team.lastUpdate = json[@"dateLastUpdatedUtc"];
+
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-mm-dd HH:mm:ss"];
+        team.lastUpdate = [dateFormat dateFromString:json[@"dateLastUpdatedUtc"]];
+        
+        //TODO: add manager
         
         NSError *saveError;
         [self.context save:&saveError];
         if (saveError == nil) {
-            NSLog(@"\nTeam Name ... %@",team.name);
+            NSLog(@"\nTeam Name ... %@",team.lastUpdate);
             return team;
         } else {
             NSLog(@"\nError ... %@", saveError.localizedDescription);
@@ -81,5 +70,29 @@
     }
 }
 
+#pragma mark - User
+-(User*)addNewUserWithJson:(NSDictionary*)json {
+    if (json !=nil) {
+        User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:self.context];
+        
+        user.userId = json[@"userId"];
+        user.name = json[@"fullName"];
+        user.emailAddress = json[@"emailAddress1"];
+        user.phone = json[@"phone1"];
+        user.gender = json[@"gender"];
+        //TODO: add last updated
+//        user.lastUpdated = json[@"dateLastUpdatedUtc"];
+        
+        NSError *saveError;
+        [self.context save:&saveError];
+        if (saveError == nil) {
+            NSLog(@"\nTeam Name ... %@",user.name);
+            return user;
+        } else {
+            NSLog(@"\nError ... %@", saveError.localizedDescription);
+        }
+    }
+    return nil;
+}
 
 @end
