@@ -6,11 +6,14 @@
 //  Copyright (c) 2015 Pho Diep. All rights reserved.
 //
 
+#import "CoreDataStack.h"
 #import "TeamsViewController.h"
 #import "Team.h"
 #import "TeamCowboyClient.h"
 
 @interface TeamsViewController () <UITableViewDataSource>
+
+@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) NSMutableDictionary *views;
@@ -46,14 +49,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.context = [[CoreDataStack alloc] init].managedObjectContext;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;
     
+    [self getTeams];
+    
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.teams = [[TeamCowboyClient alloc] teams];
+-(void)getTeams {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+
+    NSError *fetchError = nil;
+    self.teams = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+
 }
 
 #pragma mark - UITableViewDataSource
@@ -66,8 +78,8 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-
-//    cell.textLabel.text = [(Team*)self.teams[indexPath.row] getName];
+    cell.backgroundColor = [UIColor redColor];
+    cell.textLabel.text = [(Team*)self.teams[indexPath.row] name];
     
     return cell;
 }

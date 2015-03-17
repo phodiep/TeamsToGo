@@ -211,6 +211,16 @@
 		1DF01FA31A8068F9008F514C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1D4D27D11AB2567300849911 /* ScheduleViewController.h */,
+				1D4D27D21AB2567300849911 /* ScheduleViewController.m */,
+				1D4D27D41AB256E500849911 /* LoginViewController.h */,
+				1D4D27D51AB256E500849911 /* LoginViewController.m */,
+				1D4D27D71AB25A6C00849911 /* SettingsViewController.h */,
+				1D4D27D81AB25A6C00849911 /* SettingsViewController.m */,
+				1D4D27DA1AB25AA800849911 /* TeamsViewController.h */,
+				1D4D27DB1AB25AA800849911 /* TeamsViewController.m */,
+				1D4D27DD1AB25C1800849911 /* MessagesViewController.h */,
+				1D4D27DE1AB25C1800849911 /* MessagesViewController.m */,
 				1DF01FAF1A807388008F514C /* NetworkController.h */,
 				1DF01FB01A807388008F514C /* NetworkController.m */,
 				1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */,
@@ -222,16 +232,6 @@
 		1DF01FA41A806902008F514C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				1D4D27D11AB2567300849911 /* ScheduleViewController.h */,
-				1D4D27D21AB2567300849911 /* ScheduleViewController.m */,
-				1D4D27D41AB256E500849911 /* LoginViewController.h */,
-				1D4D27D51AB256E500849911 /* LoginViewController.m */,
-				1D4D27D71AB25A6C00849911 /* SettingsViewController.h */,
-				1D4D27D81AB25A6C00849911 /* SettingsViewController.m */,
-				1D4D27DA1AB25AA800849911 /* TeamsViewController.h */,
-				1D4D27DB1AB25AA800849911 /* TeamsViewController.m */,
-				1D4D27DD1AB25C1800849911 /* MessagesViewController.h */,
-				1D4D27DE1AB25C1800849911 /* MessagesViewController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
