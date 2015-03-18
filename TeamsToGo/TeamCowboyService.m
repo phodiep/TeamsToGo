@@ -50,10 +50,8 @@
     if (json != nil) {
         if ( [self teamAlreadyExists:json[@"teamId"]] == false ) {
             Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:self.context];
-            
             [self setTeamProperties:team withJson:json];
             [self saveContext:[NSString stringWithFormat:@"Created Team: %@", team.name]];
-            
         } else {
             [self updateTeamIfNecessary:json[@"teamId"] withJson:json];
         }
@@ -83,6 +81,28 @@
 }
 
 -(void)updateTeamIfNecessary:(NSString*)teamId withJson:(NSDictionary*)json {
+    NSArray *fetchTeamResults = [self fetchTeamById:teamId];
+    
+    if ([fetchTeamResults count] == 1) {
+        Team *team = fetchTeamResults[0];
+
+        if (team.lastUpdate != [self formatDate:json[@"dateLastUpdatedUtc"]]) {
+            [self setTeamProperties:team withJson:json];
+            [self saveContext:[NSString stringWithFormat:@"Updated Team: %@", team.name]];
+        }
+    }
+}
+
+-(BOOL)teamAlreadyExists:(NSString*)teamId {
+    NSArray *fetchTeamResults = [self fetchTeamById:teamId];
+    
+    if ([fetchTeamResults count] > 0) {
+        return true;
+    }
+    return false;
+}
+
+-(NSArray*)fetchTeamById:(NSString*)teamId {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:self.context];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
@@ -93,32 +113,11 @@
     NSError *fetchError = nil;
     NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
     
-    if ([fetchResults count] == 1) {
-        Team *team = fetchResults[0];
-
-        if (team.lastUpdate != [self formatDate:json[@"dateLastUpdatedUtc"]]) {
-            [self setTeamProperties:team withJson:json];
-            [self saveContext:[NSString stringWithFormat:@"Updated Team: %@", team.name]];
-        }
-    }
-}
-
--(BOOL)teamAlreadyExists:(NSString*)teamId {
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:self.context];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:entityDescription];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"teamId == %@", teamId];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *fetchError = nil;
-    NSUInteger count = [self.context countForFetchRequest:fetchRequest error:&fetchError];
-
     if (fetchError != nil) {
         NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-        return nil;
     }
-    return (count != 0);
+    
+    return fetchResults;
 }
 
 
@@ -182,23 +181,100 @@
 
 
 #pragma mark - Event
+-(void)addMultipleEvents:(NSArray *)jsonArray {
+    if (jsonArray != nil) {
+        for (NSDictionary *json in jsonArray) {
+            [self addNewEventWithJson:json];
+        }
+    }
+}
+
 -(Event*)addNewEventWithJson:(NSDictionary*)json {
     if (json != nil) {
-        if ( [self eventAlreadyExists:json[@"eventId"]] == false ) {
-            Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+        if ([self eventAlreadyExists:json[@"eventId"]]) {
+            return [self updateEventIfNecessary:json[@"eventId"] withJson:json];
             
         } else {
-            
+            Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+            [self setEventProperties:event withJson:json];
+            [self saveContext:[NSString stringWithFormat:@"Created Event: %@", event.title]];
+            return event;
         }
     }
     return nil;
 }
 
--(void)addMultipleEvents:(NSArray *)jsonArray {
+-(BOOL)eventAlreadyExists:(NSString*)eventId {
+    NSArray *fetchResults = [self fetchEventById:eventId];
     
+    if ([fetchResults count] > 0) {
+        return true;
+    }
+    return false;
 }
 
--(BOOL)eventAlreadyExists:(NSString*)eventId {
+-(void)setEventProperties:(Event*)event withJson:(NSDictionary*)json {
+    if (json[@"eventId"] != nil) {
+        event.eventId = [NSString stringWithFormat:@"%@", json[@"eventId"]];
+    }
+    if (json[@"title"] != nil) {
+        event.title = json[@"title"];
+    }
+    if (json[@"status"] != nil) {
+        event.status = json[@"status"];
+    }
+    if (json[@"dateTimeInfo"][@"startDateTimeLocalDisplay"] != nil) {
+        event.startTime = json[@"dateTimeInfo"][@"startDateTimeLocalDisplay"];
+    }
+    if (json[@"homeAway"] != nil) {
+        event.homeAway = json[@"homeAway"];
+    }
+    //TODO: deal with "null"
+//    if (json[@"comments"] != nil && ![json[@"comments"]  isEqual: @"null"]) {
+//        event.comments = json[@"comments"];
+//    }
+    //TODO: shirtColors
+//    if (json[@"shirtColors"][@"team1"] != nil) {
+//        event.teamColor = json[@"shirtColors"][@"team1"];
+//    }
+//    if (json[@"shirtColors"][@"team2"] != nil) {
+//        event.opponentColor = json[@"shirtColors"][@"team2"];
+//    }
+
+    if (json[@"dateLastUpdatedUtc"] != nil) {
+        event.lastUpdate = [self formatDate:json[@"dateLastUpdatedUtc"]];
+    }
+    if (json[@"team"] != nil) {
+//        event.team = [self addNewTeamWithJson:json[@"team"]];
+    }
+    
+    //TODO: add location
+//    event.location = json[@""];
+}
+
+-(Event*)updateEventIfNecessary:(NSString*)eventId withJson:(NSDictionary*)json {
+    NSArray *fetchResults = [self fetchEventById:eventId];
+    
+    if ([fetchResults count] == 1) {
+        Event *event = fetchResults[0];
+        
+        if ( [self eventHasBeenUpdated:event withJson:json]) {
+            [self setEventProperties:event withJson:json];
+            [self saveContext:[NSString stringWithFormat:@"Updated Event: %@", event.title]];
+        }
+        return event;
+    }
+    return nil;
+}
+
+-(BOOL)eventHasBeenUpdated:(Event*)event withJson:(NSDictionary*)json {
+    if (event.lastUpdate == [self formatDate:json[@"dateLastUpdatedUtc"]]) {
+        return false;
+    }
+    return true;
+}
+
+-(NSArray*)fetchEventById:(NSString*)eventId {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
@@ -207,49 +283,13 @@
     [fetchRequest setPredicate:predicate];
     
     NSError *fetchError = nil;
-    NSUInteger count = [self.context countForFetchRequest:fetchRequest error:&fetchError];
+    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
     
     if (fetchError != nil) {
         NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-        return nil;
-    }
-    return (count != 0);
-}
-
--(void)setEvenProperties:(Event*)event withJson:(NSDictionary*)json {
-    if (json[@"eventId"] != nil) {
-        event.eventId = json[@"eventId"];
-    }
-    if (json[@"title"] != nil) {
-        event.title = json[@"title"];
-    }
-    if (json[@"status"] != nil) {
-        event.status = json[@"status"];
-    }
-    if (json[@"dateTimeInfo"][@"startDateTimeLocal"] != nil) {
-        event.startTime = json[@"dateTimeInfo"][@"startDateTimeLocal"];
-    }
-    if (json[@"homeAway"] != nil) {
-        event.homeAway = json[@"homeAway"];
-    }
-    if (json[@"comments"] != nil) {
-        event.comments = json[@"comments"];
-    }
-    if (json[@"shirtColors"][@"team1"] != nil) {
-        event.teamColor = json[@"shirtColors"][@"team1"];
-    }
-    if (json[@"shirtColors"][@"team2"] != nil) {
-        event.opponentColor = json[@"shirtColors"][@"team2"];
-    }
-    if (json[@"dateLastUpdatedUtc"] != nil) {
-        event.lastUpdate = json[@"dateLastUpdatedUtc"];
-    }
-    if (json[@"team"] != nil) {
-        event.team = json[@"team"];
     }
     
-    //TODO: add location
-//    event.location = json[@""];
+    return fetchResults;
 }
 
 

@@ -16,6 +16,7 @@
 -(void)authGetUserToken;
 -(void)userGet;
 -(void)userGetTeams;
+-(void)userGetTeamEvents;
 
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSArray *teams;
