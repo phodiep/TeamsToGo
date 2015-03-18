@@ -115,27 +115,27 @@
 }
 
 #pragma mark - User_Get
--(void)userGet {
-    NSString *methodCall = @"User_Get";
-    BOOL usingSSL = false;
-
-    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
-    
-    NSDictionary *param = @{@"method" : methodCall,
-                            @"timestamp" : self.timestamp,
-                            @"nonce" : self.nonce,
-                            @"userToken" : userToken};
-    
-    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
-                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
-                                            withParameters:param
-                                     withCompletionHandler:^(NSObject *results) {
-                                         if (results != nil) {
-                                             NSDictionary *json = (NSDictionary*)results;
-//                                             self.user = [[User alloc] initWithJson:json];
-                                         }
-                                     }];
-}
+//-(void)userGet {
+//    NSString *methodCall = @"User_Get";
+//    BOOL usingSSL = false;
+//
+//    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+//    
+//    NSDictionary *param = @{@"method" : methodCall,
+//                            @"timestamp" : self.timestamp,
+//                            @"nonce" : self.nonce,
+//                            @"userToken" : userToken};
+//    
+//    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+//                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+//                                            withParameters:param
+//                                     withCompletionHandler:^(NSObject *results) {
+//                                         if (results != nil) {
+//                                             NSDictionary *json = (NSDictionary*)results;
+////                                             self.user = [[User alloc] initWithJson:json];
+//                                         }
+//                                     }];
+//}
 
 #pragma mark - User_GetTeams
 -(void)userGetTeams {
@@ -163,17 +163,41 @@
 }
 
 #pragma mark - User_GetTeamMessages
--(void)userGetTeamMessagesForTeam:(NSString*)teamId {
-    NSString *methodCall = @"User_GetTeamMessages";
+//-(void)userGetTeamMessagesForTeam:(NSString*)teamId {
+//    NSString *methodCall = @"User_GetTeamMessages";
+//    BOOL usingSSL = false;
+//    
+//    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+//
+//    NSDictionary *param = @{@"method" : methodCall,
+//                            @"timestamp" : self.timestamp,
+//                            @"nonce" : self.nonce,
+//                            @"userToken" : userToken,
+//                            @"teamId" : teamId};
+//    
+//    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+//                                            toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+//                                           withParameters:param
+//                                    withCompletionHandler:^(NSObject *results) {
+//                                        if (results != nil) {
+//                                            NSArray *json = (NSArray*)results;
+////                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+//                                        }
+//                                    }];
+//}
+
+
+#pragma mark - User_GetTeamEvents
+-(void)userGetTeamEvents {
+    NSString *methodCall = @"User_GetTeamEvents";
     BOOL usingSSL = false;
     
     NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
-
+    
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
                             @"nonce" : self.nonce,
-                            @"userToken" : userToken,
-                            @"teamId" : teamId};
+                            @"userToken" : userToken};
     
     [[NetworkController sharedInstance] makeApiGetRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
@@ -181,12 +205,11 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-//                                            self.teams = [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
+                                            
+                                            [[TeamCowboyService sharedService] addMultipleEvents:json];
+                                            
                                         }
                                     }];
-
-    
 }
-
 
 @end

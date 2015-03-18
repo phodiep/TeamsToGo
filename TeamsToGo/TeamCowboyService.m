@@ -61,15 +61,25 @@
 }
 
 -(void)setTeamProperties:(Team*)team withJson:(NSDictionary*)json {
-    team.teamId = [NSString stringWithFormat:@"%@",json[@"teamId"]];
-    team.activity = json[@"activity"][@"name"];
-    team.name = json[@"name"];
+    if (json[@"teamId"] != nil) {
+        team.teamId = [NSString stringWithFormat:@"%@",json[@"teamId"]];
+    }
     
-    team.lastUpdate = [self formatDate:json[@"dateLastUpdatedUtc"]];
+    if (json[@"activity"][@"name"] != nil) {
+        team.activity = json[@"activity"][@"name"];
+    }
     
-    //TODO: add manager
-    team.manager = [self addNewUserWithJson:json[@"managerUser"]];
-    NSLog(@"%@", team.manager.name);
+    if (json[@"name"] != nil) {
+        team.name = json[@"name"];
+    }
+    
+    if (json[@"dateLastUpdatedUtc"] != nil) {
+        team.lastUpdate = [self formatDate:json[@"dateLastUpdatedUtc"]];
+    }
+    
+    if (json[@"managerUser"] != nil) {
+        team.manager = [self addNewUserWithJson:json[@"managerUser"]];
+    }
 }
 
 -(void)updateTeamIfNecessary:(NSString*)teamId withJson:(NSDictionary*)json {
@@ -144,29 +154,106 @@
 }
 
 -(void)setUserProperties:(User*)user withJson:(NSDictionary*)json {
-    user.userId = [NSString stringWithFormat:@"%@",json[@"userId"]];
-    user.name = json[@"fullName"];
+    if (json[@"userId"] != nil) {
+        user.userId = [NSString stringWithFormat:@"%@",json[@"userId"]];
+    }
     
-    if (json[@"emailAddress"] == nil) {
+    if (json[@"fullName"] != nil) {
+        user.name = json[@"fullName"];
+    }
+    
+    if (json[@"emailAddress"] != nil) {
         user.emailAddress = json[@"emailAddress"];
     }
-    if (json[@"emailAddress1"] == nil) {
+    if (json[@"emailAddress1"] != nil) {
         user.emailAddress = json[@"emailAddress1"];
     }
 
-    if (json[@"phone1"] == nil) {
+    if (json[@"phone1"] != nil) {
         user.phone = json[@"phone1"];
     }
-    if (json[@"gender"] == nil) {
+    if (json[@"gender"] != nil) {
         user.gender = json[@"gender"];
     }
-    if (json[@"dateLastUpdatedUtc"] == nil) {
+    if (json[@"dateLastUpdatedUtc"] != nil) {
         user.lastUpdated = [self formatDate:json[@"dateLastUpdatedUtc"]];
     }
 }
 
 
+#pragma mark - Event
+-(Event*)addNewEventWithJson:(NSDictionary*)json {
+    if (json != nil) {
+        if ( [self eventAlreadyExists:json[@"eventId"]] == false ) {
+            Event *event = [NSEntityDescription insertNewObjectForEntityForName:@"Event" inManagedObjectContext:self.context];
+            
+        } else {
+            
+        }
+    }
+    return nil;
+}
 
+-(void)addMultipleEvents:(NSArray *)jsonArray {
+    
+}
+
+-(BOOL)eventAlreadyExists:(NSString*)eventId {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *fetchError = nil;
+    NSUInteger count = [self.context countForFetchRequest:fetchRequest error:&fetchError];
+    
+    if (fetchError != nil) {
+        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+        return nil;
+    }
+    return (count != 0);
+}
+
+-(void)setEvenProperties:(Event*)event withJson:(NSDictionary*)json {
+    if (json[@"eventId"] != nil) {
+        event.eventId = json[@"eventId"];
+    }
+    if (json[@"title"] != nil) {
+        event.title = json[@"title"];
+    }
+    if (json[@"status"] != nil) {
+        event.status = json[@"status"];
+    }
+    if (json[@"dateTimeInfo"][@"startDateTimeLocal"] != nil) {
+        event.startTime = json[@"dateTimeInfo"][@"startDateTimeLocal"];
+    }
+    if (json[@"homeAway"] != nil) {
+        event.homeAway = json[@"homeAway"];
+    }
+    if (json[@"comments"] != nil) {
+        event.comments = json[@"comments"];
+    }
+    if (json[@"shirtColors"][@"team1"] != nil) {
+        event.teamColor = json[@"shirtColors"][@"team1"];
+    }
+    if (json[@"shirtColors"][@"team2"] != nil) {
+        event.opponentColor = json[@"shirtColors"][@"team2"];
+    }
+    if (json[@"dateLastUpdatedUtc"] != nil) {
+        event.lastUpdate = json[@"dateLastUpdatedUtc"];
+    }
+    if (json[@"team"] != nil) {
+        event.team = json[@"team"];
+    }
+    
+    //TODO: add location
+//    event.location = json[@""];
+}
+
+
+#pragma mark - misc
 -(NSDate*)formatDate:(NSString*)dateString {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-mm-dd HH:mm:ss"];
@@ -182,6 +269,8 @@
         NSLog(@"%@",successString);
     }
 }
+
+
 
 
 

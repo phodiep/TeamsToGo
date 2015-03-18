@@ -33,7 +33,6 @@
 //    [self promptUserToLoginIfNecessary];
 //    
     [self getUserTokenIfNecessary];
-    [[TeamCowboyClient alloc] userGetTeams];
 
     [self setupTabBar];
     
@@ -68,18 +67,19 @@
     teamsVC.tabBarItem.title = @"Teams";
     teamsVC.tabBarItem.image = [UIImage imageNamed:@"team"];
     
-    MessagesViewController *messagesVC = [[MessagesViewController alloc] init];
-    messagesVC.tabBarItem.title = @"Messages";
-    messagesVC.tabBarItem.image = [UIImage imageNamed:@"message"];
+//    MessagesViewController *messagesVC = [[MessagesViewController alloc] init];
+//    messagesVC.tabBarItem.title = @"Messages";
+//    messagesVC.tabBarItem.image = [UIImage imageNamed:@"message"];
     
-    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-    settingsVC.tabBarItem.title = @"Settings";
-    settingsVC.tabBarItem.image = [UIImage imageNamed:@"settings"];
+//    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+//    settingsVC.tabBarItem.title = @"Settings";
+//    settingsVC.tabBarItem.image = [UIImage imageNamed:@"settings"];
     
     self.tabBar.viewControllers = @[scheduleVC,
                                     teamsVC,
-                                    messagesVC,
-                                    settingsVC];
+                                    //messagesVC,
+                                    //settingsVC
+                                    ];
     self.tabBar.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 }
 

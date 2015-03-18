@@ -21,5 +21,6 @@
 +(id)sharedService;
 
 -(void)addMultipleTeams:(NSArray*)jsonArray;
+-(void)addMultipleEvents:(NSArray *)jsonArray;
 
 @end
