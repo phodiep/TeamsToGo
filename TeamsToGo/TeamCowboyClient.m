@@ -58,27 +58,37 @@
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
                             @"nonce" : self.nonce,
-                            @"testParam" : @"testingParam"};
-
+                            @"testParam" : @"testingGetParam"};
+    NSLog(@"TestingGetRequest");
     [[NetworkController sharedInstance] makeApiGetRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
-                                           withParameters:param withCompletionHandler:nil];
+                                           withParameters:param withCompletionHandler:^(NSObject *results) {
+                                               if (results != nil) {
+                                                   NSArray *json = (NSArray*)results;
+                                                   
+                                                   NSLog(@"%@", json);
+                                                   
+                                               }
+                                           }];
+    
 }
 
 #pragma mark - Test_GetRequest
 -(void)testPostRequest {
     NSString *methodCall = @"Test_PostRequest";
     BOOL usingSSL = false;
-    
+    NSLog(@"TestingPostRequest");
     NSDictionary *param = @{@"method" : methodCall,
                             @"timestamp" : self.timestamp,
                             @"nonce" : self.nonce,
-                            @"testParam" : @"testingParam"};
+                            @"testParam" : @"testingPostParam"};
     
     [[NetworkController sharedInstance] makeApiPostRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
                                            withParameters:param
-                                    withCompletionHandler:nil];
+                                     withCompletionHandler:^(NSObject *results) {
+                                         NSLog(@"%@", results);
+                                     }];
 }
 
 #pragma mark - Auth_GetUserToken

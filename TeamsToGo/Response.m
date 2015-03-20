@@ -24,7 +24,12 @@
 
     self = [super init];
     if (self) {
-        self.success = [data valueForKey:@"success"];
+        if ([data valueForKey:@"success"] == 0) {
+            self.success = NO;
+        } else {
+            self.success = YES;
+        }
+
         self.requestSeconds = [data valueForKey:@"requestSecs"];
 
         NSDictionary* body = [data valueForKey:@"body"];

@@ -106,7 +106,7 @@
 }
 
 -(void)makeApiGetRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSObject *results))completionHandler {
-    
+    NSLog(@"...Make API Get Request");
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
     [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
     [params setObject:@"json" forKey:@"response_type"];
@@ -127,13 +127,13 @@
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = @"GET";
-    
+
     completionHandler([NetworkController makeSynchronousApiRequest:request]);
     
 }
 
 -(void)makeApiPostRequest:(NSString*)apiMethod toEndPointUrl:(NSString*)endPoint withParameters:(NSDictionary*)inputParams withCompletionHandler:(void (^)(NSObject *results))completionHandler {
-    
+    NSLog(@"...Make API Post Request");
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:inputParams];
     [params setObject:[[ApiKeys instance] getPublicKey] forKey:@"api_key"];
     [params setObject:@"json" forKey:@"response_type"];
@@ -170,7 +170,6 @@
     NSError* error = nil;
     
     NSData* result = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
     if (error != nil) {
         NSLog(@"\n\nRequest Error: %@", error);
         return nil;
@@ -182,7 +181,6 @@
     }
 
     Response* finalResponse = [[Response alloc] init:[NSJSONSerialization JSONObjectWithData:result options:0 error:nil]];
-
     return [finalResponse getResults];
     
 }
