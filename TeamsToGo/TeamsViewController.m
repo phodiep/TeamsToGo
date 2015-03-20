@@ -30,16 +30,24 @@
     self.views = [[NSMutableDictionary alloc] init];
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
+    UILabel *title = [[UILabel alloc] init];
+    title.text = @"Teams";
+    title.font = [UIFont systemFontOfSize:20];
+    
+    
     [[TeamCowboyClient alloc] userGetTeams];
     
+    [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     
+    [self.rootView addSubview:title];
     [self.rootView addSubview:self.tableView];
     
+    [self.views setObject:title forKey:@"title"];
     [self.views setObject:self.tableView forKey:@"tableView"];
     
     [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[tableView]-55-|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
 
     
     self.view = self.rootView;
@@ -78,7 +86,6 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.backgroundColor = [UIColor redColor];
     cell.textLabel.text = [(Team*)self.teams[indexPath.row] name];
     
     return cell;

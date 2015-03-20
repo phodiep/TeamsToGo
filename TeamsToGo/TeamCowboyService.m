@@ -46,16 +46,18 @@
     }
 }
 
--(void)addNewTeamWithJson:(NSDictionary*)json {
+-(Team*)addNewTeamWithJson:(NSDictionary*)json {
     if (json != nil) {
         if ( [self teamAlreadyExists:json[@"teamId"]] == false ) {
             Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team" inManagedObjectContext:self.context];
             [self setTeamProperties:team withJson:json];
             [self saveContext:[NSString stringWithFormat:@"Created Team: %@", team.name]];
+            return team;
         } else {
-            [self updateTeamIfNecessary:json[@"teamId"] withJson:json];
+            return [self updateTeamIfNecessary:json[@"teamId"] withJson:json];
         }
     }
+    return nil;
 }
 
 -(void)setTeamProperties:(Team*)team withJson:(NSDictionary*)json {
@@ -80,7 +82,7 @@
     }
 }
 
--(void)updateTeamIfNecessary:(NSString*)teamId withJson:(NSDictionary*)json {
+-(Team*)updateTeamIfNecessary:(NSString*)teamId withJson:(NSDictionary*)json {
     NSArray *fetchTeamResults = [self fetchTeamById:teamId];
     
     if ([fetchTeamResults count] == 1) {
@@ -90,7 +92,9 @@
             [self setTeamProperties:team withJson:json];
             [self saveContext:[NSString stringWithFormat:@"Updated Team: %@", team.name]];
         }
+        return team;
     }
+    return nil;
 }
 
 -(BOOL)teamAlreadyExists:(NSString*)teamId {
@@ -223,29 +227,34 @@
     if (json[@"status"] != nil) {
         event.status = json[@"status"];
     }
-    if (json[@"dateTimeInfo"][@"startDateTimeLocalDisplay"] != nil) {
-        event.startTime = json[@"dateTimeInfo"][@"startDateTimeLocalDisplay"];
+    if (json[@"dateTimeInfo"][@"startDateTimeLocal"] != nil) {
+        event.startTime = [self formatDate:json[@"dateTimeInfo"][@"startDateTimeLocal"]];
     }
     if (json[@"homeAway"] != nil) {
         event.homeAway = json[@"homeAway"];
     }
-    //TODO: deal with "null"
-//    if (json[@"comments"] != nil && ![json[@"comments"]  isEqual: @"null"]) {
-//        event.comments = json[@"comments"];
-//    }
-    //TODO: shirtColors
-//    if (json[@"shirtColors"][@"team1"] != nil) {
-//        event.teamColor = json[@"shirtColors"][@"team1"];
-//    }
-//    if (json[@"shirtColors"][@"team2"] != nil) {
-//        event.opponentColor = json[@"shirtColors"][@"team2"];
-//    }
+    if (json[@"comments"] != nil) {
+        if (![[NSString stringWithFormat:@"%@", json[@"comments"]] isEqualToString:@"<null>"]) {
+            event.comments = json[@"comments"];
+        }
+    }
+
+    if (json[@"shirtColors"][@"team1"] != nil) {
+        if (![[NSString stringWithFormat:@"%@", json[@"shirtColors"][@"team1"]] isEqualToString:@"<null>"]) {
+            event.teamColor = [NSString stringWithFormat:@"%@",json[@"shirtColors"][@"team1"][@"colors"][0][@"hexCode"]];
+        }
+    }
+    if (json[@"shirtColors"][@"team2"] != nil) {
+        if (![[NSString stringWithFormat:@"%@", json[@"shirtColors"][@"team2"]] isEqualToString:@"<null>"]) {
+            event.opponentColor = [NSString stringWithFormat:@"%@",json[@"shirtColors"][@"team2"][@"colors"][0][@"hexCode"]];
+        }
+    }
 
     if (json[@"dateLastUpdatedUtc"] != nil) {
         event.lastUpdate = [self formatDate:json[@"dateLastUpdatedUtc"]];
     }
     if (json[@"team"] != nil) {
-//        event.team = [self addNewTeamWithJson:json[@"team"]];
+        event.team = [self addNewTeamWithJson:json[@"team"]];
     }
     
     //TODO: add location
@@ -296,7 +305,7 @@
 #pragma mark - misc
 -(NSDate*)formatDate:(NSString*)dateString {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-mm-dd HH:mm:ss"];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     return [dateFormat dateFromString:dateString];
 }
 

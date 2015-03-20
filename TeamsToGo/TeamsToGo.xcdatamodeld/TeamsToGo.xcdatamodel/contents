@@ -6,7 +6,7 @@
         <attribute name="homeAway" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastUpdate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="opponentColor" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="startTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="teamColor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -49,10 +49,10 @@
         <relationship name="teamManager" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="manager" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Event" positionX="-434" positionY="342" width="128" height="225"/>
+        <element name="Location" positionX="151" positionY="449" width="128" height="133"/>
+        <element name="Rsvp" positionX="205" positionY="207" width="128" height="133"/>
         <element name="Team" positionX="-234" positionY="146" width="128" height="133"/>
         <element name="User" positionX="-56" positionY="-7" width="128" height="163"/>
-        <element name="Event" positionX="-434" positionY="342" width="128" height="223"/>
-        <element name="Rsvp" positionX="205" positionY="207" width="128" height="133"/>
-        <element name="Location" positionX="151" positionY="449" width="128" height="133"/>
     </elements>
 </model>
