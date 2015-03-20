@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D134E151A88133B005510B0 /* ResponseError.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E141A88133B005510B0 /* ResponseError.m */; };
 		1D134E181A8815EA005510B0 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E171A8815EA005510B0 /* Response.m */; };
 		1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */; };
 		1D4D27D31AB2567300849911 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27D21AB2567300849911 /* ScheduleViewController.m */; };
@@ -51,8 +50,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D134E131A88133B005510B0 /* ResponseError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponseError.h; sourceTree = "<group>"; };
-		1D134E141A88133B005510B0 /* ResponseError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponseError.m; sourceTree = "<group>"; };
 		1D134E161A8815EA005510B0 /* Response.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Response.h; sourceTree = "<group>"; };
 		1D134E171A8815EA005510B0 /* Response.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Response.m; sourceTree = "<group>"; };
 		1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamCowboyClient.h; sourceTree = "<group>"; };
@@ -249,8 +246,6 @@
 				1DF01FA91A806BD7008F514C /* ApiKeys.m */,
 				1DF01FB21A807712008F514C /* Hashes.h */,
 				1DF01FB31A807712008F514C /* Hashes.m */,
-				1D134E131A88133B005510B0 /* ResponseError.h */,
-				1D134E141A88133B005510B0 /* ResponseError.m */,
 				1D134E161A8815EA005510B0 /* Response.h */,
 				1D134E171A8815EA005510B0 /* Response.m */,
 				1D4D27E61AB49F5900849911 /* Color.h */,
@@ -372,7 +367,6 @@
 				1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */,
 				1DE4586D1ABB816600D46D8F /* Event.m in Sources */,
 				1D4D27D91AB25A6C00849911 /* SettingsViewController.m in Sources */,
-				1D134E151A88133B005510B0 /* ResponseError.m in Sources */,
 				1D4D27DC1AB25AA800849911 /* TeamsViewController.m in Sources */,
 				1D4D27D31AB2567300849911 /* ScheduleViewController.m in Sources */,
 				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,

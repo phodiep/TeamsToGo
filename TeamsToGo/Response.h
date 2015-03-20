@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ResponseError.h"
 
 @interface Response : NSObject
 
@@ -15,6 +14,5 @@
 
 -(BOOL)getDidSucceed;
 -(NSObject*)getResults;
--(ResponseError*)getResponseError;
 
 @end

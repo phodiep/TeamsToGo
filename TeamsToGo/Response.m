@@ -7,36 +7,37 @@
 //
 
 #import "Response.h"
-#import "ResponseError.h"
 
 @interface Response ()
 
 @property (nonatomic) BOOL didSucceed;
-@property (strong, nonatomic) ResponseError* responseError;
 @property (strong, nonatomic) NSString* requestSeconds;
 @property (strong, nonatomic) NSDictionary* result;
+
+@property (strong, nonatomic) NSString *errorCode;
+@property (strong, nonatomic) NSString *errorHttpResponse;
+@property (strong, nonatomic) NSString *errorMessage;
 
 @end
 
 @implementation Response
 
 - (instancetype)init:(NSDictionary*)data {
-
     self = [super init];
     if (self) {
-        if ([data valueForKey:@"success"] == 0) {
-            self.didSucceed = NO;
-        } else {
-            self.didSucceed = YES;
-        }
+        
+        self.didSucceed = (data[@"success"] == 0 ? NO : YES);
 
-        self.requestSeconds = [data valueForKey:@"requestSecs"];
+        self.requestSeconds = data[@"requestSecs"];
 
-        NSDictionary* body = [data valueForKey:@"body"];
-        if (self.didSucceed == false) {
-            self.responseError = [[ResponseError alloc] init:[body valueForKey:@"error"]];
-        } else {
+        NSDictionary* body = data[@"body"];
+        if (self.didSucceed) {
             self.result = body;
+        } else {
+            NSDictionary *error = body[@"error"];
+            self.errorCode = error[@"errorCode"];
+            self.errorHttpResponse = error[@"httpResponse"];
+            self.errorMessage = error[@"message"];
         }
     }
     return self;
@@ -52,10 +53,6 @@
 
 -(NSObject*)getResults {
     return self.result;
-}
-
--(ResponseError*)getResponseError {
-    return self.responseError;
 }
 
 @end
