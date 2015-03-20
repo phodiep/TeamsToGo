@@ -26,5 +26,7 @@
 -(NSArray*)fetchAllTeams;
 -(void)deleteAllTeamsFromCoreData;
 
+-(NSArray*)fetchAllEvents;
+-(void)deleteAllEventsFromCoreData;
 
 @end

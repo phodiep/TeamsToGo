@@ -68,24 +68,13 @@
     [self getAllTeams];
     self.lastUpdated = [NSDate date];
     
-    NSLog(@"Last Updated: %@",[self formatDate:self.lastUpdated]);
-    
-}
+    NSLog(@"Last Updated: %@",[self formatRefreshDate:self.lastUpdated]);
 
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatDate:self.lastUpdated]]];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
     [refreshControl addTarget:self action:@selector(refreshTeamList:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
-    
-}
 
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-//    [self refreshTeamList];
 }
 
 -(void)getAllTeams {
@@ -95,9 +84,9 @@
 -(void)refreshTeamList:(UIRefreshControl*)refreshControl {
     float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
     
-    float minutesBetweenUpdates = 5.0; //will only update if more than 5 minutes have past since last update
+    float minimumMinutesBetweenUpdates = 1.0;
     
-    if (minutesSinceLastUpdate >= minutesBetweenUpdates) {
+    if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
         NSLog(@"minutes since last update: %f", minutesSinceLastUpdate);
     
         [[TeamCowboyService sharedService] deleteAllTeamsFromCoreData];
@@ -107,7 +96,7 @@
         [self.tableView reloadData];
     
         self.lastUpdated = [NSDate date];
-
+        refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
     }
     [refreshControl endRefreshing];
     
@@ -129,9 +118,9 @@
     return cell;
 }
 
--(NSString*)formatDate:(NSDate*)date {
+-(NSString*)formatRefreshDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"h:mm aaa"];
+    [dateFormat setDateFormat:@"MMM d h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
 

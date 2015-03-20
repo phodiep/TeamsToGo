@@ -232,7 +232,7 @@
 }
 
 -(BOOL)eventAlreadyExists:(NSString*)eventId {
-    NSArray *fetchResults = [self fetchEventById:eventId];
+    NSArray *fetchResults = [self fetchEvent:eventId];
     
     if ([fetchResults count] > 0) {
         return true;
@@ -285,7 +285,7 @@
 }
 
 -(Event*)updateEventIfNecessary:(NSString*)eventId withJson:(NSDictionary*)json {
-    NSArray *fetchResults = [self fetchEventById:eventId];
+    NSArray *fetchResults = [self fetchEvent:eventId];
     
     if ([fetchResults count] == 1) {
         Event *event = fetchResults[0];
@@ -306,13 +306,15 @@
     return true;
 }
 
--(NSArray*)fetchEventById:(NSString*)eventId {
+-(NSArray*)fetchEvent:(NSString*)eventId {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
-    [fetchRequest setPredicate:predicate];
+    if (eventId != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
+        [fetchRequest setPredicate:predicate];
+    }
     
     NSError *fetchError = nil;
     NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
@@ -323,6 +325,18 @@
     
     return fetchResults;
 }
+
+-(NSArray*)fetchAllEvents {
+    return [self fetchEvent:nil];
+}
+
+-(void)deleteAllEventsFromCoreData {
+    NSArray *events = [self fetchAllEvents];
+    if (events != nil) {
+        [self deleteFromCoreData:events stringPluralForItems:@"events"];
+    }
+}
+
 
 
 #pragma mark - misc

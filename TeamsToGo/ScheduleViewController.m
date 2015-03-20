@@ -13,6 +13,7 @@
 #import "EventCell.h"
 #import "Team.h"
 #import "Color.h"
+#import "TeamCowboyService.h"
 
 @interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) NSDictionary *views;
 @property (strong, nonatomic) NSArray *events;
 
+@property (strong, nonatomic) NSDate *lastUpdated;
+
 @end
 
 @implementation ScheduleViewController
@@ -33,8 +36,6 @@
 
     self.context = [[CoreDataStack alloc] init].managedObjectContext;
     [[TeamCowboyClient alloc] userGetTeamEvents];
-    [self getEventSchedule];
-    
     
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Schedule";
@@ -76,18 +77,39 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
+    [self getEventSchedule];
+    self.lastUpdated = [NSDate date];
+
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+    [refreshControl addTarget:self action:@selector(refreshSchedule:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
 }
 
 -(void)getEventSchedule {
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:entityDescription];
-    
-    NSError *fetchError = nil;
-    self.events = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-    NSLog(@"%lu", (unsigned long)[self.events count]);
+    self.events = [[TeamCowboyService sharedService] fetchAllEvents];
 }
 
+-(void)refreshSchedule:(UIRefreshControl*)refreshControl {
+    float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
+    
+    float minimumMinutesBetweenUpdates = 1.0;
+    
+    if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
+
+        [[TeamCowboyService sharedService] deleteAllEventsFromCoreData];
+        [[TeamCowboyClient sharedService] userGetTeamEvents];
+        [self getEventSchedule];
+        
+        [self.tableView reloadData];
+        
+        self.lastUpdated = [NSDate date];
+        refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+        
+    }
+
+    [refreshControl endRefreshing];
+}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([self.events count]>0) {
@@ -147,6 +169,12 @@
 -(NSString*)formatDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"EEEE, MMM d yy 'at' h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
+
+-(NSString*)formatRefreshDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"MMM d h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
 
