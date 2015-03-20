@@ -13,7 +13,7 @@
 
 - (instancetype)init:(NSDictionary*)data;
 
--(BOOL)getSuccess;
+-(BOOL)getDidSucceed;
 -(NSObject*)getResults;
 -(ResponseError*)getResponseError;
 

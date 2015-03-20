@@ -11,7 +11,7 @@
 
 @interface Response ()
 
-@property (nonatomic) BOOL success;
+@property (nonatomic) BOOL didSucceed;
 @property (strong, nonatomic) ResponseError* responseError;
 @property (strong, nonatomic) NSString* requestSeconds;
 @property (strong, nonatomic) NSDictionary* result;
@@ -25,15 +25,15 @@
     self = [super init];
     if (self) {
         if ([data valueForKey:@"success"] == 0) {
-            self.success = NO;
+            self.didSucceed = NO;
         } else {
-            self.success = YES;
+            self.didSucceed = YES;
         }
 
         self.requestSeconds = [data valueForKey:@"requestSecs"];
 
         NSDictionary* body = [data valueForKey:@"body"];
-        if (self.success == false) {
+        if (self.didSucceed == false) {
             self.responseError = [[ResponseError alloc] init:[body valueForKey:@"error"]];
         } else {
             self.result = body;
@@ -42,8 +42,8 @@
     return self;
 }
 
--(BOOL)getSuccess {
-    return self.success;
+-(BOOL)getDidSucceed {
+    return self.didSucceed;
 }
 
 -(NSString*)getRequestSeconds {
