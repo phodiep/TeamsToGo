@@ -27,6 +27,15 @@
 
 @implementation TeamCowboyClient
 
++(id)sharedService {
+    static TeamCowboyClient *mySharedService = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        mySharedService = [[self alloc] init];
+    });
+    return mySharedService;
+}
+
 #pragma mark - set secure/non-secure endpoint
 -(NSString *)httpEndPoint {
     if (_httpEndPoint == nil) {
@@ -165,7 +174,6 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-//                                            [[NSArray alloc] initWithArray:[[Team alloc]arrayOfTeamsWithJson:json]];
                                             [[TeamCowboyService sharedService] addMultipleTeams:json];
                                             
                                         }

@@ -23,4 +23,8 @@
 -(void)addMultipleTeams:(NSArray*)jsonArray;
 -(void)addMultipleEvents:(NSArray *)jsonArray;
 
+-(NSArray*)fetchAllTeams;
+-(void)deleteAllTeamsFromCoreData;
+
+
 @end

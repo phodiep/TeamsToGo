@@ -10,6 +10,7 @@
 #import "TeamsViewController.h"
 #import "Team.h"
 #import "TeamCowboyClient.h"
+#import "TeamCowboyService.h"
 
 @interface TeamsViewController () <UITableViewDataSource>
 
@@ -19,6 +20,8 @@
 @property (strong, nonatomic) NSMutableDictionary *views;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *teams;
+
+@property (strong, nonatomic) NSDate *lastUpdated;
 
 @end
 
@@ -35,7 +38,7 @@
     title.font = [UIFont systemFontOfSize:20];
     
     
-    [[TeamCowboyClient alloc] userGetTeams];
+    [[TeamCowboyClient sharedService] userGetTeams];
     
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -62,19 +65,54 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;
     
-    [self getTeams];
+    [self getAllTeams];
+    self.lastUpdated = [NSDate date];
+    
+    NSLog(@"Last Updated: %@",[self formatDate:self.lastUpdated]);
     
 }
 
--(void)getTeams {
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Team" inManagedObjectContext:self.context];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:entityDescription];
-
-    NSError *fetchError = nil;
-    self.teams = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatDate:self.lastUpdated]]];
+    [refreshControl addTarget:self action:@selector(refreshTeamList:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
 }
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+//    [self refreshTeamList];
+}
+
+-(void)getAllTeams {
+    self.teams = [[TeamCowboyService sharedService] fetchAllTeams];
+}
+
+-(void)refreshTeamList:(UIRefreshControl*)refreshControl {
+    float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
+    
+    float minutesBetweenUpdates = 5.0; //will only update if more than 5 minutes have past since last update
+    
+    if (minutesSinceLastUpdate >= minutesBetweenUpdates) {
+        NSLog(@"minutes since last update: %f", minutesSinceLastUpdate);
+    
+        [[TeamCowboyService sharedService] deleteAllTeamsFromCoreData];
+        [[TeamCowboyClient sharedService] userGetTeams];
+        [self getAllTeams];
+    
+        [self.tableView reloadData];
+    
+        self.lastUpdated = [NSDate date];
+
+    }
+    [refreshControl endRefreshing];
+    
+}
+
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -90,5 +128,12 @@
     
     return cell;
 }
+
+-(NSString*)formatDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
+
 
 @end

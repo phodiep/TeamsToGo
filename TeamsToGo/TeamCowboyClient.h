@@ -11,6 +11,8 @@
 
 @interface TeamCowboyClient : NSObject
 
++(id)sharedService;
+
 -(void)testGetRequest;
 -(void)testPostRequest;
 -(void)authGetUserToken;

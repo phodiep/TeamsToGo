@@ -43,7 +43,7 @@
 
 - (void)getUserTokenIfNecessary {
     if ([[NSUserDefaults standardUserDefaults]objectForKey:@"userToken"] == nil) {
-        [[TeamCowboyClient alloc] authGetUserToken];
+        [[TeamCowboyClient sharedService] authGetUserToken];
     }
 }
 
