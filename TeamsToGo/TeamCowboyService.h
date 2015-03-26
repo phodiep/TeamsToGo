@@ -30,5 +30,6 @@
 -(NSArray*)fetchAllFutureEvents;
 -(NSArray*)fetchEventWithId:(NSString*)eventId;
 -(void)deleteAllEventsFromCoreData;
+-(void)deleteAllPastEvents;
 
 @end

@@ -25,6 +25,7 @@
 @property (strong, nonatomic) NSDictionary *views;
 @property (strong, nonatomic) NSArray *events;
 
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSDate *lastUpdated;
 
 @end
@@ -35,7 +36,8 @@
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 
     self.context = [[CoreDataStack alloc] init].managedObjectContext;
-    [self makeApiRequestToGetFreshEvents];
+    [self deletePastEvents];
+    
     
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Schedule";
@@ -80,10 +82,22 @@
     [self getEventSchedule];
     self.lastUpdated = [NSDate date];
 
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
-    [refreshControl addTarget:self action:@selector(refreshSchedule:) forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:refreshControl];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+    [self.refreshControl addTarget:self action:@selector(refreshSchedule) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (![self.events count]) {
+        [self refreshSchedule];
+    }
+    
+}
+
+-(void)deletePastEvents {
+    [[TeamCowboyService sharedService] deleteAllPastEvents];
 }
 
 -(void)getEventSchedule {
@@ -94,25 +108,23 @@
     [[TeamCowboyClient alloc] userGetTeamEvents];
 }
 
--(void)refreshSchedule:(UIRefreshControl*)refreshControl {
+-(void)refreshSchedule {
     float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
     
     float minimumMinutesBetweenUpdates = 1.0;
     
     if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
-
-        [[TeamCowboyService sharedService] deleteAllEventsFromCoreData];
-        [[TeamCowboyClient sharedService] userGetTeamEvents];
+        [self makeApiRequestToGetFreshEvents];
         [self getEventSchedule];
         
         [self.tableView reloadData];
         
         self.lastUpdated = [NSDate date];
-        refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
         
     }
 
-    [refreshControl endRefreshing];
+    [self.refreshControl endRefreshing];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -36,7 +36,6 @@
     [self.rootview addSubview:self.password];
     [self.rootview addSubview:self.loginButton];
     
-    
     NSDictionary *views = @{@"title" : self.titleLabel,
                             @"username" : self.username,
                             @"password" : self.password,

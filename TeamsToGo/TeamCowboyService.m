@@ -133,20 +133,10 @@
 -(void)deleteAllTeamsFromCoreData {
     NSArray *teams = [self fetchAllTeams];
     
-    if (teams != nil) {
-        [self deleteFromCoreData:teams stringPluralForItems:@"teams"];
+    if ([teams count] >0) {
+        [self deleteFromCoreData:teams stringPluralForItems:@"all teams"];
     }
 }
-
--(void)deleteFromCoreData:(NSArray*)items stringPluralForItems:(NSString*)name {
-    if (items != nil) {
-        for (NSManagedObject *item in items) {
-            [self.context deleteObject:item];
-        }
-        [self saveContext:[NSString stringWithFormat:@"deleted all %@", name]];
-    }
-}
-
 
 #pragma mark - User
 -(User*)addNewUserWithJson:(NSDictionary*)json {
@@ -234,10 +224,7 @@
 -(BOOL)eventAlreadyExists:(NSString*)eventId {
     NSArray *fetchResults = [self fetchEventWithId:eventId];
     
-    if ([fetchResults count] > 0) {
-        return true;
-    }
-    return false;
+    return ([fetchResults count] > 0);
 }
 
 -(void)setEventProperties:(Event*)event withJson:(NSDictionary*)json {
@@ -339,20 +326,38 @@
     return [self fetchEventWithPredicate:predicate];
 }
 
+-(void)deleteAllPastEvents {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"startTime < %@", [NSDate date]];
+    NSArray * events = [self fetchEventWithPredicate:predicate];
+    
+    if ([events count] > 0) {
+        [self deleteFromCoreData:events stringPluralForItems:@"past events"];
+    }
+}
+
 -(NSArray*)fetchAllEvents {
     return [self fetchEventWithPredicate:nil];
 }
 
 -(void)deleteAllEventsFromCoreData {
     NSArray *events = [self fetchAllEvents];
-    if (events != nil) {
-        [self deleteFromCoreData:events stringPluralForItems:@"events"];
+    if ([events count] > 0) {
+        [self deleteFromCoreData:events stringPluralForItems:@"all events"];
     }
 }
 
 
 
 #pragma mark - misc
+-(void)deleteFromCoreData:(NSArray*)items stringPluralForItems:(NSString*)name {
+    if (items != nil) {
+        for (NSManagedObject *item in items) {
+            [self.context deleteObject:item];
+        }
+        [self saveContext:[NSString stringWithFormat:@"deleted %@", name]];
+    }
+}
+
 -(NSDate*)formatDate:(NSString*)dateString {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];

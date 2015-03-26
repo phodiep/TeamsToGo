@@ -65,14 +65,14 @@
 //    messagesVC.tabBarItem.title = @"Messages";
 //    messagesVC.tabBarItem.image = [UIImage imageNamed:@"message"];
     
-//    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
-//    settingsVC.tabBarItem.title = @"Settings";
-//    settingsVC.tabBarItem.image = [UIImage imageNamed:@"settings"];
+    SettingsViewController *settingsVC = [[SettingsViewController alloc] init];
+    settingsVC.tabBarItem.title = @"Settings";
+    settingsVC.tabBarItem.image = [UIImage imageNamed:@"settings"];
     
     self.tabBar.viewControllers = @[scheduleVC,
                                     teamsVC,
                                     //messagesVC,
-                                    //settingsVC
+                                    settingsVC
                                     ];
     self.tabBar.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
 }
