@@ -29,14 +29,17 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
-    
-//    [self promptUserToLoginIfNecessary];
-//    
-    [self getUserTokenIfNecessary];
 
     [self setupTabBar];
-    
     self.window.rootViewController = self.tabBar;
+
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"username"] == nil ||
+        [[NSUserDefaults standardUserDefaults]objectForKey:@"password"] == nil) {
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        [self.tabBar presentViewController:loginVC animated:true completion:nil];
+    } else {
+        [self getUserTokenIfNecessary];
+    }
     
     return YES;
 }
@@ -44,15 +47,6 @@
 - (void)getUserTokenIfNecessary {
     if ([[NSUserDefaults standardUserDefaults]objectForKey:@"userToken"] == nil) {
         [[TeamCowboyClient sharedService] authGetUserToken];
-    }
-}
-
-- (void)promptUserToLoginIfNecessary {
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"username"] == nil ||
-        [[NSUserDefaults standardUserDefaults]objectForKey:@"password"] == nil) {
-//        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        
-        
     }
 }
 

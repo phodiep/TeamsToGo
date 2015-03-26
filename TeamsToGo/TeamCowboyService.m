@@ -232,7 +232,7 @@
 }
 
 -(BOOL)eventAlreadyExists:(NSString*)eventId {
-    NSArray *fetchResults = [self fetchEvent:eventId];
+    NSArray *fetchResults = [self fetchEventWithId:eventId];
     
     if ([fetchResults count] > 0) {
         return true;
@@ -285,7 +285,7 @@
 }
 
 -(Event*)updateEventIfNecessary:(NSString*)eventId withJson:(NSDictionary*)json {
-    NSArray *fetchResults = [self fetchEvent:eventId];
+    NSArray *fetchResults = [self fetchEventWithId:eventId];
     
     if ([fetchResults count] == 1) {
         Event *event = fetchResults[0];
@@ -306,13 +306,12 @@
     return true;
 }
 
--(NSArray*)fetchEvent:(NSString*)eventId {
+-(NSArray*)fetchEventWithPredicate:(NSPredicate*)predicate {
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.context];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entityDescription];
     
-    if (eventId != nil) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
+    if (predicate != nil) {
         [fetchRequest setPredicate:predicate];
     }
     
@@ -326,8 +325,22 @@
     return fetchResults;
 }
 
+
+-(NSArray*)fetchEventWithId:(NSString*)eventId {
+    if (eventId != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", eventId];
+        return [self fetchEventWithPredicate:predicate];
+    }
+    return nil;
+}
+
+-(NSArray*)fetchAllFutureEvents {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"startTime >= %@", [NSDate date]];
+    return [self fetchEventWithPredicate:predicate];
+}
+
 -(NSArray*)fetchAllEvents {
-    return [self fetchEvent:nil];
+    return [self fetchEventWithPredicate:nil];
 }
 
 -(void)deleteAllEventsFromCoreData {

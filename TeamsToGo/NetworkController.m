@@ -11,7 +11,6 @@
 #import "ApiKeys.h"
 #import "Hashes.h"
 #import "Response.h"
-#import "ResponseError.h"
 #import <CoreFoundation/CoreFoundation.h>
 
 #pragma mark - interface
@@ -175,8 +174,10 @@
         return nil;
     }
 
-    if ([NetworkController goodReponseCode:response] == false) {
+    if ([NetworkController goodResponseCode:response] == false) {
         //deal w/ bad response
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+        NSLog(@"Bad Response: %ld", (long)httpResponse.statusCode);
         return nil;
     }
 
@@ -186,7 +187,7 @@
 }
 
 
-+ (BOOL)goodReponseCode:(NSURLResponse*)response {
++ (BOOL)goodResponseCode:(NSURLResponse*)response {
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     
     switch (httpResponse.statusCode) {

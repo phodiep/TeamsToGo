@@ -121,7 +121,6 @@
                                      withCompletionHandler:^(NSObject *results) {
                                          if (results != nil) {
                                              NSDictionary *json = (NSDictionary*)results;
-                                             
                                              if (results != nil) {
                                                  [[NSUserDefaults standardUserDefaults]setObject:json[@"userId"]
                                                                                           forKey:@"userId"];

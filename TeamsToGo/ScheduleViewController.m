@@ -15,7 +15,7 @@
 #import "Color.h"
 #import "TeamCowboyService.h"
 
-@interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic) BOOL largeScreen;
 
@@ -35,7 +35,7 @@
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 
     self.context = [[CoreDataStack alloc] init].managedObjectContext;
-    [[TeamCowboyClient alloc] userGetTeamEvents];
+    [self makeApiRequestToGetFreshEvents];
     
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Schedule";
@@ -87,7 +87,11 @@
 }
 
 -(void)getEventSchedule {
-    self.events = [[TeamCowboyService sharedService] fetchAllEvents];
+    self.events = [[TeamCowboyService sharedService] fetchAllFutureEvents];
+}
+
+-(void)makeApiRequestToGetFreshEvents {
+    [[TeamCowboyClient alloc] userGetTeamEvents];
 }
 
 -(void)refreshSchedule:(UIRefreshControl*)refreshControl {
