@@ -101,6 +101,7 @@
             [alertView show];
         } else {
             [self dismissViewControllerAnimated:true completion:nil];
+
         }
         
     }

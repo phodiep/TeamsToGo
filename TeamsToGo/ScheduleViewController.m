@@ -84,7 +84,7 @@
 
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
-    [self.refreshControl addTarget:self action:@selector(refreshSchedule) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(manualRefreshSchedule) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:self.refreshControl];
 }
 
@@ -109,22 +109,27 @@
 }
 
 -(void)refreshSchedule {
+    [self makeApiRequestToGetFreshEvents];
+    [self getEventSchedule];
+    
+    [self.tableView reloadData];
+    
+    self.lastUpdated = [NSDate date];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+
+}
+
+-(void)manualRefreshSchedule {
     float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
     
     float minimumMinutesBetweenUpdates = 1.0;
     
     if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
-        [self makeApiRequestToGetFreshEvents];
-        [self getEventSchedule];
-        
-        [self.tableView reloadData];
-        
-        self.lastUpdated = [NSDate date];
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
-        
+        [self refreshSchedule];
     }
-
+    
     [self.refreshControl endRefreshing];
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
