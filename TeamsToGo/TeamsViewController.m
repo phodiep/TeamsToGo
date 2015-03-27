@@ -11,8 +11,9 @@
 #import "Team.h"
 #import "TeamCowboyClient.h"
 #import "TeamCowboyService.h"
+#import "TeamViewController.h"
 
-@interface TeamsViewController () <UITableViewDataSource>
+@interface TeamsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *context;
 
@@ -64,6 +65,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     
     [self getAllTeams];
     self.lastUpdated = [NSDate date];
@@ -123,6 +125,16 @@
     [dateFormat setDateFormat:@"MMM d h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
+
+#pragma mark - UITableViewDelegate
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    TeamViewController *teamVC = [[TeamViewController alloc] init];
+    teamVC.teamId = [(Team*)self.teams[indexPath.row] teamId];
+    
+    [self presentViewController:teamVC animated:true completion:nil];
+    
+}
+
 
 
 @end

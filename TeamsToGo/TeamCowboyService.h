@@ -13,6 +13,7 @@
 #import "Rsvp.h"
 #import "Team.h"
 #import "User.h"
+#import "Player.h"
 
 @interface TeamCowboyService : NSObject
 
@@ -25,6 +26,8 @@
 
 -(NSArray*)fetchAllTeams;
 -(void)deleteAllTeamsFromCoreData;
+
+-(void)addPlayers:(NSArray*)jsonArray toTeam:(NSString*)teamId;
 
 -(NSArray*)fetchAllEvents;
 -(NSArray*)fetchAllFutureEvents;

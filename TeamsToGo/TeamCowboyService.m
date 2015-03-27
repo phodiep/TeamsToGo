@@ -138,35 +138,26 @@
     }
 }
 
+
 #pragma mark - User
 -(User*)addNewUserWithJson:(NSDictionary*)json {
     if (json !=nil) {
         if ( [self userAlreadyExists:json[@"userId"]] == false ) {
             User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:self.context];
             [self setUserProperties:user withJson:json];
-        
             [self saveContext:[NSString stringWithFormat:@"\nUser Name ... %@",user.name]];
+            return user;
+            
+        } else {
+            User *user = [self fetchUsers:json[@"userId"]][0];
+            return user;
         }
     }
     return nil;
 }
 
 -(BOOL)userAlreadyExists:(NSString*)userId {
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"User" inManagedObjectContext:self.context];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:entityDescription];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@", userId];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *fetchError = nil;
-    NSUInteger count = [self.context countForFetchRequest:fetchRequest error:&fetchError];
-    
-    if (fetchError != nil) {
-        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-        return nil;
-    }
-    return (count != 0);
+    return ( [[self fetchUsers:userId] count] > 0 );
 }
 
 -(void)setUserProperties:(User*)user withJson:(NSDictionary*)json {
@@ -194,6 +185,54 @@
     if (json[@"dateLastUpdatedUtc"] != nil) {
         user.lastUpdated = [self formatDate:json[@"dateLastUpdatedUtc"]];
     }
+}
+
+-(NSArray*)fetchUsers:(NSString*)userId {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"User" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    if (userId != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userId == %@", userId];
+        [fetchRequest setPredicate:predicate];
+    }
+    
+    NSError *fetchError = nil;
+    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+    
+    if (fetchError != nil) {
+        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+    }
+    
+    return fetchResults;
+}
+
+
+#pragma mark - Player
+
+-(void)addPlayers:(NSArray*)jsonArray toTeam:(NSString*)teamId {
+    if (jsonArray != nil && ![teamId isEqualToString:@""] ) {
+        Team *team = [self fetchTeams:teamId][0];
+        for (NSDictionary *json in jsonArray) {
+            User *user = [self addNewUserWithJson:json];
+            [self addPlayer:user toTeam:team withType:json[@"teamMeta"][@"teamMemberType"][@"titleShort"]];
+        }
+    }
+    
+}
+
+-(Player*)addPlayer:(User*)user toTeam:(Team*)team withType:(NSString*)type {
+    
+    if (user != nil && team != nil && ![type isEqualToString:@""]) {
+        Player *player = [NSEntityDescription insertNewObjectForEntityForName:@"Player" inManagedObjectContext:self.context];
+        player.user = user;
+        player.team = team;
+        player.type = type;
+        
+        [self saveContext:[NSString stringWithFormat:@"\nPlayer's Name ... %@ (%@)",user.name, type]];
+        return player;
+    }
+    return nil;
 }
 
 

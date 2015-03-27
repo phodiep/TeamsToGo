@@ -15,13 +15,15 @@
 		1D4D27DC1AB25AA800849911 /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27DB1AB25AA800849911 /* TeamsViewController.m */; };
 		1D4D27DF1AB25C1800849911 /* MessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27DE1AB25C1800849911 /* MessagesViewController.m */; };
 		1D4D27E81AB49F5900849911 /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27E71AB49F5900849911 /* Color.m */; };
-		1D4D27F11AB4D32300849911 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27F01AB4D32300849911 /* Team.m */; };
 		1D4D27F41AB4D32300849911 /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27F31AB4D32300849911 /* Rsvp.m */; };
 		1D4D27FA1AB4D32300849911 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27F91AB4D32300849911 /* Location.m */; };
 		1D4D280D1AB4E2CC00849911 /* CoreDataStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D280C1AB4E2CC00849911 /* CoreDataStack.m */; };
 		1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D280F1AB4E88400849911 /* TeamCowboyService.m */; };
-		1D4D28131AB5021000849911 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D28121AB5021000849911 /* User.m */; };
 		1D4D28161ABA045900849911 /* EventCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D28151ABA045900849911 /* EventCell.m */; };
+		1D6671451AC4C3D600074518 /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671441AC4C3D600074518 /* TeamViewController.m */; };
+		1D66714B1AC4CA6100074518 /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D66714A1AC4CA6100074518 /* Team.m */; };
+		1D66714E1AC4CA6100074518 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D66714D1AC4CA6100074518 /* Player.m */; };
+		1D6671511AC4CA6200074518 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671501AC4CA6200074518 /* User.m */; };
 		1DE4586D1ABB816600D46D8F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE4586C1ABB816600D46D8F /* Event.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
@@ -66,8 +68,6 @@
 		1D4D27DE1AB25C1800849911 /* MessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesViewController.m; sourceTree = "<group>"; };
 		1D4D27E61AB49F5900849911 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		1D4D27E71AB49F5900849911 /* Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
-		1D4D27EF1AB4D32300849911 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
-		1D4D27F01AB4D32300849911 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		1D4D27F21AB4D32300849911 /* Rsvp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rsvp.h; sourceTree = "<group>"; };
 		1D4D27F31AB4D32300849911 /* Rsvp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rsvp.m; sourceTree = "<group>"; };
 		1D4D27F81AB4D32300849911 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
@@ -76,10 +76,16 @@
 		1D4D280C1AB4E2CC00849911 /* CoreDataStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataStack.m; sourceTree = "<group>"; };
 		1D4D280E1AB4E88400849911 /* TeamCowboyService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamCowboyService.h; sourceTree = "<group>"; };
 		1D4D280F1AB4E88400849911 /* TeamCowboyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamCowboyService.m; sourceTree = "<group>"; };
-		1D4D28111AB5021000849911 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = ../User.h; sourceTree = "<group>"; };
-		1D4D28121AB5021000849911 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = ../User.m; sourceTree = "<group>"; };
 		1D4D28141ABA045900849911 /* EventCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCell.h; sourceTree = "<group>"; };
 		1D4D28151ABA045900849911 /* EventCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCell.m; sourceTree = "<group>"; };
+		1D6671431AC4C3D600074518 /* TeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
+		1D6671441AC4C3D600074518 /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
+		1D6671491AC4CA6100074518 /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		1D66714A1AC4CA6100074518 /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		1D66714C1AC4CA6100074518 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		1D66714D1AC4CA6100074518 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		1D66714F1AC4CA6200074518 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		1D6671501AC4CA6200074518 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		1DE4586B1ABB816600D46D8F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../Event.h; sourceTree = "<group>"; };
 		1DE4586C1ABB816600D46D8F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = ../Event.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,11 +140,13 @@
 				1D4D27F31AB4D32300849911 /* Rsvp.m */,
 				1DE4586B1ABB816600D46D8F /* Event.h */,
 				1DE4586C1ABB816600D46D8F /* Event.m */,
-				1D4D27EF1AB4D32300849911 /* Team.h */,
-				1D4D27F01AB4D32300849911 /* Team.m */,
-				1D4D28111AB5021000849911 /* User.h */,
-				1D4D28121AB5021000849911 /* User.m */,
 				1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */,
+				1D66714F1AC4CA6200074518 /* User.h */,
+				1D6671501AC4CA6200074518 /* User.m */,
+				1D66714C1AC4CA6100074518 /* Player.h */,
+				1D66714D1AC4CA6100074518 /* Player.m */,
+				1D6671491AC4CA6100074518 /* Team.h */,
+				1D66714A1AC4CA6100074518 /* Team.m */,
 			);
 			name = coredata;
 			sourceTree = "<group>";
@@ -217,6 +225,8 @@
 				1D4D27D51AB256E500849911 /* LoginViewController.m */,
 				1D4D27D71AB25A6C00849911 /* SettingsViewController.h */,
 				1D4D27D81AB25A6C00849911 /* SettingsViewController.m */,
+				1D6671431AC4C3D600074518 /* TeamViewController.h */,
+				1D6671441AC4C3D600074518 /* TeamViewController.m */,
 				1D4D27DA1AB25AA800849911 /* TeamsViewController.h */,
 				1D4D27DB1AB25AA800849911 /* TeamsViewController.m */,
 				1D4D27DD1AB25C1800849911 /* MessagesViewController.h */,
@@ -358,22 +368,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D6671511AC4CA6200074518 /* User.m in Sources */,
 				1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */,
 				1D4D27FA1AB4D32300849911 /* Location.m in Sources */,
 				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
 				1D4D27DF1AB25C1800849911 /* MessagesViewController.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
-				1D4D27F11AB4D32300849911 /* Team.m in Sources */,
 				1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */,
 				1DE4586D1ABB816600D46D8F /* Event.m in Sources */,
 				1D4D27D91AB25A6C00849911 /* SettingsViewController.m in Sources */,
+				1D66714B1AC4CA6100074518 /* Team.m in Sources */,
 				1D4D27DC1AB25AA800849911 /* TeamsViewController.m in Sources */,
 				1D4D27D31AB2567300849911 /* ScheduleViewController.m in Sources */,
 				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,
-				1D4D28131AB5021000849911 /* User.m in Sources */,
+				1D6671451AC4C3D600074518 /* TeamViewController.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
 				1D4D280D1AB4E2CC00849911 /* CoreDataStack.m in Sources */,
 				1D4D28161ABA045900849911 /* EventCell.m in Sources */,
+				1D66714E1AC4CA6100074518 /* Player.m in Sources */,
 				1DF01FB11A807388008F514C /* NetworkController.m in Sources */,
 				1D4D27F41AB4D32300849911 /* Rsvp.m in Sources */,
 				1D4D27E81AB49F5900849911 /* Color.m in Sources */,

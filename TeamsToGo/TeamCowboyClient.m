@@ -229,4 +229,34 @@
                                     }];
 }
 
+#pragma mark - Team_GetRoster
+-(void)teamGetRoster:(NSString*)teamId {
+    NSString *methodCall = @"Team_GetRoster";
+    BOOL usingSSL = false;
+    
+    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+    
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"userToken" : userToken,
+                            @"teamId" : teamId,
+                            @"includeInactive" : @"false"};
+    
+    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+                                            toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                           withParameters:param
+                                    withCompletionHandler:^(NSObject *results) {
+                                        if (results != nil) {
+                                            NSArray *json = (NSArray*)results;
+                                            
+                                            [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
+                                            
+                                            
+                                            
+                                        }
+                                    }];
+    
+}
+
 @end
