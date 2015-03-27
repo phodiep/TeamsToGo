@@ -2,14 +2,16 @@
 //  TeamViewController.h
 //  TeamsToGo
 //
-//  Created by Pho Diep on 3/26/15.
+//  Created by Pho Diep on 3/27/15.
 //  Copyright (c) 2015 Pho Diep. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
+#import "Team.h"
 
-@interface TeamViewController : ViewController
+@interface TeamViewController : UIViewController
 
-@property (strong, nonatomic) NSString *teamId;
+@property (strong, nonatomic) Team *team;
+@property (strong, nonatomic) UINavigationController *navigationController;
 
 @end

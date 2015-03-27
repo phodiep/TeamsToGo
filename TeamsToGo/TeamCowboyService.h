@@ -28,6 +28,8 @@
 -(void)deleteAllTeamsFromCoreData;
 
 -(void)addPlayers:(NSArray*)jsonArray toTeam:(NSString*)teamId;
+-(NSArray*)fetchPlayersForTeam:(Team*)team;
+
 
 -(NSArray*)fetchAllEvents;
 -(NSArray*)fetchAllFutureEvents;

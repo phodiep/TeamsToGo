@@ -12,6 +12,7 @@
 #import "TeamCowboyClient.h"
 #import "TeamCowboyService.h"
 #import "TeamViewController.h"
+#import "MessagesViewController.h"
 
 @interface TeamsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -29,10 +30,12 @@
 @implementation TeamsViewController
 
 -(void)loadView {
+    
     self.tableView = [[UITableView alloc] init];
     self.teams = [[NSArray alloc]init];
     self.views = [[NSMutableDictionary alloc] init];
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+
     
     UILabel *title = [[UILabel alloc] init];
     title.text = @"Teams";
@@ -46,7 +49,7 @@
     
     [self.rootView addSubview:title];
     [self.rootView addSubview:self.tableView];
-    
+
     [self.views setObject:title forKey:@"title"];
     [self.views setObject:self.tableView forKey:@"tableView"];
     
@@ -66,6 +69,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
     
     [self getAllTeams];
     self.lastUpdated = [NSDate date];
@@ -115,7 +119,9 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = [(Team*)self.teams[indexPath.row] name];
+    
+    Team *team = (Team*)self.teams[indexPath.row];
+    cell.textLabel.text = [team name];
     
     return cell;
 }
@@ -129,7 +135,11 @@
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     TeamViewController *teamVC = [[TeamViewController alloc] init];
-    teamVC.teamId = [(Team*)self.teams[indexPath.row] teamId];
+    
+    Team *team = (Team*)self.teams[indexPath.row];
+    teamVC.team = team;
+  
+    [[TeamCowboyClient sharedService] teamGetRoster:team.teamId];
     
     [self presentViewController:teamVC animated:true completion:nil];
     

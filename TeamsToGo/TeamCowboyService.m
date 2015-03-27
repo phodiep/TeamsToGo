@@ -223,7 +223,8 @@
 
 -(Player*)addPlayer:(User*)user toTeam:(Team*)team withType:(NSString*)type {
     
-    if (user != nil && team != nil && ![type isEqualToString:@""]) {
+    if (user != nil && team != nil && ![type isEqualToString:@""] &&
+        ![self playerAlreadyExists:user onTeam:team]) {
         Player *player = [NSEntityDescription insertNewObjectForEntityForName:@"Player" inManagedObjectContext:self.context];
         player.user = user;
         player.team = team;
@@ -235,6 +236,43 @@
     return nil;
 }
 
+-(BOOL)playerAlreadyExists:(User*)user onTeam:(Team*)team {
+    return ( [[self fetchPlayersForTeam:team specificUser:user] count] > 0);
+}
+
+-(NSArray*)fetchPlayersForTeam:(Team*)team specificUser:(User*)user {
+    if (team != nil) {
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.context];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:entityDescription];
+        
+        if (user == nil) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@", team];
+            [fetchRequest setPredicate:predicate];
+        }
+        if (user != nil) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@ AND user == %@", team, user];
+            [fetchRequest setPredicate:predicate];
+        }
+        
+        
+        NSError *fetchError = nil;
+        NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+        
+        if (fetchError != nil) {
+            NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+        }
+        
+        return fetchResults;
+        
+    }
+    return nil;
+    
+}
+
+-(NSArray*)fetchPlayersForTeam:(Team*)team {
+    return [self fetchPlayersForTeam:team specificUser:nil];
+}
 
 #pragma mark - Event
 -(void)addMultipleEvents:(NSArray *)jsonArray {

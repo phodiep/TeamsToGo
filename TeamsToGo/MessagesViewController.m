@@ -16,7 +16,7 @@
 
 -(void)loadView {
     UIView *rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
-    
+    NSLog(@"messageVC");
     
     self.view = rootView;
     

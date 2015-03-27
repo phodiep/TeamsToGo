@@ -34,7 +34,7 @@
 
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
-
+    
     self.context = [[CoreDataStack alloc] init].managedObjectContext;
     [self deletePastEvents];
     

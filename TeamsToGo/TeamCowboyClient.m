@@ -240,8 +240,7 @@
                             @"timestamp" : self.timestamp,
                             @"nonce" : self.nonce,
                             @"userToken" : userToken,
-                            @"teamId" : teamId,
-                            @"includeInactive" : @"false"};
+                            @"teamId" : teamId};
     
     [[NetworkController sharedInstance] makeApiGetRequest:methodCall
                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
@@ -249,7 +248,7 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            
+                                            NSLog(@"%lu", (unsigned long)[json count]);
                                             [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
                                             
                                             
