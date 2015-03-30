@@ -30,12 +30,12 @@
 }
 
 -(void)applyAutoLayout {
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[emailIcon(15)]-8-[phoneIcon(15)]-8-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[emailIcon(20)]-8-[phoneIcon(20)]-8-|" options:0 metrics:0 views:self.views]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[email]-8-[phone]" options:0 metrics:0 views:self.views]];
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-[type]-8-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[emailIcon(15)]-8-[email]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[phoneIcon(15)]-8-[phone]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[emailIcon(20)]-8-[email]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[phoneIcon(20)]-8-[phone]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
 
 }
 
@@ -46,35 +46,19 @@
     
     self.phoneLabel = [[UILabel alloc] init];
     self.phoneLabel.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapPhone = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPhonePressed)];
-    [self.phoneLabel addGestureRecognizer:tapPhone];
     
     self.phoneIcon = [[UIImageView alloc] init];
     self.phoneIcon.image = [UIImage imageNamed:@"phone"];
     self.phoneIcon.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapPhoneIcon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPhonePressed)];
-    [self.phoneIcon addGestureRecognizer:tapPhoneIcon];
     
     self.emailLabel = [[UILabel alloc] init];
     self.emailLabel.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapEmail = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEmailPressed)];
-    [self.emailLabel addGestureRecognizer:tapEmail];
     
     self.emailIcon = [[UIImageView alloc] init];
     self.emailIcon.image = [UIImage imageNamed:@"mail"];
     self.emailIcon.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapEmailIcon = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEmailPressed)];
-    [self.emailIcon addGestureRecognizer:tapEmailIcon];
     
     self.typeLabel = [[UILabel alloc] init];
-}
-
--(void)tapPhonePressed {
-    NSLog(@"calling ... %@", self.phoneLabel.text);
-}
-
--(void)tapEmailPressed {
-    NSLog(@"emailing ... %@", self.emailLabel.text);
 }
 
 -(void)prepAllForAutoLayout {

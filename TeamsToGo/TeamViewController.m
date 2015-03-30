@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Pho Diep. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
 #import "TeamViewController.h"
 #import "TeamCowboyService.h"
 #import "User.h"
@@ -13,7 +14,8 @@
 #import "Team.h"
 #import "RosterCell.h"
 
-@interface TeamViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@interface TeamViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @property (strong, nonatomic) NSArray *players;
 @property (strong, nonatomic) NSMutableDictionary *playersGrouped;
@@ -22,6 +24,9 @@
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIButton *backButton;
+
+@property (strong, nonatomic) NSString *selectedContactPhone;
+@property (strong, nonatomic) NSString *selectedContactEmail;
 
 @end
 
@@ -130,6 +135,163 @@
     return cell;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, tableView.frame.size.width, 18)];
+    
+    [header addSubview:headerLabel];
+    
+    header.backgroundColor = [UIColor grayColor];
+    headerLabel.textColor = [UIColor whiteColor];
+    [headerLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    
+    headerLabel.text = self.groupTypes[section];
+    
+    return header;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *type = self.groupTypes[indexPath.section];
+    
+    Player *player = (Player*)self.playersGrouped[type][indexPath.row];
+    User *user = (User*)player.user;
+    
+    NSString *actionSheetTitle = [NSString stringWithFormat:@"Contact %@", user.name];
+
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:actionSheetTitle delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:nil];
+    
+    if (![user.phone isEqualToString:@""]) {
+        self.selectedContactPhone = [self numbersOnlyFromString:user.phone];
+        [actionSheet addButtonWithTitle:@"Call"];
+        [actionSheet addButtonWithTitle:@"Text"];
+    } else {
+        self.selectedContactPhone = @"";
+    }
+    
+    if (![user.emailAddress isEqualToString:@""]) {
+        self.selectedContactEmail = user.emailAddress;
+        [actionSheet addButtonWithTitle:@"Email"];
+    } else {
+        self.selectedContactEmail = @"";
+    }
+    
+    [actionSheet showInView:self.view];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Call"]) {
+        [self callPhone:self.selectedContactPhone];
+    }
+    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Text"]) {
+        [self textPhone:self.selectedContactPhone];
+    }
+    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Email"]) {
+        [self emailPlayer:self.selectedContactEmail];
+    }
+    
+    
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result {
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+        case MessageComposeResultFailed: {
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)showSMS:(NSString*)phone {
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSArray *recipents = @[phone];
+    NSString *message = [NSString stringWithFormat:@"[%@]", self.team.name];
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:recipents];
+    [messageController setBody:message];
+    
+    // Present message view controller on screen
+    [self presentViewController:messageController animated:YES completion:nil];
+}
+
+-(void)callPhone:(NSString*)phone {
+    if (![phone isEqualToString:@""]) {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", phone]];
+        [[UIApplication  sharedApplication] openURL:url];
+    }
+}
+
+-(void)textPhone:(NSString*)phone {
+    if (![phone isEqualToString:@""]) {
+        [self showSMS:phone];
+    }
+}
+
+-(void)emailPlayer:(NSString*)email {
+    if (![email isEqualToString:@""] && [self validateEmail:email]) {
+        NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
+        // Email Content
+        NSString *messageBody = @"";
+        // To address
+        NSArray *toRecipents = [NSArray arrayWithObject:email];
+        
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailSubject];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipents];
+        
+        // Present mail view controller on screen
+        [self presentViewController:mc animated:YES completion:NULL];
+        
+    }
+}
+
+#pragma mark - MFMessageDelegate
+
 
 #pragma mark - group players by type
 -(void)groupPlayersByType {
@@ -187,6 +349,13 @@
             [originalString  substringToIndex:3],
             [originalString substringWithRange:NSMakeRange(3,3)],
             [originalString substringFromIndex:6]];
+}
+
+- (BOOL) validateEmail: (NSString *) candidate {
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    
+    return [emailTest evaluateWithObject:candidate];
 }
 
 @end
