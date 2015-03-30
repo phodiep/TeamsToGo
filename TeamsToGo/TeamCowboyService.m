@@ -149,7 +149,7 @@
             return user;
             
         } else {
-            User *user = [self fetchUsers:json[@"userId"]][0];
+            User *user = [self updateUserIfNecessary:json[@"userId"] withJson:json];
             return user;
         }
     }
@@ -159,6 +159,23 @@
 -(BOOL)userAlreadyExists:(NSString*)userId {
     return ( [[self fetchUsers:userId] count] > 0 );
 }
+
+-(User*)updateUserIfNecessary:(NSString*)userId withJson:(NSDictionary*)json {
+    NSArray *fetchUserResults = [self fetchUsers:userId];
+    
+    if ([fetchUserResults count] == 1) {
+        User *user = fetchUserResults[0];
+        
+//        if (user.lastUpdated != [self formatDate:json[@"dateLastUpdatedUtc"]] ||
+//            [user.phone isEqualToString:@""] || [user.emailAddress isEqualToString:@""]) {
+            [self setUserProperties:user withJson:json];
+            [self saveContext:[NSString stringWithFormat:@"Updated User: %@", user.name]];
+//        }
+        return user;
+    }
+    return nil;
+}
+
 
 -(void)setUserProperties:(User*)user withJson:(NSDictionary*)json {
     if (json[@"userId"] != nil) {
@@ -172,6 +189,7 @@
     if (json[@"emailAddress"] != nil) {
         user.emailAddress = json[@"emailAddress"];
     }
+    
     if (json[@"emailAddress1"] != nil) {
         user.emailAddress = json[@"emailAddress1"];
     }
@@ -179,6 +197,7 @@
     if (json[@"phone1"] != nil) {
         user.phone = json[@"phone1"];
     }
+    
     if (json[@"gender"] != nil) {
         user.gender = json[@"gender"];
     }
@@ -228,7 +247,17 @@
         Player *player = [NSEntityDescription insertNewObjectForEntityForName:@"Player" inManagedObjectContext:self.context];
         player.user = user;
         player.team = team;
-        player.type = type;
+        if ([[type lowercaseString] containsString:@"full"]){
+            player.type = @"Full-time";
+        } else if ([[type lowercaseString] containsString:@"part"]) {
+            player.type = @"Part-time";
+        } else if ([[type lowercaseString] containsString:@"sub"]) {
+            player.type = @"Sub";
+        } else if ([[type lowercaseString] containsString:@"injured"]) {
+            player.type = @"Injured";
+        } else {
+            player.type = type;
+        }
         
         [self saveContext:[NSString stringWithFormat:@"\nPlayer's Name ... %@ (%@)",user.name, type]];
         return player;

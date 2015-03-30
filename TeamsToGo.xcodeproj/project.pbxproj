@@ -24,6 +24,7 @@
 		1D66714E1AC4CA6100074518 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D66714D1AC4CA6100074518 /* Player.m */; };
 		1D6671511AC4CA6200074518 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671501AC4CA6200074518 /* User.m */; };
 		1D6671571AC59EE600074518 /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671561AC59EE600074518 /* TeamViewController.m */; };
+		1D66715A1AC607C000074518 /* RosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671591AC607C000074518 /* RosterCell.m */; };
 		1DE4586D1ABB816600D46D8F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE4586C1ABB816600D46D8F /* Event.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
@@ -86,6 +87,8 @@
 		1D6671501AC4CA6200074518 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		1D6671551AC59EE600074518 /* TeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
 		1D6671561AC59EE600074518 /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
+		1D6671581AC607C000074518 /* RosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RosterCell.h; sourceTree = "<group>"; };
+		1D6671591AC607C000074518 /* RosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RosterCell.m; sourceTree = "<group>"; };
 		1DE4586B1ABB816600D46D8F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../Event.h; sourceTree = "<group>"; };
 		1DE4586C1ABB816600D46D8F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = ../Event.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,6 +247,8 @@
 			children = (
 				1D4D28141ABA045900849911 /* EventCell.h */,
 				1D4D28151ABA045900849911 /* EventCell.m */,
+				1D6671581AC607C000074518 /* RosterCell.h */,
+				1D6671591AC607C000074518 /* RosterCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -392,6 +397,7 @@
 				1D134E181A8815EA005510B0 /* Response.m in Sources */,
 				1DF01FB41A807712008F514C /* Hashes.m in Sources */,
 				1DF01F7D1A8068E6008F514C /* main.m in Sources */,
+				1D66715A1AC607C000074518 /* RosterCell.m in Sources */,
 				1D4D27D61AB256E500849911 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
