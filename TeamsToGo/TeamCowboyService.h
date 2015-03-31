@@ -42,4 +42,6 @@
 -(NSArray*)fetchCountByStatus:(Event*)event;
 -(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 
+-(NSArray*)addMultipleRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
+
 @end

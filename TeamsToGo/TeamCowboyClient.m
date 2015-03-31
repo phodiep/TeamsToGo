@@ -276,7 +276,7 @@
                                             NSDictionary *json = (NSDictionary*)results;
 
                                             [[TeamCowboyService sharedService] addMultipleCountByStatusForEvent:eventId withJson:json];
-                                            
+                                            [[TeamCowboyService sharedService] addMultipleRsvpsForEvent:eventId withJson:json];
                                         }
                                     }];
 }

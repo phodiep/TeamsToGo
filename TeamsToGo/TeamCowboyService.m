@@ -194,7 +194,7 @@
         user.emailAddress = json[@"emailAddress1"];
     }
 
-    if (json[@"phone1"] != nil) {
+    if (json[@"phone1"] != nil && json[@"phone1"] != (id)[NSNull null]) {
         user.phone = json[@"phone1"];
     }
     
@@ -474,6 +474,7 @@
 -(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
     if (json != nil && ![eventId isEqualToString:@""]) {
         Event *event = (Event*)[self fetchEventWithId:eventId][0];
+        [self deleteCountByStatusForEvent:event];
         
         NSMutableArray *newCounts = [[NSMutableArray alloc] init];
         NSArray *countsByStatusJson = json[@"countsByStatus"];
@@ -485,10 +486,9 @@
     return nil;
 }
 
-
-
 -(void)deleteCountByStatusForEvent:(Event*)event {
-    [self deleteFromCoreData: [self fetchCountByStatus:event] stringPluralForItems:@"CountByStatus"];
+    NSArray *countsFound = [self fetchCountByStatus:event];
+    [self deleteFromCoreData: countsFound stringPluralForItems:[NSString stringWithFormat:@"CountByStatus (%lu)", (unsigned long)[countsFound count]]];
 }
 
 -(NSArray*)fetchCountByStatus:(Event*)event {
@@ -497,7 +497,7 @@
     [fetchRequest setEntity:entityDescription];
     
     if (event != nil) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", event.eventId];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
         [fetchRequest setPredicate:predicate];
     }
     
@@ -511,6 +511,63 @@
     return fetchResults;
 }
 
+-(Rsvp*)addRsvpForEvent:(Event*)event withJson:(NSDictionary*)json {
+    if (json != nil && event != nil) {
+        
+        Rsvp *rsvp = [NSEntityDescription insertNewObjectForEntityForName:@"Rsvp" inManagedObjectContext:self.context];
+        
+        rsvp.user = [self addNewUserWithJson:json[@"user"]];
+        rsvp.status = json[@"rsvpInfo"][@"status"];
+        rsvp.comments = json[@"rsvpInfo"][@"comments"];
+        rsvp.addlFemale = [NSString stringWithFormat:@"%@",json[@"rsvpInfo"][@"addlFemale"] ];
+        rsvp.addlMale = [NSString stringWithFormat:@"%@",json[@"rsvpInfo"][@"addlMale"]];
+        rsvp.event = event;
+        
+        [self saveContext:@""];
+        return rsvp;
+    }
+    return nil;
+}
+
+-(NSArray*)addMultipleRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
+    if (json != nil && ![eventId isEqualToString:@""]) {
+        Event *event = (Event*)[self fetchEventWithId:eventId][0];
+        [self deleteRsvpForEvent:event];
+        
+        NSMutableArray *rsvps = [[NSMutableArray alloc] init];
+        NSArray *usersJson = json[@"users"];
+        
+        for (NSDictionary *user in usersJson) {
+            [rsvps addObject:[self addRsvpForEvent:event withJson:user]];
+        }
+    }
+    return nil;
+}
+
+-(NSArray*)fetchRsvpByEvent:(Event*)event {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Rsvp" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    if (event != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
+        [fetchRequest setPredicate:predicate];
+    }
+    
+    NSError *fetchError = nil;
+    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+    
+    if (fetchError != nil) {
+        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+    }
+    
+    return fetchResults;
+}
+
+-(void)deleteRsvpForEvent:(Event*)event {
+    NSArray *rsvpFound = [self fetchRsvpByEvent:event];
+    [self deleteFromCoreData: rsvpFound stringPluralForItems:[NSString stringWithFormat:@"Rsvps (%lu)", (unsigned long)[rsvpFound count]]];
+}
 
 
 #pragma mark - misc
