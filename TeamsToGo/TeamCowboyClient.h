@@ -20,6 +20,7 @@
 -(void)userGetTeams;
 -(void)userGetTeamEvents;
 -(void)teamGetRoster:(NSString*)teamId;
+-(void)eventGetAttendanceList:(NSString*)eventId forTeamId:(NSString*)teamId;
 
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSArray *teams;

@@ -14,6 +14,7 @@
 #import "Team.h"
 #import "User.h"
 #import "Player.h"
+#import "CountByStatus.h"
 
 @interface TeamCowboyService : NSObject
 
@@ -36,5 +37,9 @@
 -(NSArray*)fetchEventWithId:(NSString*)eventId;
 -(void)deleteAllEventsFromCoreData;
 -(void)deleteAllPastEvents;
+
+
+-(NSArray*)fetchCountByStatus:(Event*)event;
+-(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 
 @end

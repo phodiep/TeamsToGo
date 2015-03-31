@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C1510" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="CountByStatus" representedClassName="CountByStatus" syncable="YES">
+        <attribute name="female" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="male" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="other" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="total" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Event" inverseName="rsvpCount" inverseEntity="Event" syncable="YES"/>
+    </entity>
     <entity name="Event" representedClassName="Event" syncable="YES">
         <attribute name="comments" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="eventId" optional="YES" attributeType="String" syncable="YES"/>
@@ -11,6 +19,7 @@
         <attribute name="teamColor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Location" inverseName="events" inverseEntity="Location" syncable="YES"/>
+        <relationship name="rsvpCount" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CountByStatus" inverseName="event" inverseEntity="CountByStatus" syncable="YES"/>
         <relationship name="rsvps" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rsvp" inverseName="event" inverseEntity="Rsvp" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="events" inverseEntity="Team" syncable="YES"/>
     </entity>
@@ -56,11 +65,12 @@
         <relationship name="teamManager" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="manager" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-434" positionY="342" width="128" height="225"/>
+        <element name="Event" positionX="-434" positionY="342" width="128" height="238"/>
         <element name="Location" positionX="151" positionY="449" width="128" height="133"/>
         <element name="Rsvp" positionX="205" positionY="207" width="128" height="133"/>
         <element name="Team" positionX="-344" positionY="14" width="128" height="148"/>
         <element name="User" positionX="-11" positionY="20" width="128" height="178"/>
         <element name="Player" positionX="-198" positionY="198" width="128" height="88"/>
+        <element name="CountByStatus" positionX="-218" positionY="389" width="128" height="133"/>
     </elements>
 </model>

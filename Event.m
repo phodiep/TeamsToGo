@@ -2,11 +2,12 @@
 //  Event.m
 //  TeamsToGo
 //
-//  Created by Pho Diep on 3/19/15.
+//  Created by Pho Diep on 3/30/15.
 //  Copyright (c) 2015 Pho Diep. All rights reserved.
 //
 
 #import "Event.h"
+#import "CountByStatus.h"
 #import "Location.h"
 #import "Rsvp.h"
 #import "Team.h"
@@ -26,5 +27,6 @@
 @dynamic location;
 @dynamic rsvps;
 @dynamic team;
+@dynamic rsvpCount;
 
 @end

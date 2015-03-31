@@ -248,14 +248,39 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            NSLog(@"%lu", (unsigned long)[json count]);
                                             [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
-                                            
-                                            
                                             
                                         }
                                     }];
-    
 }
+
+#pragma mark - Event_GetAttendanceList
+-(void)eventGetAttendanceList:(NSString*)eventId forTeamId:(NSString*)teamId {
+    NSString *methodCall = @"Event_GetAttendanceList";
+    BOOL usingSSL = false;
+    
+    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+    
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"userToken" : userToken,
+                            @"teamId" : teamId,
+                            @"eventId" : eventId};
+    
+    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+                                            toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                           withParameters:param
+                                    withCompletionHandler:^(NSObject *results) {
+                                        if (results != nil) {
+                                            NSDictionary *json = (NSDictionary*)results;
+
+                                            [[TeamCowboyService sharedService] addMultipleCountByStatusForEvent:eventId withJson:json];
+                                            
+                                        }
+                                    }];
+}
+
+
 
 @end

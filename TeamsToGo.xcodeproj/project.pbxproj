@@ -25,7 +25,9 @@
 		1D6671511AC4CA6200074518 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671501AC4CA6200074518 /* User.m */; };
 		1D6671571AC59EE600074518 /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671561AC59EE600074518 /* TeamViewController.m */; };
 		1D66715A1AC607C000074518 /* RosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671591AC607C000074518 /* RosterCell.m */; };
-		1DE4586D1ABB816600D46D8F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE4586C1ABB816600D46D8F /* Event.m */; };
+		1D66715D1AC9DFCF00074518 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D66715C1AC9DFCF00074518 /* EventViewController.m */; };
+		1D66716F1ACA36EC00074518 /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D66716E1ACA36EC00074518 /* Event.m */; };
+		1D6671751ACA3AF000074518 /* CountByStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6671741ACA3AF000074518 /* CountByStatus.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
 		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
@@ -89,8 +91,12 @@
 		1D6671561AC59EE600074518 /* TeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
 		1D6671581AC607C000074518 /* RosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RosterCell.h; sourceTree = "<group>"; };
 		1D6671591AC607C000074518 /* RosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RosterCell.m; sourceTree = "<group>"; };
-		1DE4586B1ABB816600D46D8F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../Event.h; sourceTree = "<group>"; };
-		1DE4586C1ABB816600D46D8F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = ../Event.m; sourceTree = "<group>"; };
+		1D66715B1AC9DFCF00074518 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
+		1D66715C1AC9DFCF00074518 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		1D66716D1ACA36EC00074518 /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../Event.h; sourceTree = "<group>"; };
+		1D66716E1ACA36EC00074518 /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = ../Event.m; sourceTree = "<group>"; };
+		1D6671731ACA3AF000074518 /* CountByStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountByStatus.h; sourceTree = "<group>"; };
+		1D6671741ACA3AF000074518 /* CountByStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountByStatus.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -141,9 +147,11 @@
 				1D4D27F91AB4D32300849911 /* Location.m */,
 				1D4D27F21AB4D32300849911 /* Rsvp.h */,
 				1D4D27F31AB4D32300849911 /* Rsvp.m */,
-				1DE4586B1ABB816600D46D8F /* Event.h */,
-				1DE4586C1ABB816600D46D8F /* Event.m */,
+				1D66716D1ACA36EC00074518 /* Event.h */,
+				1D66716E1ACA36EC00074518 /* Event.m */,
 				1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */,
+				1D6671731ACA3AF000074518 /* CountByStatus.h */,
+				1D6671741ACA3AF000074518 /* CountByStatus.m */,
 				1D66714F1AC4CA6200074518 /* User.h */,
 				1D6671501AC4CA6200074518 /* User.m */,
 				1D66714C1AC4CA6100074518 /* Player.h */,
@@ -224,6 +232,8 @@
 			children = (
 				1D4D27D11AB2567300849911 /* ScheduleViewController.h */,
 				1D4D27D21AB2567300849911 /* ScheduleViewController.m */,
+				1D66715B1AC9DFCF00074518 /* EventViewController.h */,
+				1D66715C1AC9DFCF00074518 /* EventViewController.m */,
 				1D4D27D41AB256E500849911 /* LoginViewController.h */,
 				1D4D27D51AB256E500849911 /* LoginViewController.m */,
 				1D4D27D71AB25A6C00849911 /* SettingsViewController.h */,
@@ -380,18 +390,20 @@
 				1D4D27DF1AB25C1800849911 /* MessagesViewController.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
 				1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */,
-				1DE4586D1ABB816600D46D8F /* Event.m in Sources */,
 				1D4D27D91AB25A6C00849911 /* SettingsViewController.m in Sources */,
 				1D66714B1AC4CA6100074518 /* Team.m in Sources */,
 				1D6671571AC59EE600074518 /* TeamViewController.m in Sources */,
 				1D4D27DC1AB25AA800849911 /* TeamsViewController.m in Sources */,
+				1D66715D1AC9DFCF00074518 /* EventViewController.m in Sources */,
 				1D4D27D31AB2567300849911 /* ScheduleViewController.m in Sources */,
 				1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */,
+				1D6671751ACA3AF000074518 /* CountByStatus.m in Sources */,
 				1DF01F861A8068E6008F514C /* ViewController.m in Sources */,
 				1D4D280D1AB4E2CC00849911 /* CoreDataStack.m in Sources */,
 				1D4D28161ABA045900849911 /* EventCell.m in Sources */,
 				1D66714E1AC4CA6100074518 /* Player.m in Sources */,
 				1DF01FB11A807388008F514C /* NetworkController.m in Sources */,
+				1D66716F1ACA36EC00074518 /* Event.m in Sources */,
 				1D4D27F41AB4D32300849911 /* Rsvp.m in Sources */,
 				1D4D27E81AB49F5900849911 /* Color.m in Sources */,
 				1D134E181A8815EA005510B0 /* Response.m in Sources */,

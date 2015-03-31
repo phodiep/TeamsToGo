@@ -238,8 +238,20 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)showSMS:(NSString*)phone {
-    if(![MFMessageComposeViewController canSendText]) {
+-(void)callPhone:(NSString*)phone {
+    if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phone]]]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Phone Calls!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    if (![phone isEqualToString:@""]) {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", phone]];
+        [[UIApplication  sharedApplication] openURL:url];
+    }
+}
+
+-(void)textPhone:(NSString*)phone {
+    if (![phone isEqualToString:@""] && ![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
@@ -255,23 +267,20 @@
     
     // Present message view controller on screen
     [self presentViewController:messageController animated:YES completion:nil];
-}
+    
 
--(void)callPhone:(NSString*)phone {
-    if (![phone isEqualToString:@""]) {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", phone]];
-        [[UIApplication  sharedApplication] openURL:url];
-    }
-}
-
--(void)textPhone:(NSString*)phone {
-    if (![phone isEqualToString:@""]) {
-        [self showSMS:phone];
-    }
 }
 
 -(void)emailPlayer:(NSString*)email {
+    
+    if (![MFMailComposeViewController canSendMail]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
     if (![email isEqualToString:@""] && [self validateEmail:email]) {
+
         NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
         // Email Content
         NSString *messageBody = @"";
@@ -286,11 +295,9 @@
         
         // Present mail view controller on screen
         [self presentViewController:mc animated:YES completion:NULL];
-        
+
     }
 }
-
-#pragma mark - MFMessageDelegate
 
 
 #pragma mark - group players by type

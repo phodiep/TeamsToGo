@@ -452,6 +452,65 @@
     }
 }
 
+#pragma mark - Event Attendence
+-(CountByStatus*)addNewCountByStatusforEvent:(Event*)event withJson:(NSDictionary*)json {
+    if (json != nil && event != nil) {
+        
+        CountByStatus *countByStatus = [NSEntityDescription insertNewObjectForEntityForName:@"CountByStatus" inManagedObjectContext:self.context];
+        
+        countByStatus.event = event;
+        countByStatus.status = json[@"status"];
+        countByStatus.male = json[@"counts"][@"byGender"][@"m"];
+        countByStatus.female = json[@"counts"][@"byGender"][@"f"];
+        countByStatus.other = json[@"counts"][@"byGender"][@"other"];
+        countByStatus.total = json[@"counts"][@"total"];
+        
+        [self saveContext:@""];
+        return countByStatus;
+    }
+    return nil;
+}
+
+-(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
+    if (json != nil && ![eventId isEqualToString:@""]) {
+        Event *event = (Event*)[self fetchEventWithId:eventId][0];
+        
+        NSMutableArray *newCounts = [[NSMutableArray alloc] init];
+        NSArray *countsByStatusJson = json[@"countsByStatus"];
+        
+        for (NSDictionary* counts in countsByStatusJson) {
+            [newCounts addObject:[self addNewCountByStatusforEvent:event withJson:counts]];
+        }
+    }
+    return nil;
+}
+
+
+
+-(void)deleteCountByStatusForEvent:(Event*)event {
+    [self deleteFromCoreData: [self fetchCountByStatus:event] stringPluralForItems:@"CountByStatus"];
+}
+
+-(NSArray*)fetchCountByStatus:(Event*)event {
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"CountByStatus" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    if (event != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"eventId == %@", event.eventId];
+        [fetchRequest setPredicate:predicate];
+    }
+    
+    NSError *fetchError = nil;
+    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+    
+    if (fetchError != nil) {
+        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+    }
+    
+    return fetchResults;
+}
+
 
 
 #pragma mark - misc
