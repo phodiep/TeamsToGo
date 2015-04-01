@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) UILabel *label;
 @property (strong, nonatomic) UILabel *typeLabel;
+@property (strong, nonatomic) UILabel *comments;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 

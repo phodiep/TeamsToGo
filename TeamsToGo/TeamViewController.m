@@ -40,7 +40,7 @@
     title.text = [self.team name];
     
     self.backButton = [[UIButton alloc] init];
-    [self.backButton setTitle:@"<Back" forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
@@ -57,10 +57,10 @@
                             @"back" : self.backButton};
     
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[title]-[tableView]-8-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[back]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[back(20)]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back]" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
     
     self.view = self.rootView;
 }

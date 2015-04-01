@@ -14,6 +14,7 @@
 #import "Rsvp.h"
 #import "RsvpCell.h"
 #import "CountByStatus.h"
+#import "Fonts.h"
 
 @interface EventViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -25,8 +26,14 @@
 
 @property (strong, nonatomic) UIButton *backButton;
 
+@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UILabel *eventTitle;
+@property (strong, nonatomic) UILabel *eventTime;
+@property (strong, nonatomic) UILabel *comments;
+
 @property (strong, nonatomic) NSMutableDictionary *playersGrouped;
 @property (strong, nonatomic) NSMutableArray *groupTypes;
+
 
 @end
 
@@ -37,23 +44,56 @@
     
     self.tableView = [[UITableView alloc] init];
     self.backButton = [[UIButton alloc] init];
-    [self.backButton setTitle:@"<Back" forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    self.headerView = [[UIView alloc] init];
+    self.headerView.backgroundColor = [UIColor orangeColor];
+    
+    self.eventTitle = [[UILabel alloc] init];
+    self.eventTitle.numberOfLines = 0;
+    self.eventTitle.font = [[Fonts alloc] titleFont];
+    self.eventTitle.textAlignment = NSTextAlignmentCenter;
+    
+    self.eventTime = [[UILabel alloc] init];
+    self.eventTime.numberOfLines = 0;
+    self.eventTime.font = [[Fonts alloc] textFont];
+    self.eventTime.textAlignment = NSTextAlignmentCenter;
+    
+    self.comments = [[UILabel alloc] init];
+    self.comments.numberOfLines = 0;
+    self.comments.font = [[Fonts alloc] textFont];
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.eventTime setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.comments setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [self.rootView addSubview:self.tableView];
     [self.rootView addSubview:self.backButton];
+    [self.rootView addSubview:self.headerView];
+    [self.headerView addSubview:self.eventTitle];
+    [self.headerView addSubview:self.eventTime];
+    [self.headerView addSubview:self.comments];
     
     NSDictionary *views = @{@"tableview" : self.tableView,
-                            @"back" : self.backButton};
+                            @"back" : self.backButton,
+                            @"header" : self.headerView,
+                            @"eventTitle" : self.eventTitle,
+                            @"eventTime" : self.eventTime,
+                            @"comments" : self.comments};
     
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back]-8-[tableview]|" options:0 metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back(20)]-[header][tableview]|" options:0 metrics:0 views:views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableview]|" options:0 metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back]" options:0 metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:0 metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:views]];
     
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[comments]-8-|" options:0 metrics:0 views:views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTitle]-8-|" options:0 metrics:0 views:views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:views]];
     
     self.view = self.rootView;
 }
@@ -76,6 +116,23 @@
     self.counts = [[TeamCowboyService sharedService] fetchCountByStatus:self.event];
     
     [self groupRsvps];
+
+    NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
+    
+    if (![self.event.homeAway isEqualToString:@""]) {
+        [title appendString:[NSString stringWithFormat:@" (%@)", self.event.homeAway]];
+    }
+    
+    if (![self.event.title isEqualToString:@""]) {
+        [title appendString:[NSString stringWithFormat:@" vs. %@", self.event.title]];
+    }
+    
+    self.eventTitle.text = title;
+    
+    self.eventTime.text = [self formatDate:self.event.startTime];
+    if (self.event.comments != nil) {
+        self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
+    }
     
     [self.tableView reloadData];
 }
@@ -117,11 +174,24 @@
     
     NSMutableString *cellLabel = [[NSMutableString alloc] initWithString:rsvp.user.name];
     
-    if (![rsvp.addlFemale isEqualToString:@"0"]) {
-        [cellLabel appendString:[NSString stringWithFormat:@"(+%@ female)", rsvp.addlFemale]];
+    if (![rsvp.addlFemale isEqualToString:@"0"] &&
+        ![rsvp.addlMale isEqualToString:@"0"]) {
+        [cellLabel appendString:[NSString stringWithFormat:@" (+%@ female%@ & +%@ male%@)",
+                                 rsvp.addlFemale,
+                                 [rsvp.addlFemale isEqualToString:@"1"] ? @"" : @"s",
+                                 rsvp.addlMale,
+                                 [rsvp.addlMale isEqualToString:@"1"] ? @"" : @"s"]];
+    } else {
+        if (![rsvp.addlFemale isEqualToString:@"0"]) {
+            [cellLabel appendString:[NSString stringWithFormat:@" (+%@ female)", rsvp.addlFemale]];
+        }
+        if (![rsvp.addlMale isEqualToString:@"0"]) {
+            [cellLabel appendString:[NSString stringWithFormat:@" (+%@ male)", rsvp.addlMale]];
+        }
     }
-    if (![rsvp.addlMale isEqualToString:@"0"]) {
-        [cellLabel appendString:[NSString stringWithFormat:@"(+%@ male)", rsvp.addlMale]];
+    
+    if (![rsvp.comments isEqualToString:@""]) {
+        cell.comments.text = [NSString stringWithFormat:@"\"%@\"", rsvp.comments];
     }
     
     cell.label.text = cellLabel;
@@ -154,13 +224,13 @@
     if ([status isEqualToString:@"Yes"]) {
         header.backgroundColor = [UIColor blueColor];
     } else if ([status isEqualToString:@"No"]) {
-        header.backgroundColor = [UIColor redColor];
+        header.backgroundColor = [UIColor blackColor];
     } else {
         header.backgroundColor = [UIColor lightGrayColor];
     }
     
     headerLabel.textColor = [UIColor whiteColor];
-    [headerLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    [headerLabel setFont:[[Fonts alloc] headerFont]];
     
     
 
@@ -264,7 +334,11 @@
     return nil;
 }
 
-
+-(NSString*)formatDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"EEEE, MMM d yy 'at' h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
 
 
 @end
