@@ -22,7 +22,7 @@
     if (self) {
         [self initAllObjects];
         [self prepAllForAutoLayout];
-        
+
         [self applyAutoLayout];
     }
     
@@ -30,14 +30,36 @@
 }
 
 -(void)applyAutoLayout {
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[emailIcon(20)]-8-[phoneIcon(20)]-8-|" options:0 metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[email]-8-[phone]" options:0 metrics:0 views:self.views]];
+    if (![self.emailLabel.text isEqualToString:@""] && ![self.phoneLabel.text isEqualToString:@""]) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[email]-8-[phone]-8-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emailIcon(15)]" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[phoneIcon(15)]" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[emailIcon(15)]-8-[email]-(>=8)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[phoneIcon(15)]-8-[phone]-(>=8)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+        
+    } else if ([self.emailLabel.text isEqualToString:@""] && [self.phoneLabel.text isEqualToString:@""]) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-|" options:0 metrics:0 views:self.views]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-[type]-8-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[emailIcon(20)]-8-[email]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[phoneIcon(20)]-8-[phone]-(>=8)-|" options:NSLayoutFormatAlignAllTop metrics:0 views:self.views]];
-
+    } else if ([self.emailLabel.text isEqualToString:@""]) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[phone]-8-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[phoneIcon(15)]" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[phoneIcon(15)]-8-[phone]-(>=8)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+        
+    } else if ([self.phoneLabel.text isEqualToString:@""]) {
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[name]-8-[email]-8-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[emailIcon(15)]" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[name]-(>=8)-|" options:0 metrics:0 views:self.views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-40-[emailIcon(15)]-8-[email]-(>=8)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    }
 }
+
+-(void)removeAutoLayout {
+    [self.contentView removeConstraints:[self.contentView constraints]];
+}
+
 
 -(void)initAllObjects {
     self.views = [[NSMutableDictionary alloc] init];
@@ -45,20 +67,15 @@
     self.nameLabel = [[UILabel alloc] init];
     
     self.phoneLabel = [[UILabel alloc] init];
-    self.phoneLabel.userInteractionEnabled = YES;
     
     self.phoneIcon = [[UIImageView alloc] init];
     self.phoneIcon.image = [UIImage imageNamed:@"phone"];
-    self.phoneIcon.userInteractionEnabled = YES;
     
     self.emailLabel = [[UILabel alloc] init];
-    self.emailLabel.userInteractionEnabled = YES;
     
     self.emailIcon = [[UIImageView alloc] init];
     self.emailIcon.image = [UIImage imageNamed:@"mail"];
-    self.emailIcon.userInteractionEnabled = YES;
     
-    self.typeLabel = [[UILabel alloc] init];
 }
 
 -(void)prepAllForAutoLayout {
@@ -67,7 +84,6 @@
     [self prepObjectForAutolayout:self.phoneIcon addToSubview:self.contentView addToDictionary:@"phoneIcon"];
     [self prepObjectForAutolayout:self.emailLabel addToSubview:self.contentView addToDictionary:@"email"];
     [self prepObjectForAutolayout:self.emailIcon addToSubview:self.contentView addToDictionary:@"emailIcon"];
-    [self prepObjectForAutolayout:self.typeLabel addToSubview:self.contentView addToDictionary:@"type"];
 }
 
 -(void)prepObjectForAutolayout:(id)object addToSubview:(UIView*)view addToDictionary:(NSString*)reference {
@@ -75,6 +91,7 @@
     [view addSubview:object];
     [self.views setObject:object forKey:reference];
 }
+
 
 - (void)awakeFromNib {
     // Initialization code

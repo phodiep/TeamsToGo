@@ -14,6 +14,7 @@
 #import "Team.h"
 #import "Color.h"
 #import "TeamCowboyService.h"
+#import "EventViewController.h"
 
 @interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate>
 
@@ -188,6 +189,12 @@
     Team * team = (Team*)event.team;
     
     [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:team.teamId];
+    
+    EventViewController *eventVC = [[EventViewController alloc] init];
+    
+    eventVC.event = event;
+
+    [self presentViewController:eventVC animated:true completion:nil];
     
 }
 

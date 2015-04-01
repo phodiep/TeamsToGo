@@ -102,13 +102,14 @@
     
 }
 
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *type = self.groupTypes[indexPath.section];
     
     Player *player = (Player*)self.playersGrouped[type][indexPath.row];
     User *user = (User*)player.user;
-    
+
     RosterCell *cell = (RosterCell*)[self.tableView dequeueReusableCellWithIdentifier:@"ROSTER_CELL" forIndexPath:indexPath];
     
     cell.nameLabel.text = user.name;
@@ -131,7 +132,7 @@
         cell.emailLabel.hidden = YES;
         cell.emailIcon.hidden = YES;
     }
-    
+
     return cell;
 }
 
@@ -337,7 +338,7 @@
         
         return NSOrderedAscending;
     }];
-    NSLog(@"%@", self.groupTypes);
+    
 }
 
 #pragma mark - button actions

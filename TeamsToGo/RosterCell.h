@@ -15,6 +15,8 @@
 @property (strong, nonatomic) UIImageView *phoneIcon;
 @property (strong, nonatomic) UILabel *emailLabel;
 @property (strong, nonatomic) UIImageView *emailIcon;
-@property (strong, nonatomic) UILabel *typeLabel;
+
+-(void)applyAutoLayout;
+-(void)removeAutoLayout;
 
 @end
