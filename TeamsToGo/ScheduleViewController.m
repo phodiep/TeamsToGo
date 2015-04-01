@@ -193,7 +193,8 @@
     EventViewController *eventVC = [[EventViewController alloc] init];
     
     eventVC.event = event;
-
+    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self presentViewController:eventVC animated:true completion:nil];
     
 }

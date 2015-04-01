@@ -554,6 +554,9 @@
         [fetchRequest setPredicate:predicate];
     }
     
+    NSSortDescriptor *sortByName = [[NSSortDescriptor alloc] initWithKey:@"user.name" ascending:YES];
+    [fetchRequest setSortDescriptors:@[sortByName]];
+    
     NSError *fetchError = nil;
     NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
     
