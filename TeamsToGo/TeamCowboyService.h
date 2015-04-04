@@ -7,44 +7,38 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CoreDataStack.h"
-#import "Location.h"
-#import "Event.h"
-#import "Rsvp.h"
-#import "Team.h"
+
 #import "User.h"
-#import "Player.h"
-#import "CountByStatus.h"
+#import "Team.h"
+#import "Event.h"
 
 @interface TeamCowboyService : NSObject
 
-@property (strong, nonatomic) CoreDataStack *coreDataStack;
+//@property (strong, nonatomic) CoreDataStack *coreDataStack;
 
 +(id)sharedService;
 
--(void)addMultipleTeams:(NSArray*)jsonArray;
--(void)addMultipleEvents:(NSArray *)jsonArray;
+@property (strong, nonatomic) User *loginUser;
+@property (strong, nonatomic) NSMutableArray *users;
+@property (strong, nonatomic) NSMutableArray *teams;
+@property (strong, nonatomic) NSMutableArray *events;
 
+
+-(User*)createNewUserIfNecessaryElseUpdate:(NSDictionary *)json;
+-(NSArray*)createMultipleUsersIfNecessaryElseUpdate:(NSArray*)jsonArray;
+-(NSArray*)fetchAllUsers;
+
+-(Team*)createNewTeamIfNecessaryElseUpdate:(NSDictionary *)json;
+-(NSArray*)createMultipleTeamsIfNecessaryElseUpdate:(NSArray *)jsonArray;
 -(NSArray*)fetchAllTeams;
--(void)deleteAllTeamsFromCoreData;
 
--(void)addPlayers:(NSArray*)jsonArray toTeam:(NSString*)teamId;
--(NSArray*)fetchPlayersForTeam:(Team*)team;
-
-
+-(Event*)createNewEventIfNecessaryElseUpdate:(NSDictionary*)json;
+-(NSArray*)createMultipleEventsIfNecessaryElseUpdate:(NSArray *)jsonArray;
 -(NSArray*)fetchAllEvents;
--(NSArray*)fetchAllFutureEvents;
--(NSArray*)fetchEventWithId:(NSString*)eventId;
--(void)deleteAllEventsFromCoreData;
--(void)deleteAllPastEvents;
+-(void)deletePastEvents;
 
 
--(NSArray*)fetchCountByStatus:(Event*)event;
--(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 
--(NSArray*)fetchRsvpByEvent:(Event*)event;
--(NSArray*)addMultipleRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
-
--(Player*)fetchPlayer:(User*)user onTeam:(Team*)team;
+-(void)resetData;
 
 @end

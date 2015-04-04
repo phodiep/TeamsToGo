@@ -132,28 +132,29 @@
      }];
 }
 
-#pragma mark - User_Get
-//-(void)userGet {
-//    NSString *methodCall = @"User_Get";
-//    BOOL usingSSL = false;
-//
-//    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
-//    
-//    NSDictionary *param = @{@"method" : methodCall,
-//                            @"timestamp" : self.timestamp,
-//                            @"nonce" : self.nonce,
-//                            @"userToken" : userToken};
-//    
-//    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
-//                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
-//                                            withParameters:param
-//                                     withCompletionHandler:^(NSObject *results) {
-//                                         if (results != nil) {
-//                                             NSDictionary *json = (NSDictionary*)results;
-////                                             self.user = [[User alloc] initWithJson:json];
-//                                         }
-//                                     }];
-//}
+#pragma mark - User_Get (login user)
+-(void)userGet {
+    NSString *methodCall = @"User_Get";
+    BOOL usingSSL = false;
+
+    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+    
+    NSDictionary *param = @{@"method" : methodCall,
+                            @"timestamp" : self.timestamp,
+                            @"nonce" : self.nonce,
+                            @"userToken" : userToken};
+    
+    [[NetworkController sharedInstance] makeApiGetRequest:methodCall
+                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                            withParameters:param
+                                     withCompletionHandler:^(NSObject *results) {
+                                         if (results != nil) {
+                                             NSDictionary *json = (NSDictionary*)results;
+                                             [[TeamCowboyService sharedService] createNewUserIfNecessaryElseUpdate:json];
+                                             
+                                         }
+                                     }];
+}
 
 #pragma mark - User_GetTeams
 -(void)userGetTeams {
@@ -173,8 +174,8 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            [[TeamCowboyService sharedService] addMultipleTeams:json];
                                             
+                                            [[TeamCowboyService sharedService] createMultipleTeamsIfNecessaryElseUpdate:json];                                            
                                         }
                                     }];
 }
@@ -223,7 +224,7 @@
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
                                             
-                                            [[TeamCowboyService sharedService] addMultipleEvents:json];
+                                            [[TeamCowboyService sharedService] createMultipleEventsIfNecessaryElseUpdate:json];
                                             
                                         }
                                     }];
@@ -248,7 +249,7 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-                                            [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
+//                                            [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
                                             
                                         }
                                     }];
@@ -275,8 +276,8 @@
                                         if (results != nil) {
                                             NSDictionary *json = (NSDictionary*)results;
 
-                                            [[TeamCowboyService sharedService] addMultipleCountByStatusForEvent:eventId withJson:json];
-                                            [[TeamCowboyService sharedService] addMultipleRsvpsForEvent:eventId withJson:json];
+//                                            [[TeamCowboyService sharedService] addMultipleCountByStatusForEvent:eventId withJson:json];
+//                                            [[TeamCowboyService sharedService] addMultipleRsvpsForEvent:eventId withJson:json];
                                         }
                                     }];
 }

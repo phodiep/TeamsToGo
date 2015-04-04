@@ -36,10 +36,6 @@
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
-    self.context = [[CoreDataStack alloc] init].managedObjectContext;
-    [self deletePastEvents];
-    
-    
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Schedule";
     title.font = [UIFont systemFontOfSize:20];
@@ -97,20 +93,16 @@
     
 }
 
--(void)deletePastEvents {
-    [[TeamCowboyService sharedService] deleteAllPastEvents];
-}
 
 -(void)getEventSchedule {
-    self.events = [[TeamCowboyService sharedService] fetchAllFutureEvents];
-}
-
--(void)makeApiRequestToGetFreshEvents {
+    [[TeamCowboyService sharedService] deletePastEvents];
     [[TeamCowboyClient alloc] userGetTeamEvents];
+    self.events = [[TeamCowboyService sharedService] fetchAllEvents];
+    
+    [self.tableView reloadData];
 }
 
 -(void)refreshSchedule {
-    [self makeApiRequestToGetFreshEvents];
     [self getEventSchedule];
     
     [self.tableView reloadData];
@@ -148,6 +140,7 @@
     cell.dateTimeLabel.text = [self formatDate:event.startTime];
     cell.teamLabel.text = [(Team*)event.team name];
     cell.locationLabel.text = @"here/there";
+    
     //    self.userStatus = [[UILabel alloc] init];
     
     if (![event.status isEqualToString:@"active"]) {
@@ -157,11 +150,15 @@
     }
     
     cell.ownTeamLabel.text = [(Team*)event.team name];
-    if (event.homeAway != nil && ![event.homeAway isEqualToString:@""]) {
-        cell.homeAwayLabel.text = [NSString stringWithFormat:@"(%@) vs",event.homeAway];
-    } else {
-        cell.homeAwayLabel.text = @"";
+    
+    cell.homeAwayLabel.text = @"";
+    if (event.homeAway == Home) {
+        cell.homeAwayLabel.text = @"(Home)";
     }
+    if (event.homeAway == Away) {
+        cell.homeAwayLabel.text = @"(Away)";
+    }
+    
     cell.otherTeamLabel.text = event.title;
     
     if (event.teamColor != nil) {

@@ -41,9 +41,6 @@
     title.text = @"Teams";
     title.font = [UIFont systemFontOfSize:20];
     
-    
-    [[TeamCowboyClient sharedService] userGetTeams];
-    
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     
@@ -58,8 +55,8 @@
 
     
     self.view = self.rootView;
-    
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,7 +66,6 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
     
     [self getAllTeams];
     self.lastUpdated = [NSDate date];
@@ -84,6 +80,7 @@
 }
 
 -(void)getAllTeams {
+    [[TeamCowboyClient sharedService] userGetTeams];
     self.teams = [[TeamCowboyService sharedService] fetchAllTeams];
 }
 
@@ -94,13 +91,10 @@
     
     if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
         NSLog(@"minutes since last update: %f", minutesSinceLastUpdate);
-    
-        [[TeamCowboyService sharedService] deleteAllTeamsFromCoreData];
-        [[TeamCowboyClient sharedService] userGetTeams];
+        
         [self getAllTeams];
-    
         [self.tableView reloadData];
-    
+        
         self.lastUpdated = [NSDate date];
         refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
     }
@@ -121,7 +115,7 @@
     UITableViewCell *cell = [[UITableViewCell alloc] init];
     
     Team *team = (Team*)self.teams[indexPath.row];
-    cell.textLabel.text = [team name];
+    cell.textLabel.text = team.name;
     
     return cell;
 }
@@ -139,7 +133,7 @@
     Team *team = (Team*)self.teams[indexPath.row];
     teamVC.team = team;
   
-    [[TeamCowboyClient sharedService] teamGetRoster:team.teamId];
+//    [[TeamCowboyClient sharedService] teamGetRoster:team.teamId];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self presentViewController:teamVC animated:true completion:nil];
     

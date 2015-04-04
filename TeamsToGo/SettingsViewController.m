@@ -66,14 +66,16 @@
     
     if (buttonIndex == 1) {
         //logout
-        [[TeamCowboyService sharedService] deleteAllEventsFromCoreData];
-        [[TeamCowboyService sharedService] deleteAllTeamsFromCoreData];
+//        [[TeamCowboyService sharedService] deleteAllEventsFromCoreData];
+//        [[TeamCowboyService sharedService] deleteAllTeamsFromCoreData];
         
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"username"];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"password"];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"userToken"];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"userId"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [[TeamCowboyService sharedService] resetData];
         
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         [self presentViewController:loginVC animated:true completion:nil];

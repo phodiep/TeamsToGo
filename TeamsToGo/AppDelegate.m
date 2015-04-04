@@ -37,6 +37,7 @@
         [[NSUserDefaults standardUserDefaults]objectForKey:@"password"] == nil) {
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         [self.tabBar presentViewController:loginVC animated:true completion:nil];
+        
     } else {
         [self getUserTokenIfNecessary];
     }
