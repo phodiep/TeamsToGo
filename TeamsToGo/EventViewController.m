@@ -166,8 +166,15 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     NSString *type = self.groupTypes[indexPath.section];
     Rsvp *rsvp = (Rsvp*)self.playersGrouped[type][indexPath.row];
+    
+    User *user = (User*)rsvp.user;
+    Event *event = (Event*)rsvp.event;
+    Team *team = (Team*)event.team;
+    
+    Player *player = (Player*)[[TeamCowboyService sharedService]fetchPlayer: user onTeam: team];
 
     RsvpCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"RSVP_CELL" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -192,6 +199,14 @@
     
     if (![rsvp.comments isEqualToString:@""]) {
         cell.comments.text = [NSString stringWithFormat:@"\"%@\"", rsvp.comments];
+    } else {
+        cell.comments.text = @"";
+    }
+    
+    if (![player.type isEqualToString:@"Full-time"] && ![player.type isEqualToString:@""]) {
+        cell.typeLabel.text = [NSString stringWithFormat:@"(%@)", player.type];
+    } else {
+        cell.typeLabel.text = @"";
     }
     
     cell.label.text = cellLabel;

@@ -41,7 +41,7 @@
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[label]-8-[comment]-8-|" options:0 metrics:0 views:views]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-18-[label]-(>=8)-[type]-8-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-24-[comment]-8-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-30-[comment]-8-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
 
     }
     return self;

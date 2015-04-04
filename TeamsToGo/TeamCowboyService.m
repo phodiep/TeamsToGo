@@ -255,6 +255,8 @@
             player.type = @"Sub";
         } else if ([[type lowercaseString] containsString:@"injured"]) {
             player.type = @"Injured";
+        } else if ([[type lowercaseString] containsString:@"on leave"]) {
+            player.type = @"On Leave";
         } else {
             player.type = type;
         }
@@ -570,6 +572,31 @@
 -(void)deleteRsvpForEvent:(Event*)event {
     NSArray *rsvpFound = [self fetchRsvpByEvent:event];
     [self deleteFromCoreData: rsvpFound stringPluralForItems:[NSString stringWithFormat:@"Rsvps (%lu)", (unsigned long)[rsvpFound count]]];
+}
+
+-(Player*)fetchPlayer:(User*)user onTeam:(Team*)team {
+
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.context];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entityDescription];
+    
+    if (user != nil && team != nil) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@ AND team == %@", user, team];
+        [fetchRequest setPredicate:predicate];
+    }
+    
+    NSError *fetchError = nil;
+    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
+    
+    if (fetchError != nil) {
+        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
+    }
+    
+    if ([fetchResults count] == 1) {
+        return fetchResults[0];
+    }
+    
+    return nil;
 }
 
 

@@ -45,4 +45,6 @@
 -(NSArray*)fetchRsvpByEvent:(Event*)event;
 -(NSArray*)addMultipleRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 
+-(Player*)fetchPlayer:(User*)user onTeam:(Team*)team;
+
 @end
