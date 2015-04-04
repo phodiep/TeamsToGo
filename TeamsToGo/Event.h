@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Team.h"
+#import "Rsvp.h"
 
 @interface Event : NSObject
 
@@ -28,6 +29,34 @@ typedef NS_ENUM(NSInteger, HomeAway) {
 @property (strong, nonatomic) NSString *status;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *location;
+
+@property (strong, nonatomic) NSArray *rsvps;
+
+@property (strong, nonatomic) NSString *rsvpYesFemale;
+@property (strong, nonatomic) NSString *rsvpYesMale;
+@property (strong, nonatomic) NSString *rsvpYesOther;
+
+@property (strong, nonatomic) NSString *rsvpNoFemale;
+@property (strong, nonatomic) NSString *rsvpNoMale;
+@property (strong, nonatomic) NSString *rsvpNoOther;
+
+@property (strong, nonatomic) NSString *rsvpMaybeFemale;
+@property (strong, nonatomic) NSString *rsvpMaybeMale;
+@property (strong, nonatomic) NSString *rsvpMaybeOther;
+
+@property (strong, nonatomic) NSString *rsvpNoResponseFemale;
+@property (strong, nonatomic) NSString *rsvpNoResponseMale;
+@property (strong, nonatomic) NSString *rsvpNoResponseOther;
+
+@property (strong, nonatomic) NSString *rsvpAvailableFemale;
+@property (strong, nonatomic) NSString *rsvpAvailableMale;
+@property (strong, nonatomic) NSString *rsvpAvailableOther;
+
+@property (strong, nonatomic) NSString *rsvpStatusDisplayYes;
+@property (strong, nonatomic) NSString *rsvpStatusDisplayNo;
+@property (strong, nonatomic) NSString *rsvpStatusDisplayMaybe;
+@property (strong, nonatomic) NSString *rsvpStatusDisplayAvailable;
+@property (strong, nonatomic) NSString *rsvpStatusDisplayNoResponse;
 
 @property (strong, nonatomic) NSDate *lastUpdate;
 

@@ -11,6 +11,8 @@
 #import "User.h"
 #import "Team.h"
 #import "Event.h"
+#import "TeamMember.h"
+#import "Rsvp.h"
 
 @interface TeamCowboyService : NSObject
 
@@ -22,6 +24,8 @@
 @property (strong, nonatomic) NSMutableArray *users;
 @property (strong, nonatomic) NSMutableArray *teams;
 @property (strong, nonatomic) NSMutableArray *events;
+@property (strong, nonatomic) NSMutableArray *teamMembers;
+@property (strong, nonatomic) NSMutableArray *rsvps;
 
 
 -(User*)createNewUserIfNecessaryElseUpdate:(NSDictionary *)json;
@@ -37,7 +41,11 @@
 -(NSArray*)fetchAllEvents;
 -(void)deletePastEvents;
 
+-(TeamMember*)createNewTeamMemberIfNecessaryElseUpdate:(NSDictionary*)json forTeam:(Team*)team;
+-(NSArray*)createMultipleTeamMembersIfNecessaryElseUpdate:(NSArray *)jsonArray forTeam:(NSString*)teamId;
+-(NSArray*)fetchAllTeamMembersForTeam:(Team*)team;
 
+-(Event*)updateRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 
 -(void)resetData;
 

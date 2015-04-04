@@ -26,6 +26,8 @@
 		1DD301461AD047F600E2795C /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD301451AD047F600E2795C /* User.m */; };
 		1DD3014E1AD054F600E2795C /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD3014D1AD054F600E2795C /* Team.m */; };
 		1DD301511AD0550100E2795C /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DD301501AD0550100E2795C /* Event.m */; };
+		1DDAE3FE1AD087DB00928464 /* TeamMember.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAE3FD1AD087DB00928464 /* TeamMember.m */; };
+		1DDAE4011AD09C1500928464 /* Rsvp.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAE4001AD09C1500928464 /* Rsvp.m */; };
 		1DF01F7D1A8068E6008F514C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7C1A8068E6008F514C /* main.m */; };
 		1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F7F1A8068E6008F514C /* AppDelegate.m */; };
 		1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DF01F811A8068E6008F514C /* TeamsToGo.xcdatamodeld */; };
@@ -91,6 +93,10 @@
 		1DD3014D1AD054F600E2795C /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
 		1DD3014F1AD0550100E2795C /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		1DD301501AD0550100E2795C /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
+		1DDAE3FC1AD087DB00928464 /* TeamMember.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamMember.h; sourceTree = "<group>"; };
+		1DDAE3FD1AD087DB00928464 /* TeamMember.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamMember.m; sourceTree = "<group>"; };
+		1DDAE3FF1AD09C1500928464 /* Rsvp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rsvp.h; sourceTree = "<group>"; };
+		1DDAE4001AD09C1500928464 /* Rsvp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rsvp.m; sourceTree = "<group>"; };
 		1DF01F771A8068E6008F514C /* TeamsToGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamsToGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF01F7B1A8068E6008F514C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1DF01F7C1A8068E6008F514C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -261,6 +267,10 @@
 				1DD3014D1AD054F600E2795C /* Team.m */,
 				1DD3014F1AD0550100E2795C /* Event.h */,
 				1DD301501AD0550100E2795C /* Event.m */,
+				1DDAE3FC1AD087DB00928464 /* TeamMember.h */,
+				1DDAE3FD1AD087DB00928464 /* TeamMember.m */,
+				1DDAE3FF1AD09C1500928464 /* Rsvp.h */,
+				1DDAE4001AD09C1500928464 /* Rsvp.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -370,6 +380,7 @@
 				1D4D27DF1AB25C1800849911 /* MessagesViewController.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
 				1DD301401ACB774900E2795C /* RsvpCell.m in Sources */,
+				1DDAE3FE1AD087DB00928464 /* TeamMember.m in Sources */,
 				1DD3014E1AD054F600E2795C /* Team.m in Sources */,
 				1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */,
 				1D4D27D91AB25A6C00849911 /* SettingsViewController.m in Sources */,
@@ -388,6 +399,7 @@
 				1DD301431ACCA84700E2795C /* Fonts.m in Sources */,
 				1D134E181A8815EA005510B0 /* Response.m in Sources */,
 				1DF01FB41A807712008F514C /* Hashes.m in Sources */,
+				1DDAE4011AD09C1500928464 /* Rsvp.m in Sources */,
 				1DF01F7D1A8068E6008F514C /* main.m in Sources */,
 				1D66715A1AC607C000074518 /* RosterCell.m in Sources */,
 				1D4D27D61AB256E500849911 /* LoginViewController.m in Sources */,

@@ -9,9 +9,6 @@
 #import "TeamCowboyClient.h"
 #import "NetworkController.h"
 #import "ApiKeys.h"
-//#import "User.h"
-//#import "UserExtension.h"
-//#import "Team.h"
 #import "TeamCowboyService.h"
 
 @interface TeamCowboyClient ()
@@ -249,8 +246,9 @@
                                     withCompletionHandler:^(NSObject *results) {
                                         if (results != nil) {
                                             NSArray *json = (NSArray*)results;
-//                                            [[TeamCowboyService sharedService] addPlayers:json toTeam:teamId];
                                             
+                                            [[TeamCowboyService sharedService] createMultipleTeamMembersIfNecessaryElseUpdate:json forTeam:teamId];
+
                                         }
                                     }];
 }
@@ -276,8 +274,7 @@
                                         if (results != nil) {
                                             NSDictionary *json = (NSDictionary*)results;
 
-//                                            [[TeamCowboyService sharedService] addMultipleCountByStatusForEvent:eventId withJson:json];
-//                                            [[TeamCowboyService sharedService] addMultipleRsvpsForEvent:eventId withJson:json];
+                                            [[TeamCowboyService sharedService] updateRsvpsForEvent:eventId withJson:json];                                            
                                         }
                                     }];
 }

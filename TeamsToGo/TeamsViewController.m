@@ -133,7 +133,6 @@
     Team *team = (Team*)self.teams[indexPath.row];
     teamVC.team = team;
   
-//    [[TeamCowboyClient sharedService] teamGetRoster:team.teamId];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self presentViewController:teamVC animated:true completion:nil];
     

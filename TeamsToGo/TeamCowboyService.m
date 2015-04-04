@@ -31,6 +31,8 @@
         self.users = [[NSMutableArray alloc] init];
         self.teams = [[NSMutableArray alloc] init];
         self.events = [[NSMutableArray alloc] init];
+        self.teamMembers = [[NSMutableArray alloc] init];
+        self.rsvps = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -373,97 +375,219 @@
     }
 }
 
+#pragma mark - TeamMember
+
+-(TeamMember*)createNewTeamMemberIfNecessaryElseUpdate:(NSDictionary*)json forTeam:(Team*)team {
+    if (json == nil) {
+        return nil;
+    }
+    User *user = [self createNewUserIfNecessaryElseUpdate:json];
+    
+    TeamMember *member = [self fetchTeamMemberByUser:user andTeam:team];
+    
+    if (member == nil) {
+        member = [[TeamMember alloc] init];
+        [self updateTeamMemberInfo:member forUser:user onTeam:team withJson:json];
+        [self addTeamMember:member];
+    } else {
+        [self updateTeamMemberInfo:member forUser:user onTeam:team withJson:json];
+    }
+    return member;
+}
+
+-(TeamMember*)updateTeamMemberInfo:(TeamMember*)member forUser:(User*)user onTeam:(Team*)team withJson:(NSDictionary*)json {
+    if (member == nil || user == nil || team == nil) {
+        return nil;
+    }
+    if (json == nil) {
+        return member;
+    }
+    
+    member.user = user;
+    member.team = team;
+    
+    NSString *type = json[@"teamMeta"][@"teamMemberType"][@"titleShort"];
+    
+    if ([[type lowercaseString] containsString:@"full"]){
+        member.memberType = @"Full-time";
+    } else if ([[type lowercaseString] containsString:@"part"]) {
+        member.memberType = @"Part-time";
+    } else if ([[type lowercaseString] containsString:@"sub"]) {
+        member.memberType = @"Sub";
+    } else if ([[type lowercaseString] containsString:@"injured"]) {
+        member.memberType = @"Injured";
+    } else if ([[type lowercaseString] containsString:@"on leave"]) {
+        member.memberType = @"On Leave";
+    } else {
+        member.memberType = type;
+    }
+    
+    [member updateTimestamp];
+    
+    return member;
+    
+}
+
+-(void)addTeamMember:(TeamMember*)member {
+    [self.teamMembers addObject:member];
+}
+
+-(TeamMember*)fetchTeamMemberByUser:(User*)user andTeam:(Team*)team {
+    if (user == nil || team == nil) {
+        return nil;
+    }
+    
+    for (TeamMember *member in self.teamMembers) {
+        if (member.user == user && member.team == team) {
+            return member;
+        }
+    }
+    return nil;
+}
+
+-(NSArray*)fetchAllTeamMembersForTeam:(Team*)team {
+    if (team == nil) {
+        return nil;
+    }
+    
+    NSMutableArray *fetchedTeamMembers = [[NSMutableArray alloc] init];
+    for (TeamMember *member in self.teamMembers) {
+        if (member.team == team) {
+            [fetchedTeamMembers addObject:member];
+        }
+    }
+    return fetchedTeamMembers;
+}
+
+-(NSArray*)createMultipleTeamMembersIfNecessaryElseUpdate:(NSArray *)jsonArray forTeam:(NSString*)teamId {
+    if (jsonArray == nil || teamId == nil) {
+        return nil;
+    }
+    NSMutableArray *membersFromJson = [[NSMutableArray alloc] init];
+    Team *team = [self fetchTeamById:teamId];
+    
+    for (NSDictionary *json in jsonArray) {
+        TeamMember *member = [self createNewTeamMemberIfNecessaryElseUpdate:json forTeam:team];
+        if (member != nil) {
+            [membersFromJson addObject:member];
+        }
+    }
+    return membersFromJson;
+}
+
+#pragma mark - Event Attendence
+-(Event*)updateRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
+    if (eventId == nil) {
+        return nil;
+    }
+    
+    Event *event = [self fetchEventById:eventId];
+    
+    if (json == nil) {
+        return event;
+    }
+    
+    NSArray *rsvpCounts = (NSArray*)json[@"countsByStatus"];
+
+    for (NSDictionary* entry in rsvpCounts) {
+        if ([entry[@"status"] isEqualToString:@"yes"]) {
+            event.rsvpYesFemale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"f"]];
+            event.rsvpYesMale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"m"]];
+            event.rsvpYesOther = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"other"]];
+        }
+        if ([entry[@"status"] isEqualToString:@"no"]) {
+            event.rsvpNoFemale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"f"]];
+            event.rsvpNoMale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"m"]];
+            event.rsvpNoOther = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"other"]];
+        }
+        if ([entry[@"status"] isEqualToString:@"maybe"]) {
+            event.rsvpMaybeFemale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"f"]];
+            event.rsvpMaybeMale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"m"]];
+            event.rsvpMaybeOther = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"other"]];
+        }
+        if ([entry[@"status"] isEqualToString:@"available"]) {
+            event.rsvpAvailableFemale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"f"]];
+            event.rsvpAvailableMale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"m"]];
+            event.rsvpAvailableOther = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"other"]];
+        }
+        if ([entry[@"status"] isEqualToString:@"noresponse"]) {
+            event.rsvpNoResponseFemale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"f"]];
+            event.rsvpNoResponseMale = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"m"]];
+            event.rsvpNoResponseOther = [NSString stringWithFormat:@"%@", entry[@"counts"][@"byGender"][@"other"]];
+        }
+    }
+    
+    NSArray *displayResponses = (NSArray*)json[@"meta"][@"rsvpStatuses"];
+    
+    for (NSDictionary* entry in displayResponses) {
+        if ([entry[@"status"] isEqualToString:@"yes"]) {
+            event.rsvpStatusDisplayYes = entry[@"statusDisplay"];
+        }
+        if ([entry[@"status"] isEqualToString:@"no"]) {
+            event.rsvpStatusDisplayNo = entry[@"statusDisplay"];
+        }
+        if ([entry[@"status"] isEqualToString:@"maybe"]) {
+            event.rsvpStatusDisplayMaybe = entry[@"statusDisplay"];
+        }
+        if ([entry[@"status"] isEqualToString:@"available"]) {
+            event.rsvpStatusDisplayAvailable = entry[@"statusDisplay"];
+        }
+        if ([entry[@"status"] isEqualToString:@"noresponse"]) {
+            event.rsvpStatusDisplayNoResponse = entry[@"statusDisplay"];
+        }
+    }
+    
+    NSMutableArray *rsvps = [[NSMutableArray alloc] init];
+    NSArray *users = json[@"users"];
+
+    for (NSDictionary *userJson in users) {
+        TeamMember *member = [self createNewTeamMemberIfNecessaryElseUpdate:userJson[@"user"] forTeam:event.team];
+        
+        Rsvp *rsvp = [self makeRsvp:member withJson:userJson];
+        
+        if (rsvp != nil) {
+            [rsvps addObject:rsvp];
+        }
+    }
+    
+    if ([rsvps count] > 0) {
+        event.rsvps = rsvps;
+    }
+    
+    return event;
+}
+
+-(Rsvp*)makeRsvp:(TeamMember*)member withJson:(NSDictionary*)json {
+    if (json == nil || member == nil) {
+        return nil;
+    }
+    
+    Rsvp *rsvp = [[Rsvp alloc] init];
+    rsvp.comments = json[@"rsvpInfo"][@"comments"];
+    rsvp.member = member;
+    rsvp.addlFemale = [NSString stringWithFormat:@"%@", json[@"rsvpInfo"][@"addlFemale"]];
+    rsvp.addlMale = [NSString stringWithFormat:@"%@", json[@"rsvpInfo"][@"addlMale"]];
+    
+    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"yes"]) {
+        rsvp.status = Yes;
+    }
+    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"no"]) {
+        rsvp.status = No;
+    }
+    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"maybe"]) {
+        rsvp.status = Maybe;
+    }
+    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"available"]) {
+        rsvp.status = Available;
+    }
+    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"noresponse"]) {
+        rsvp.status = NoResponse;
+    }
+    
+    return rsvp;
+}
 
 
-
-
-
-
-
-
-
-
-
-
-#pragma mark - Player
-
-//-(void)addPlayers:(NSArray*)jsonArray toTeam:(NSString*)teamId {
-//    if (jsonArray != nil && ![teamId isEqualToString:@""] ) {
-//        Team *team = [self fetchTeams:teamId][0];
-//        for (NSDictionary *json in jsonArray) {
-//            User *user = [self addNewUserWithJson:json];
-//            [self addPlayer:user toTeam:team withType:json[@"teamMeta"][@"teamMemberType"][@"titleShort"]];
-//        }
-//    }
-//    
-//}
-//
-//-(Player*)addPlayer:(User*)user toTeam:(Team*)team withType:(NSString*)type {
-//    
-//    if (user != nil && team != nil && ![type isEqualToString:@""] &&
-//        ![self playerAlreadyExists:user onTeam:team]) {
-//        Player *player = [NSEntityDescription insertNewObjectForEntityForName:@"Player" inManagedObjectContext:self.context];
-//        player.user = user;
-//        player.team = team;
-//        if ([[type lowercaseString] containsString:@"full"]){
-//            player.type = @"Full-time";
-//        } else if ([[type lowercaseString] containsString:@"part"]) {
-//            player.type = @"Part-time";
-//        } else if ([[type lowercaseString] containsString:@"sub"]) {
-//            player.type = @"Sub";
-//        } else if ([[type lowercaseString] containsString:@"injured"]) {
-//            player.type = @"Injured";
-//        } else if ([[type lowercaseString] containsString:@"on leave"]) {
-//            player.type = @"On Leave";
-//        } else {
-//            player.type = type;
-//        }
-//        
-//        [self saveContext:[NSString stringWithFormat:@"\nPlayer's Name ... %@ (%@)",user.name, type]];
-//        return player;
-//    }
-//    return nil;
-//}
-//
-//-(BOOL)playerAlreadyExists:(User*)user onTeam:(Team*)team {
-//    return ( [[self fetchPlayersForTeam:team specificUser:user] count] > 0);
-//}
-//
-//-(NSArray*)fetchPlayersForTeam:(Team*)team specificUser:(User*)user {
-//    if (team != nil) {
-//        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.context];
-//        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//        [fetchRequest setEntity:entityDescription];
-//        
-//        if (user == nil) {
-//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@", team];
-//            [fetchRequest setPredicate:predicate];
-//        }
-//        if (user != nil) {
-//            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@ AND user == %@", team, user];
-//            [fetchRequest setPredicate:predicate];
-//        }
-//        
-//        
-//        NSError *fetchError = nil;
-//        NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-//        
-//        if (fetchError != nil) {
-//            NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-//        }
-//        
-//        return fetchResults;
-//        
-//    }
-//    return nil;
-//    
-//}
-//
-//-(NSArray*)fetchPlayersForTeam:(Team*)team {
-//    return [self fetchPlayersForTeam:team specificUser:nil];
-//}
-//
-//#pragma mark - Event Attendence
 //-(CountByStatus*)addNewCountByStatusforEvent:(Event*)event withJson:(NSDictionary*)json {
 //    if (json != nil && event != nil) {
 //        
