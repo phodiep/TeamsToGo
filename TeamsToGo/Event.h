@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, HomeAway) {
 
 @property (strong, nonatomic) NSDate *timestamp;
 
+-(NSString*)getRsvpCountsForStatus:(NSString*)status andGender:(NSString*)gender;
 -(void)updateTimestamp;
 
 @end

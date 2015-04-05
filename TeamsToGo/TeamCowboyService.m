@@ -43,7 +43,7 @@
         return nil;
     }
     
-    User *user = [self fetchUserById:json[@"userId"]];
+    User *user = [self fetchUserById:[NSString stringWithFormat:@"%@", json[@"userId"]]];
     if (user == nil) {
         user = [[User alloc] init];
         [self updateUserInfo:user withJson:json];
@@ -155,7 +155,7 @@
         return nil;
     }
 
-    Team *team = [self fetchTeamById:json[@"teamId"]];
+    Team *team = [self fetchTeamById:[NSString stringWithFormat:@"%@", json[@"teamId"]]];
 
     if (team == nil) {
         team = [[Team alloc] init];
@@ -255,7 +255,7 @@
         return nil;
     }
     
-    Event *event = [self fetchEventById:json[@"eventId"]];
+    Event *event = [self fetchEventById:[NSString stringWithFormat:@"%@", json[@"eventId"]]];
     
     if (event == nil) {
         event = [[Event alloc] init];
@@ -587,45 +587,6 @@
     return rsvp;
 }
 
-
-//-(CountByStatus*)addNewCountByStatusforEvent:(Event*)event withJson:(NSDictionary*)json {
-//    if (json != nil && event != nil) {
-//        
-//        CountByStatus *countByStatus = [NSEntityDescription insertNewObjectForEntityForName:@"CountByStatus" inManagedObjectContext:self.context];
-//        
-//        countByStatus.event = event;
-//        countByStatus.status = json[@"status"];
-//        countByStatus.male = json[@"counts"][@"byGender"][@"m"];
-//        countByStatus.female = json[@"counts"][@"byGender"][@"f"];
-//        countByStatus.other = json[@"counts"][@"byGender"][@"other"];
-//        countByStatus.total = json[@"counts"][@"total"];
-//        
-//        [self saveContext:@""];
-//        return countByStatus;
-//    }
-//    return nil;
-//}
-//
-//-(NSArray*)addMultipleCountByStatusForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
-//    if (json != nil && ![eventId isEqualToString:@""]) {
-//        Event *event = (Event*)[self fetchEventWithId:eventId][0];
-//        [self deleteCountByStatusForEvent:event];
-//        
-//        NSMutableArray *newCounts = [[NSMutableArray alloc] init];
-//        NSArray *countsByStatusJson = json[@"countsByStatus"];
-//        
-//        for (NSDictionary* counts in countsByStatusJson) {
-//            [newCounts addObject:[self addNewCountByStatusforEvent:event withJson:counts]];
-//        }
-//    }
-//    return nil;
-//}
-//
-//-(void)deleteCountByStatusForEvent:(Event*)event {
-//    NSArray *countsFound = [self fetchCountByStatus:event];
-//    [self deleteFromCoreData: countsFound stringPluralForItems:[NSString stringWithFormat:@"CountByStatus (%lu)", (unsigned long)[countsFound count]]];
-//}
-//
 //-(NSArray*)fetchCountByStatus:(Event*)event {
 //    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"CountByStatus" inManagedObjectContext:self.context];
 //    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

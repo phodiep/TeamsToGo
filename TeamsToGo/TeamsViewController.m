@@ -81,7 +81,11 @@
 
 -(void)getAllTeams {
     [[TeamCowboyClient sharedService] userGetTeams];
-    self.teams = [[TeamCowboyService sharedService] fetchAllTeams];
+    NSArray *fetchedTeams = [[TeamCowboyService sharedService] fetchAllTeams];
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    
+    self.teams = [fetchedTeams sortedArrayUsingDescriptors:@[sort]];
 }
 
 -(void)refreshTeamList:(UIRefreshControl*)refreshControl {
