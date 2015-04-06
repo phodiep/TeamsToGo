@@ -20,19 +20,17 @@
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
 
-@property (nonatomic) CGFloat tableViewOriginalY;
-@property (nonatomic) CGFloat tableViewOriginalHeight;
-
 @property (strong, nonatomic) NSArray *headerTableViewConstraint;
 @property (nonatomic) BOOL headerOverlapIsMaxed;
 
 @property (strong, nonatomic) UIButton *backButton;
 
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) UIView *subHeaderView;
+
 @property (strong, nonatomic) UILabel *eventTitle;
 @property (strong, nonatomic) UILabel *eventTime;
 @property (strong, nonatomic) UILabel *comments;
-
 @property (strong, nonatomic) UILabel *locationName;
 @property (strong, nonatomic) UILabel *locationAddress;
 
@@ -55,6 +53,8 @@
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     self.headerView = [[UIView alloc] init];
     self.headerView.backgroundColor = [UIColor orangeColor];
+    self.subHeaderView = [[UIView alloc] init];
+    self.subHeaderView.backgroundColor = [UIColor clearColor];
     
     self.eventTitle = [[UILabel alloc] init];
     self.eventTitle.numberOfLines = 0;
@@ -81,6 +81,7 @@
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.subHeaderView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTime setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.comments setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -93,20 +94,22 @@
     [self.headerView addSubview:self.backButton];
     [self.headerView addSubview:self.eventTitle];
     [self.headerView addSubview:self.eventTime];
-    [self.headerView addSubview:self.comments];
-    [self.headerView addSubview:self.locationName];
-    [self.headerView addSubview:self.locationAddress];
+    [self.headerView addSubview:self.subHeaderView];
+    
+    [self.subHeaderView addSubview:self.comments];
+    [self.subHeaderView addSubview:self.locationName];
+    [self.subHeaderView addSubview:self.locationAddress];
     
     self.views = @{@"tableview" : self.tableView,
-                            @"back" : self.backButton,
-                            @"header" : self.headerView,
-                            @"eventTitle" : self.eventTitle,
-                            @"eventTime" : self.eventTime,
-                            @"comments" : self.comments,
-                            @"location" : self.locationName,
-                            @"address" : self.locationAddress};
+                   @"back" : self.backButton,
+                   @"header" : self.headerView,
+                   @"subHeader" : self.subHeaderView,
+                   @"eventTitle" : self.eventTitle,
+                   @"eventTime" : self.eventTime,
+                   @"comments" : self.comments,
+                   @"location" : self.locationName,
+                   @"address" : self.locationAddress};
     
-//    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header][tableview]|" options:0 metrics:0 views:self.views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header]" options:0 metrics:0 views:self.views]];
     
     self.headerOverlapIsMaxed = false;
@@ -115,17 +118,18 @@
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableview]|" options:0 metrics:0 views:self.views]];
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
-
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subHeader]|" options:0 metrics:0 views:self.views]];
     
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[comments]-[location]-[address]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[subHeader]|" options:0 metrics:0 views:self.views]];
+    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[comments]-[location]-[address]-8-|" options:0 metrics:0 views:self.views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back(20)]" options:0 metrics:0 views:self.views]];
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(28)-[eventTitle]-8-|" options:0 metrics:0 views:self.views]];
 
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:0 metrics:0 views:self.views]];
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:self.views]];
+    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:self.views]];
+    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:self.views]];
+    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:self.views]];
 
     
     self.view = self.rootView;
@@ -133,15 +137,15 @@
 
 -(void)setHeaderOverlap:(double)spacing {
     
-    if (self.headerOverlapIsMaxed && spacing >= 80) {
+    if (self.headerOverlapIsMaxed && spacing >= self.subHeaderView.frame.size.height) {
         return;
     }
     
     //TODO: refactor for case: spacing (-) and header at max view... constraints would not need to be reset!
     
-    self.headerOverlapIsMaxed = spacing >= 80;
+    self.headerOverlapIsMaxed = spacing >= self.subHeaderView.frame.size.height;
     double constrainedValue = MAX(spacing, 0);
-    constrainedValue = MIN(constrainedValue, 80);
+    constrainedValue = MIN(constrainedValue, self.subHeaderView.frame.size.height);
     
     
     [self.rootView removeConstraints:self.headerTableViewConstraint];
@@ -165,9 +169,6 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    self.tableViewOriginalY = self.tableView.frame.origin.y;
-    self.tableViewOriginalHeight = self.tableView.frame.size.height;
     
     [self groupRsvps];
 
