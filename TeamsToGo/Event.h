@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Team.h"
 #import "Rsvp.h"
+#import "Location.h"
 
 @interface Event : NSObject
 
@@ -28,7 +29,7 @@ typedef NS_ENUM(NSInteger, HomeAway) {
 @property (strong, nonatomic) NSDate *startTime;
 @property (strong, nonatomic) NSString *status;
 @property (strong, nonatomic) NSString *title;
-@property (strong, nonatomic) NSString *location;
+@property (strong, nonatomic) Location *location;
 
 @property (strong, nonatomic) NSArray *rsvps;
 

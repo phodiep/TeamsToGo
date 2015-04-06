@@ -13,11 +13,18 @@
 #import "Team.h"
 #import "RsvpCell.h"
 #import "Fonts.h"
+#import "Location.h"
 
-@interface EventViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface EventViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (nonatomic) CGFloat tableViewOriginalY;
+@property (nonatomic) CGFloat tableViewOriginalHeight;
+
+@property (strong, nonatomic) NSArray *headerTableViewConstraint;
+@property (nonatomic) BOOL headerOverlapIsMaxed;
 
 @property (strong, nonatomic) UIButton *backButton;
 
@@ -26,9 +33,13 @@
 @property (strong, nonatomic) UILabel *eventTime;
 @property (strong, nonatomic) UILabel *comments;
 
+@property (strong, nonatomic) UILabel *locationName;
+@property (strong, nonatomic) UILabel *locationAddress;
+
 @property (strong, nonatomic) NSMutableDictionary *playersGrouped;
 @property (strong, nonatomic) NSMutableArray *groupTypes;
 
+@property (strong, nonatomic) NSDictionary *views;
 
 @end
 
@@ -59,38 +70,85 @@
     self.comments.numberOfLines = 0;
     self.comments.font = [[Fonts alloc] textFont];
     
+    self.locationName = [[UILabel alloc] init];
+    self.locationName.numberOfLines = 0;
+    self.locationName.font = [[Fonts alloc] textFont];
+    
+    self.locationAddress = [[UILabel alloc] init];
+    self.locationAddress.numberOfLines = 0;
+    self.locationAddress.font = [[Fonts alloc] textFont];
+    
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTime setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.comments setTranslatesAutoresizingMaskIntoConstraints:false];
-    
-    [self.rootView addSubview:self.tableView];
-    [self.rootView addSubview:self.backButton];
+    [self.locationName setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.locationAddress setTranslatesAutoresizingMaskIntoConstraints:false];
+
     [self.rootView addSubview:self.headerView];
+    [self.rootView addSubview:self.tableView];
+    
+    [self.headerView addSubview:self.backButton];
     [self.headerView addSubview:self.eventTitle];
     [self.headerView addSubview:self.eventTime];
     [self.headerView addSubview:self.comments];
+    [self.headerView addSubview:self.locationName];
+    [self.headerView addSubview:self.locationAddress];
     
-    NSDictionary *views = @{@"tableview" : self.tableView,
+    self.views = @{@"tableview" : self.tableView,
                             @"back" : self.backButton,
                             @"header" : self.headerView,
                             @"eventTitle" : self.eventTitle,
                             @"eventTime" : self.eventTime,
-                            @"comments" : self.comments};
+                            @"comments" : self.comments,
+                            @"location" : self.locationName,
+                            @"address" : self.locationAddress};
     
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back(20)]-[header][tableview]|" options:0 metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableview]|" options:0 metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:0 metrics:0 views:views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:views]];
+//    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header][tableview]|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header]" options:0 metrics:0 views:self.views]];
     
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[comments]-8-|" options:0 metrics:0 views:views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTitle]-8-|" options:0 metrics:0 views:views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:views]];
+    self.headerOverlapIsMaxed = false;
+    [self setHeaderOverlap:0];
+    
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableview]|" options:0 metrics:0 views:self.views]];
+
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
+
+    
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[comments]-[location]-[address]-8-|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back(20)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(28)-[eventTitle]-8-|" options:0 metrics:0 views:self.views]];
+
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:self.views]];
+
     
     self.view = self.rootView;
+}
+
+-(void)setHeaderOverlap:(double)spacing {
+    
+    if (self.headerOverlapIsMaxed && spacing >= 80) {
+        return;
+    }
+    
+    //TODO: refactor for case: spacing (-) and header at max view... constraints would not need to be reset!
+    
+    self.headerOverlapIsMaxed = spacing >= 80;
+    double constrainedValue = MAX(spacing, 0);
+    constrainedValue = MIN(constrainedValue, 80);
+    
+    
+    [self.rootView removeConstraints:self.headerTableViewConstraint];
+    NSDictionary *metrics = @{@"space" : [NSNumber numberWithDouble:-constrainedValue] };
+    self.headerTableViewConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[header]-(space)-[tableview]|" options:0 metrics:metrics views:self.views];
+    [self.rootView addConstraints:self.headerTableViewConstraint];
+    
 }
 
 - (void)viewDidLoad {
@@ -108,6 +166,9 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    self.tableViewOriginalY = self.tableView.frame.origin.y;
+    self.tableViewOriginalHeight = self.tableView.frame.size.height;
+    
     [self groupRsvps];
 
     NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
@@ -124,7 +185,7 @@
     }
     
     if (![self.event.title isEqualToString:@""]) {
-        [title appendString:[NSString stringWithFormat:@" vs. %@", self.event.title]];
+        [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
     }
     
     self.eventTitle.text = title;
@@ -133,6 +194,20 @@
     if (self.event.comments != nil) {
         self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
     }
+    
+    Location *location = (Location*)self.event.location;
+    
+    self.locationName.text = location.name;
+    NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
+    
+    if (![location.city isEqualToString:@""]) {
+        [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+    }
+    if (![location.partOfTown isEqualToString:@""]) {
+        [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
+    }
+
+    self.locationAddress.text = address;
     
     [self.tableView reloadData];
 }
@@ -232,6 +307,19 @@
     
     return header;
 }
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+    CGPoint scrollPos = scrollView.contentOffset;
+    
+    //scroll from origin down ... move table up and make bigger ... until
+    if (scrollPos.y > 0) {
+        [self setHeaderOverlap: scrollPos.y];
+    } else {
+        [self setHeaderOverlap: 0];
+    }
+}
+
 
 #pragma mark - group rsvps by type
 -(void)groupRsvps {

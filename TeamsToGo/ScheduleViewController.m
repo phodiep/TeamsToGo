@@ -139,7 +139,7 @@
     
     cell.dateTimeLabel.text = [self formatDate:event.startTime];
     cell.teamLabel.text = [(Team*)event.team name];
-    cell.locationLabel.text = @"here/there";
+    cell.locationLabel.text = event.location.name;
     
     //    self.userStatus = [[UILabel alloc] init];
     
