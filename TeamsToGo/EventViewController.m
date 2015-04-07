@@ -196,19 +196,21 @@
         self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
     }
     
-    Location *location = (Location*)self.event.location;
+    if (self.event.location != nil) {
+        Location *location = (Location*)self.event.location;
     
-    self.locationName.text = location.name;
-    NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
+        self.locationName.text = location.name;
+        NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
     
-    if (![location.city isEqualToString:@""]) {
-        [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+        if (![location.city isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+        }
+        if (![location.partOfTown isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
+        }
+        
+        self.locationAddress.text = address;
     }
-    if (![location.partOfTown isEqualToString:@""]) {
-        [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
-    }
-
-    self.locationAddress.text = address;
     
     [self.tableView reloadData];
 }

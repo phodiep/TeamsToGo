@@ -7,6 +7,7 @@
 //
 
 #import "CoreDataStack.h"
+#import "Fonts.h"
 #import "TeamsViewController.h"
 #import "Team.h"
 #import "TeamCowboyClient.h"
@@ -15,8 +16,6 @@
 #import "MessagesViewController.h"
 
 @interface TeamsViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@property (strong, nonatomic) NSManagedObjectContext *context;
 
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) NSMutableDictionary *views;
@@ -39,7 +38,7 @@
     
     UILabel *title = [[UILabel alloc] init];
     title.text = @"Teams";
-    title.font = [UIFont systemFontOfSize:20];
+    title.font = [[Fonts alloc] titleFont];
     
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -51,7 +50,7 @@
     [self.views setObject:self.tableView forKey:@"tableView"];
     
     [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
+    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-28-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
 
     
     self.view = self.rootView;
@@ -60,8 +59,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.context = [[CoreDataStack alloc] init].managedObjectContext;
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.dataSource = self;

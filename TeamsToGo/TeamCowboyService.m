@@ -333,36 +333,38 @@
         event.team = [self createNewTeamIfNecessaryElseUpdate:json[@"team"]];
     }
     
-    //TODO: add location
     if ([self isNotNull:json[@"location"]]) {
         NSDictionary *locationJson = (NSDictionary*)json[@"location"];
-        Location *location = [[Location alloc] init];
         
         if ([self isNotNull:locationJson[@"name"]]) {
-            location.name = locationJson[@"name"];
+            Location *location = [[Location alloc] init];
+            
+            if ([self isNotNull:locationJson[@"name"]]) {
+                location.name = locationJson[@"name"];
+            }
+            
+            if ([self isNotNull:locationJson[@"address"][@"addressLine1"]]) {
+                location.address = locationJson[@"address"][@"addressLine1"];
+            }
+            
+            if ([self isNotNull:locationJson[@"address"][@"city"]]) {
+                location.city = locationJson[@"address"][@"city"];
+            }
+            
+            if ([self isNotNull:locationJson[@"address"][@"partOfTown"]]) {
+                location.partOfTown = locationJson[@"address"][@"partOfTown"];
+            }
+            
+            if ([self isNotNull:locationJson[@"address"][@"googleMapsUrl"]]) {
+                location.googleMapsUrl = locationJson[@"address"][@"googleMapsUrl"];
+            }
+            
+            if ([self isNotNull:locationJson[@"comments"]]) {
+                location.comments = locationJson[@"comments"];
+            }
+            
+            event.location = location;
         }
-
-        if ([self isNotNull:locationJson[@"address"][@"addressLine1"]]) {
-            location.address = locationJson[@"address"][@"addressLine1"];
-        }
-
-        if ([self isNotNull:locationJson[@"address"][@"city"]]) {
-            location.city = locationJson[@"address"][@"city"];
-        }
-
-        if ([self isNotNull:locationJson[@"address"][@"partOfTown"]]) {
-            location.partOfTown = locationJson[@"address"][@"partOfTown"];
-        }
-        
-        if ([self isNotNull:locationJson[@"address"][@"googleMapsUrl"]]) {
-            location.googleMapsUrl = locationJson[@"address"][@"googleMapsUrl"];
-        }
-        
-        if ([self isNotNull:locationJson[@"comments"]]) {
-            location.comments = locationJson[@"comments"];
-        }
-
-        event.location = location;
     }
 
     return event;
