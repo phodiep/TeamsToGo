@@ -15,6 +15,7 @@
 #import "Fonts.h"
 #import "Location.h"
 #import "RsvpViewController.h"
+#import "HeaderView.h"
 
 @interface EventViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -27,14 +28,7 @@
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *rsvpButton;
 
-@property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UIView *subHeaderView;
-
-@property (strong, nonatomic) UILabel *eventTitle;
-@property (strong, nonatomic) UILabel *eventTime;
-@property (strong, nonatomic) UILabel *comments;
-@property (strong, nonatomic) UILabel *locationName;
-@property (strong, nonatomic) UILabel *locationAddress;
+@property (strong, nonatomic) HeaderView *headerView;
 
 @property (strong, nonatomic) NSMutableDictionary *playersGrouped;
 @property (strong, nonatomic) NSMutableArray *groupTypes;
@@ -65,67 +59,24 @@
     self.rsvpButton.clipsToBounds = YES;
     [self.rsvpButton addTarget:self action:@selector(rsvpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    self.headerView = [[UIView alloc] init];
-    self.headerView.backgroundColor = [UIColor orangeColor];
-    self.subHeaderView = [[UIView alloc] init];
-    self.subHeaderView.backgroundColor = [UIColor clearColor];
-    
-    self.eventTitle = [[UILabel alloc] init];
-    self.eventTitle.numberOfLines = 0;
-    self.eventTitle.font = [[Fonts alloc] titleFont];
-    self.eventTitle.textAlignment = NSTextAlignmentCenter;
-    
-    self.eventTime = [[UILabel alloc] init];
-    self.eventTime.numberOfLines = 0;
-    self.eventTime.font = [[Fonts alloc] textFont];
-    self.eventTime.textAlignment = NSTextAlignmentCenter;
-    
-    self.comments = [[UILabel alloc] init];
-    self.comments.numberOfLines = 0;
-    self.comments.font = [[Fonts alloc] textFont];
-    
-    self.locationName = [[UILabel alloc] init];
-    self.locationName.numberOfLines = 0;
-    self.locationName.font = [[Fonts alloc] textFont];
-    
-    self.locationAddress = [[UILabel alloc] init];
-    self.locationAddress.numberOfLines = 0;
-    self.locationAddress.font = [[Fonts alloc] textFont];
+    self.headerView = [[HeaderView alloc] init];
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.rsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.subHeaderView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.eventTime setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.comments setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.locationName setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.locationAddress setTranslatesAutoresizingMaskIntoConstraints:false];
 
     [self.rootView addSubview:self.headerView];
     [self.rootView addSubview:self.tableView];
     
     [self.headerView addSubview:self.backButton];
     [self.headerView addSubview:self.rsvpButton];
-    [self.headerView addSubview:self.eventTitle];
-    [self.headerView addSubview:self.eventTime];
-    [self.headerView addSubview:self.subHeaderView];
-    
-    [self.subHeaderView addSubview:self.comments];
-    [self.subHeaderView addSubview:self.locationName];
-    [self.subHeaderView addSubview:self.locationAddress];
     
     self.views = @{@"tableview" : self.tableView,
                    @"back" : self.backButton,
                    @"rsvp" : self.rsvpButton,
                    @"header" : self.headerView,
-                   @"subHeader" : self.subHeaderView,
-                   @"eventTitle" : self.eventTitle,
-                   @"eventTime" : self.eventTime,
-                   @"comments" : self.comments,
-                   @"location" : self.locationName,
-                   @"address" : self.locationAddress};
+                   };
     
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header]" options:0 metrics:0 views:self.views]];
     
@@ -135,35 +86,30 @@
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableview]|" options:0 metrics:0 views:self.views]];
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subHeader]|" options:0 metrics:0 views:self.views]];
+
+
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
+
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
     
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[subHeader]|" options:0 metrics:0 views:self.views]];
-    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[comments]-[location]-[address]-8-|" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
-
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]-[eventTitle]-[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
-
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:self.views]];
-    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:self.views]];
-    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:self.views]];
-    [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:self.views]];
-
+    [self.headerView setupObjectsForAutolayout];
     
     self.view = self.rootView;
 }
 
 -(void)setHeaderOverlap:(double)spacing {
     
-    if (self.headerOverlapIsMaxed && spacing >= self.subHeaderView.frame.size.height) {
+    if (self.headerOverlapIsMaxed && spacing >= self.headerView.subHeaderView.frame.size.height) {
         return;
     }
     
     //TODO: refactor for case: spacing (-) and header at max view... constraints would not need to be reset!
     
-    self.headerOverlapIsMaxed = spacing >= self.subHeaderView.frame.size.height;
+    self.headerOverlapIsMaxed = spacing >= self.headerView.subHeaderView.frame.size.height;
     double constrainedValue = MAX(spacing, 0);
-    constrainedValue = MIN(constrainedValue, self.subHeaderView.frame.size.height);
+    constrainedValue = MIN(constrainedValue, self.headerView.subHeaderView.frame.size.height);
     
     
     [self.rootView removeConstraints:self.headerTableViewConstraint];
@@ -207,17 +153,17 @@
         [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
     }
     
-    self.eventTitle.text = title;
+    self.headerView.eventTitle.text = title;
     
-    self.eventTime.text = [self formatDate:self.event.startTime];
+    self.headerView.eventTime.text = [self formatDate:self.event.startTime];
     if (self.event.comments != nil) {
-        self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
+        self.headerView.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
     }
     
     if (self.event.location != nil) {
         Location *location = (Location*)self.event.location;
     
-        self.locationName.text = location.name;
+        self.headerView.locationName.text = location.name;
         NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
     
         if (![location.city isEqualToString:@""]) {
@@ -227,7 +173,7 @@
             [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
         }
         
-        self.locationAddress.text = address;
+        self.headerView.locationAddress.text = address;
     }
 
     [self.tableView reloadData];

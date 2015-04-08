@@ -9,8 +9,9 @@
 #import "RsvpViewController.h"
 #import "EditRsvpCell.h"
 #import "Fonts.h"
+#import "HeaderView.h"
 
-@interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>
+@interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) NSString *status;
 @property (nonatomic) NSUInteger addlMale;
@@ -22,9 +23,17 @@
 
 
 @property (strong, nonatomic) UIView *rootView;
+@property (strong, nonatomic) HeaderView *headerView;
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) NSArray *headerTableViewConstraint;
+@property (nonatomic) BOOL headerOverlapIsMaxed;
+
+
 @property (strong, nonatomic) UIButton *saveRsvpButton;
 @property (strong, nonatomic) UIButton *removeRsvpButton;
+
+@property (strong, nonatomic) NSDictionary *views;
 
 @end
 
@@ -41,22 +50,33 @@
     self.removeRsvpButton = [[UIButton alloc] init];
     [self.removeRsvpButton setTitle:@"Remover RSVP" forState:UIControlStateNormal];
     [self.removeRsvpButton addTarget:self action:@selector(removeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.headerView = [[HeaderView alloc] init];
 
+    [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.saveRsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.removeRsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
     
+    [self.rootView addSubview:self.headerView];
     [self.rootView addSubview:self.tableView];
-    [self.rootView addSubview:self.saveRsvpButton];
-    [self.rootView addSubview:self.removeRsvpButton];
+//    [self.rootView addSubview:self.saveRsvpButton];
+//    [self.rootView addSubview:self.removeRsvpButton];
     
-    NSDictionary *views = @{@"tableView" : self.tableView,
-                            @"save" : self.saveRsvpButton,
-                            @"remove" : self.removeRsvpButton};
+    self.views = @{@"header" : self.headerView,
+                   @"tableView" : self.tableView,
+                   @"save" : self.saveRsvpButton,
+                   @"remove" : self.removeRsvpButton};
 
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-40-[tableView]|" options:0 metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header]" options:0 metrics:0 views:self.views]];
     
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:views]];
+    self.headerOverlapIsMaxed = false;
+    [self setHeaderOverlap:0];
+    
+    [self.headerView setupObjectsForAutolayout];
+    
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
     
     self.view = self.rootView;
 }
@@ -73,6 +93,87 @@
     [self.tableView registerClass:EditRsvpCell.class forCellReuseIdentifier:@"RSVP_CELL"];
     
 }
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
+    
+    switch (self.event.homeAway) {
+        case Home:
+            [title appendString:@" (Home)"];
+            break;
+        case Away:
+            [title appendString:@" (Away)"];
+            break;
+        default:
+            break;
+    }
+    
+    if (![self.event.title isEqualToString:@""]) {
+        [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
+    }
+    
+    self.headerView.eventTitle.text = title;
+    
+    self.headerView.eventTime.text = [self formatDate:self.event.startTime];
+    if (self.event.comments != nil) {
+        self.headerView.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
+    }
+    
+    if (self.event.location != nil) {
+        Location *location = (Location*)self.event.location;
+        
+        self.headerView.locationName.text = location.name;
+        NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
+        
+        if (![location.city isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+        }
+        if (![location.partOfTown isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
+        }
+        
+        self.headerView.locationAddress.text = address;
+    }
+    
+    [self.tableView reloadData];
+}
+
+-(void)setHeaderOverlap:(double)spacing {
+    
+    if (self.headerOverlapIsMaxed && spacing >= self.headerView.subHeaderView.frame.size.height) {
+        return;
+    }
+    
+    //TODO: refactor for case: spacing (-) and header at max view... constraints would not need to be reset!
+    
+    self.headerOverlapIsMaxed = spacing >= self.headerView.subHeaderView.frame.size.height;
+    double constrainedValue = MAX(spacing, 0);
+    constrainedValue = MIN(constrainedValue, self.headerView.subHeaderView.frame.size.height);
+    
+    
+    [self.rootView removeConstraints:self.headerTableViewConstraint];
+    NSDictionary *metrics = @{@"space" : [NSNumber numberWithDouble:-constrainedValue] };
+    self.headerTableViewConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[header]-(space)-[tableView]|" options:0 metrics:metrics views:self.views];
+    [self.rootView addConstraints:self.headerTableViewConstraint];
+    
+}
+
+#pragma mark - UIScrollViewDelegate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGPoint scrollPos = scrollView.contentOffset;
+    
+    //scroll from origin down ... move table up and make bigger ... until
+    if (scrollPos.y > 0) {
+        [self setHeaderOverlap: scrollPos.y];
+    } else {
+        [self setHeaderOverlap: 0];
+    }
+}
+
+#pragma mark - UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 7;
@@ -383,4 +484,15 @@
 -(void)removeButtonPressed {
     NSLog(@"remove");
 }
+
+#pragma mark - misc
+
+-(NSString*)formatDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"EEEE, MMM d yyyy '@' h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
+
+
+
 @end
