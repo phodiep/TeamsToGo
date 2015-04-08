@@ -13,8 +13,8 @@
 @interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>
 
 @property (strong, nonatomic) NSString *status;
-@property (nonatomic) NSInteger addlMale;
-@property (nonatomic) NSInteger addlFemale;
+@property (nonatomic) NSUInteger addlMale;
+@property (nonatomic) NSUInteger addlFemale;
 @property (strong, nonatomic) NSString *comments;
 @property (strong, nonatomic) NSString *rsvpAsUserId;
 
@@ -176,21 +176,32 @@
     label.text = @"+ Male";
     label.font = [[Fonts alloc] titleFont];
     
+    UILabel *addlMaleLabel = [[UILabel alloc] init];
+    addlMaleLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.addlMale];
+    
+    
     UIStepper* stepper = [[UIStepper alloc] init];
+        stepper.minimumValue = 0;
+    if (self.addlMale > 0) {
+        stepper.value = self.addlMale;
+    }
+    [stepper addTarget:self action:@selector(addlMaleStepperChanged:) forControlEvents:UIControlEventValueChanged];
 
     [stepper setTranslatesAutoresizingMaskIntoConstraints:false];
     [label setTranslatesAutoresizingMaskIntoConstraints:false];
+    [addlMaleLabel setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [cell.contentView addSubview:label];
     [cell.contentView addSubview: stepper];
+    [cell.contentView addSubview:addlMaleLabel];
     
     NSDictionary *views = @{@"label" : label,
                             @"stepper" : stepper,
+                            @"male" : addlMaleLabel
                             };
     
     [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[label]-|" options:0 metrics:0 views:views]];
-    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-(>=8)-[stepper]-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
-
+    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-(>=8)-[male]-16-[stepper]-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
     
     return cell;
     
@@ -203,22 +214,33 @@
     label.text = @"+ Female";
     label.font = [[Fonts alloc] titleFont];
     
+    UILabel *addlFemaleLabel = [[UILabel alloc] init];
+    addlFemaleLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.addlFemale];
+    
+    
     UIStepper* stepper = [[UIStepper alloc] init];
+    stepper.minimumValue = 0;
+    if (self.addlFemale > 0) {
+        stepper.value = self.addlFemale;
+    }
+    [stepper addTarget:self action:@selector(addlFemaleStepperChanged:) forControlEvents:UIControlEventValueChanged];
     
     [stepper setTranslatesAutoresizingMaskIntoConstraints:false];
     [label setTranslatesAutoresizingMaskIntoConstraints:false];
+    [addlFemaleLabel setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [cell.contentView addSubview:label];
     [cell.contentView addSubview: stepper];
+    [cell.contentView addSubview:addlFemaleLabel];
     
     NSDictionary *views = @{@"label" : label,
                             @"stepper" : stepper,
+                            @"female" : addlFemaleLabel
                             };
     
     [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[label]-|" options:0 metrics:0 views:views]];
-    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-(>=8)-[stepper]-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-(>=8)-[female]-16-[stepper]-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
 
-    
     return cell;
     
 }
@@ -337,6 +359,21 @@
     [self.tableView reloadData];
     
 }
+
+-(void)addlMaleStepperChanged:(UIStepper*)stepper {
+    self.addlMale = stepper.value;
+    NSLog(@"Additional Male: %f", stepper.value);
+    
+    [self.tableView reloadData];
+}
+
+-(void)addlFemaleStepperChanged:(UIStepper*)stepper {
+    self.addlFemale = stepper.value;
+    NSLog(@"Additional Female: %f", stepper.value);
+    
+    [self.tableView reloadData];
+}
+
 
 #pragma mark - Button Actions
 -(void)saveButtonPressed {
