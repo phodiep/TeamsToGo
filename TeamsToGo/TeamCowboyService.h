@@ -45,6 +45,8 @@
 -(NSArray*)fetchAllTeamMembersForTeam:(Team*)team;
 
 -(Event*)updateRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
+-(Rsvp*)fetchRsvpForUserId:(NSString*)userId forEvent:(Event*)event;
+
 
 -(void)resetData;
 

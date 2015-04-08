@@ -12,5 +12,6 @@
 @interface RsvpViewController : UIViewController
 
 @property (strong, nonatomic) Event *event;
+@property (strong, nonatomic) NSString *userId;
 
 @end

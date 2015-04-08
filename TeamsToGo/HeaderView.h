@@ -7,18 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 @interface HeaderView : UIView
 
-@property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) Event *event;
 @property (strong, nonatomic) UIView *subHeaderView;
 
-@property (strong, nonatomic) UILabel *eventTitle;
-@property (strong, nonatomic) UILabel *eventTime;
-@property (strong, nonatomic) UILabel *comments;
-@property (strong, nonatomic) UILabel *locationName;
-@property (strong, nonatomic) UILabel *locationAddress;
-
 -(void)setupObjectsForAutolayout;
+-(void)setHeaderValues;
 
 @end

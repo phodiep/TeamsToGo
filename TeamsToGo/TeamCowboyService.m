@@ -614,123 +614,22 @@
     return rsvp;
 }
 
-//-(NSArray*)fetchCountByStatus:(Event*)event {
-//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"CountByStatus" inManagedObjectContext:self.context];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    [fetchRequest setEntity:entityDescription];
-//    
-//    if (event != nil) {
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
-//        [fetchRequest setPredicate:predicate];
-//    }
-//    
-//    NSError *fetchError = nil;
-//    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-//    
-//    if (fetchError != nil) {
-//        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-//    }
-//    
-//    return fetchResults;
-//}
-//
-//-(Rsvp*)addRsvpForEvent:(Event*)event withJson:(NSDictionary*)json {
-//    if (json != nil && event != nil) {
-//        
-//        Rsvp *rsvp = [NSEntityDescription insertNewObjectForEntityForName:@"Rsvp" inManagedObjectContext:self.context];
-//        
-//        rsvp.user = [self addNewUserWithJson:json[@"user"]];
-//        rsvp.status = json[@"rsvpInfo"][@"status"];
-//        rsvp.comments = json[@"rsvpInfo"][@"comments"];
-//        rsvp.addlFemale = [NSString stringWithFormat:@"%@",json[@"rsvpInfo"][@"addlFemale"] ];
-//        rsvp.addlMale = [NSString stringWithFormat:@"%@",json[@"rsvpInfo"][@"addlMale"]];
-//        rsvp.event = event;
-//        
-//        [self saveContext:@""];
-//        return rsvp;
-//    }
-//    return nil;
-//}
-//
-//-(NSArray*)addMultipleRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json {
-//    if (json != nil && ![eventId isEqualToString:@""]) {
-//        Event *event = (Event*)[self fetchEventWithId:eventId][0];
-//        [self deleteRsvpForEvent:event];
-//        
-//        NSMutableArray *rsvps = [[NSMutableArray alloc] init];
-//        NSArray *usersJson = json[@"users"];
-//        
-//        for (NSDictionary *user in usersJson) {
-//            [rsvps addObject:[self addRsvpForEvent:event withJson:user]];
-//        }
-//    }
-//    return nil;
-//}
-//
-//-(NSArray*)fetchRsvpByEvent:(Event*)event {
-//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Rsvp" inManagedObjectContext:self.context];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    [fetchRequest setEntity:entityDescription];
-//    
-//    if (event != nil) {
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"event == %@", event];
-//        [fetchRequest setPredicate:predicate];
-//    }
-//    
-//    NSSortDescriptor *sortByName = [[NSSortDescriptor alloc] initWithKey:@"user.name" ascending:YES];
-//    [fetchRequest setSortDescriptors:@[sortByName]];
-//    
-//    NSError *fetchError = nil;
-//    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-//    
-//    if (fetchError != nil) {
-//        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-//    }
-//    
-//    return fetchResults;
-//}
-//
-//-(void)deleteRsvpForEvent:(Event*)event {
-//    NSArray *rsvpFound = [self fetchRsvpByEvent:event];
-//    [self deleteFromCoreData: rsvpFound stringPluralForItems:[NSString stringWithFormat:@"Rsvps (%lu)", (unsigned long)[rsvpFound count]]];
-//}
-//
-//-(Player*)fetchPlayer:(User*)user onTeam:(Team*)team {
-//
-//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.context];
-//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-//    [fetchRequest setEntity:entityDescription];
-//    
-//    if (user != nil && team != nil) {
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@ AND team == %@", user, team];
-//        [fetchRequest setPredicate:predicate];
-//    }
-//    
-//    NSError *fetchError = nil;
-//    NSArray *fetchResults = [self.context executeFetchRequest:fetchRequest error:&fetchError];
-//    
-//    if (fetchError != nil) {
-//        NSLog(@"Fetch Error: %@", fetchError.localizedDescription);
-//    }
-//    
-//    if ([fetchResults count] == 1) {
-//        return fetchResults[0];
-//    }
-//    
-//    return nil;
-//}
-//
-//
-#pragma mark - misc
-//-(void)deleteFromCoreData:(NSArray*)items stringPluralForItems:(NSString*)name {
-//    if (items != nil) {
-//        for (NSManagedObject *item in items) {
-//            [self.context deleteObject:item];
-//        }
-//        [self saveContext:[NSString stringWithFormat:@"deleted %@", name]];
-//    }
-//}
+-(Rsvp*)fetchRsvpForUserId:(NSString*)userId forEvent:(Event*)event {
+    if (userId != nil && event != nil) {
+        
+        NSArray *eventRsvps = event.rsvps;
+    
+        for (Rsvp *rsvp in eventRsvps) {
+            TeamMember *member = rsvp.member;
+            if ([member.user.userId isEqualToString:[NSString stringWithFormat:@"%@", userId]]) {
+                return rsvp;
+            }
+        }
+    }
+    return nil;
+}
 
+#pragma mark - misc
 -(NSDate*)formatStringToDate:(NSString*)dateString {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -746,16 +645,6 @@
     }
     return true;
 }
-
-//-(void)saveContext:(NSString*)successString {
-//    NSError *saveError;
-//    [self.context save:&saveError];
-//    if (saveError != nil) {
-//        NSLog(@"\nError ... %@", saveError.localizedDescription);
-//    } else {
-//        NSLog(@"%@",successString);
-//    }
-//}
 
 -(void)resetData {
     self.teams = nil;

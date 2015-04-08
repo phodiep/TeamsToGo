@@ -9,6 +9,16 @@
 #import "HeaderView.h"
 #import "Fonts.h"
 
+@interface HeaderView ()
+
+@property (strong, nonatomic) UILabel *eventTitle;
+@property (strong, nonatomic) UILabel *eventTime;
+@property (strong, nonatomic) UILabel *comments;
+@property (strong, nonatomic) UILabel *locationName;
+@property (strong, nonatomic) UILabel *locationAddress;
+
+@end
+
 @implementation HeaderView
 
 -(instancetype)init {
@@ -90,5 +100,57 @@
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:views]];
 
 }
+
+-(void)setHeaderValues {
+
+    NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
+    
+    switch (self.event.homeAway) {
+        case Home:
+            [title appendString:@" (Home)"];
+            break;
+        case Away:
+            [title appendString:@" (Away)"];
+            break;
+        default:
+            break;
+    }
+    
+    if (![self.event.title isEqualToString:@""]) {
+        [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
+    }
+    
+    self.eventTitle.text = title;
+    
+    self.eventTime.text = [self formatDate:self.event.startTime];
+    if (self.event.comments != nil) {
+        self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
+    }
+    
+    if (self.event.location != nil) {
+        Location *location = (Location*)self.event.location;
+        
+        self.locationName.text = location.name;
+        NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
+        
+        if (![location.city isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+        }
+        if (![location.partOfTown isEqualToString:@""]) {
+            [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
+        }
+        
+        self.locationAddress.text = address;
+    }
+
+}
+
+#pragma mark - misc
+-(NSString*)formatDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"EEEE, MMM d yyyy '@' h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
+
 
 @end

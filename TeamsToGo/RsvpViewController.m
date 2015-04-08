@@ -7,11 +7,14 @@
 //
 
 #import "RsvpViewController.h"
+#import "TeamCowboyService.h"
 #import "EditRsvpCell.h"
 #import "Fonts.h"
 #import "HeaderView.h"
 
 @interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate>
+
+@property (strong, nonatomic) Rsvp *rsvp;
 
 @property (strong, nonatomic) NSString *status;
 @property (nonatomic) NSUInteger addlMale;
@@ -29,10 +32,6 @@
 @property (strong, nonatomic) NSArray *headerTableViewConstraint;
 @property (nonatomic) BOOL headerOverlapIsMaxed;
 
-
-@property (strong, nonatomic) UIButton *saveRsvpButton;
-@property (strong, nonatomic) UIButton *removeRsvpButton;
-
 @property (strong, nonatomic) NSDictionary *views;
 
 @end
@@ -43,30 +42,17 @@
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     self.tableView = [[UITableView alloc] init];
     
-    self.saveRsvpButton = [[UIButton alloc] init];
-    [self.saveRsvpButton setTitle:@"Save RSVP" forState:UIControlStateNormal];
-    [self.saveRsvpButton addTarget:self action:@selector(saveButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.removeRsvpButton = [[UIButton alloc] init];
-    [self.removeRsvpButton setTitle:@"Remover RSVP" forState:UIControlStateNormal];
-    [self.removeRsvpButton addTarget:self action:@selector(removeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    
     self.headerView = [[HeaderView alloc] init];
+    self.headerView.event = self.event;
 
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.saveRsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    [self.removeRsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
-    
+
     [self.rootView addSubview:self.headerView];
     [self.rootView addSubview:self.tableView];
-//    [self.rootView addSubview:self.saveRsvpButton];
-//    [self.rootView addSubview:self.removeRsvpButton];
     
     self.views = @{@"header" : self.headerView,
-                   @"tableView" : self.tableView,
-                   @"save" : self.saveRsvpButton,
-                   @"remove" : self.removeRsvpButton};
+                   @"tableView" : self.tableView};
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[header]" options:0 metrics:0 views:self.views]];
     
@@ -97,44 +83,26 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
+    [self.headerView setHeaderValues];
     
-    switch (self.event.homeAway) {
-        case Home:
-            [title appendString:@" (Home)"];
-            break;
-        case Away:
-            [title appendString:@" (Away)"];
-            break;
-        default:
-            break;
-    }
+    Rsvp *rsvp = [[TeamCowboyService sharedService] fetchRsvpForUserId:self.userId forEvent:self.event];
     
-    if (![self.event.title isEqualToString:@""]) {
-        [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
-    }
-    
-    self.headerView.eventTitle.text = title;
-    
-    self.headerView.eventTime.text = [self formatDate:self.event.startTime];
-    if (self.event.comments != nil) {
-        self.headerView.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
-    }
-    
-    if (self.event.location != nil) {
-        Location *location = (Location*)self.event.location;
-        
-        self.headerView.locationName.text = location.name;
-        NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
-        
-        if (![location.city isEqualToString:@""]) {
-            [address appendString:[NSString stringWithFormat:@", %@", location.city]];
+    if (rsvp != nil) {
+        if (rsvp.status == Yes) {
+            self.status = self.event.rsvpStatusDisplayYes;
         }
-        if (![location.partOfTown isEqualToString:@""]) {
-            [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
+        if (rsvp.status == Maybe) {
+            self.status = self.event.rsvpStatusDisplayMaybe;
         }
-        
-        self.headerView.locationAddress.text = address;
+        if (rsvp.status == Available) {
+            self.status = self.event.rsvpStatusDisplayAvailable;
+        }
+        if (rsvp.status == No) {
+            self.status = self.event.rsvpStatusDisplayNo;
+        }
+        self.addlFemale = [rsvp.addlFemale integerValue];
+        self.addlMale = [rsvp.addlMale integerValue];
+        self.comments = rsvp.comments;
     }
     
     [self.tableView reloadData];

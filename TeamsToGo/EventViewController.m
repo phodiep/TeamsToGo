@@ -135,46 +135,9 @@
     [super viewDidAppear:animated];
     
     [self groupRsvps];
-
-    NSMutableString *title = [[NSMutableString alloc] initWithString:self.event.team.name];
-
-    switch (self.event.homeAway) {
-        case Home:
-            [title appendString:@" (Home)"];
-            break;
-        case Away:
-            [title appendString:@" (Away)"];
-            break;
-        default:
-            break;
-    }
     
-    if (![self.event.title isEqualToString:@""]) {
-        [title appendString:[NSString stringWithFormat:@"\nvs. %@", self.event.title]];
-    }
-    
-    self.headerView.eventTitle.text = title;
-    
-    self.headerView.eventTime.text = [self formatDate:self.event.startTime];
-    if (self.event.comments != nil) {
-        self.headerView.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
-    }
-    
-    if (self.event.location != nil) {
-        Location *location = (Location*)self.event.location;
-    
-        self.headerView.locationName.text = location.name;
-        NSMutableString *address = [[NSMutableString alloc] initWithString:location.address];
-    
-        if (![location.city isEqualToString:@""]) {
-            [address appendString:[NSString stringWithFormat:@", %@", location.city]];
-        }
-        if (![location.partOfTown isEqualToString:@""]) {
-            [address appendString:[NSString stringWithFormat:@"\n%@", location.partOfTown]];
-        }
-        
-        self.headerView.locationAddress.text = address;
-    }
+    self.headerView.event = self.event;
+    [self.headerView setHeaderValues];
 
     [self.tableView reloadData];
 }
@@ -384,6 +347,7 @@
 -(void)rsvpButtonPressed {
     RsvpViewController *rsvpVC = [[RsvpViewController alloc] init];
     rsvpVC.event = self.event;
+    rsvpVC.userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"userId"];
     
     [self presentViewController:rsvpVC animated:true completion:nil];
     
