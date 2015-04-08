@@ -36,6 +36,9 @@
 
 @property (strong, nonatomic) NSDictionary *views;
 
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
+@property (strong, nonatomic) NSDate *lastUpdated;
+
 @end
 
 @implementation EventViewController
@@ -130,6 +133,11 @@
     
     [self.tableView registerClass:RsvpCell.class forCellReuseIdentifier:@"RSVP_CELL"];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
+    [self.refreshControl addTarget:self action:@selector(manualRefreshList) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -147,11 +155,30 @@
     
     [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:team.teamId];
     
+    [self.headerView setHeaderYesCounts];
+    
     [self groupRsvps];
     
     [self.tableView reloadData];
     [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    
+    self.lastUpdated = [NSDate date];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
 }
+
+-(void)manualRefreshList {
+    float minutesSinceLastUpdate = -[self.lastUpdated timeIntervalSinceNow]/60;
+    
+    float minimumMinutesBetweenUpdates = 1.0;
+    
+    if (minutesSinceLastUpdate >= minimumMinutesBetweenUpdates) {
+        [self refreshRsvpList];
+    }
+    
+    [self.refreshControl endRefreshing];
+    
+}
+
 
 #pragma mark - UITableView DataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -396,6 +423,12 @@
 -(NSString*)formatDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"EEEE, MMM d yyyy '@' h:mm aaa"];
+    return [dateFormat stringFromDate:date];
+}
+
+-(NSString*)formatRefreshDate:(NSDate*)date {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"MMM d h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
 

@@ -16,5 +16,6 @@
 
 -(void)setupObjectsForAutolayout;
 -(void)setHeaderValues;
+-(void)setHeaderYesCounts;
 
 @end

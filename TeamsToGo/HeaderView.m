@@ -17,6 +17,8 @@
 @property (strong, nonatomic) UILabel *locationName;
 @property (strong, nonatomic) UILabel *locationAddress;
 
+@property (strong, nonatomic) UILabel *yesCountsLabel;
+
 @end
 
 @implementation HeaderView
@@ -60,19 +62,26 @@
     self.locationAddress = [[UILabel alloc] init];
     self.locationAddress.numberOfLines = 0;
     self.locationAddress.font = [[Fonts alloc] textFont];
-
+    
+    self.yesCountsLabel = [[UILabel alloc] init];
+    self.yesCountsLabel.numberOfLines = 0;
+    self.yesCountsLabel.font = [[Fonts alloc] textFontBoldItalic];
+    self.yesCountsLabel.textAlignment = NSTextAlignmentCenter;
+    
 }
 
 -(void)setupObjectsForAutolayout {
     [self.subHeaderView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTime setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.yesCountsLabel setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.comments setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.locationName setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.locationAddress setTranslatesAutoresizingMaskIntoConstraints:false];
 
     [self addSubview:self.eventTitle];
     [self addSubview:self.eventTime];
+    [self addSubview:self.yesCountsLabel];
     [self addSubview:self.subHeaderView];
     
     [self.subHeaderView addSubview:self.comments];
@@ -82,6 +91,7 @@
     NSDictionary *views = @{@"subHeader" : self.subHeaderView,
                    @"eventTitle" : self.eventTitle,
                    @"eventTime" : self.eventTime,
+                   @"yes" : self.yesCountsLabel,
                    @"comments" : self.comments,
                    @"location" : self.locationName,
                    @"address" : self.locationAddress
@@ -89,12 +99,13 @@
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[subHeader]|" options:0 metrics:0 views:views]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[subHeader]|" options:0 metrics:0 views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[yes]-[subHeader]|" options:0 metrics:0 views:views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[comments]-[location]-[address]-8-|" options:0 metrics:0 views:views]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-33-[eventTitle]-53-|" options:0 metrics:0 views:views]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:views]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[yes]-8-|" options:0 metrics:0 views:views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[address]-8-|" options:0 metrics:0 views:views]];
@@ -124,7 +135,7 @@
     
     self.eventTime.text = [self formatDate:self.event.startTime];
     if (self.event.comments != nil) {
-        self.comments.text = [NSString stringWithFormat:@"Comments: %@", self.event.comments ];
+        self.comments.text = [NSString stringWithFormat:@"Manager's Comments: %@", self.event.comments ];
     }
     
     if (self.event.location != nil) {
@@ -141,6 +152,25 @@
         }
         
         self.locationAddress.text = address;
+    }
+    
+}
+
+-(void)setHeaderYesCounts {
+    NSMutableString *yesCounts = [[NSMutableString alloc] initWithString:@""];
+    
+    if (![self.event.rsvpYesFemale isEqualToString:@"0"]) {
+        [yesCounts appendString:[NSString stringWithFormat:@"Female (%@) ", self.event.rsvpYesFemale]];
+    }
+    if (![self.event.rsvpYesMale isEqualToString:@"0"]) {
+        [yesCounts appendString:[NSString stringWithFormat:@"Male (%@) ", self.event.rsvpYesMale]];
+    }
+    if (![self.event.rsvpYesOther isEqualToString:@"0"]) {
+        [yesCounts appendString:[NSString stringWithFormat:@"Other (%@)", self.event.rsvpYesOther]];
+    }
+    
+    if (![yesCounts isEqualToString:@""]) {
+        self.yesCountsLabel.text = [NSString stringWithFormat:@"RSVP'd Yes: %@", yesCounts];
     }
 
 }

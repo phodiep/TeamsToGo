@@ -14,5 +14,7 @@
 @property (strong, nonatomic, readonly) UIFont *subTitleFont;
 @property (strong, nonatomic, readonly) UIFont *textFont;
 @property (strong, nonatomic, readonly) UIFont *headerFont;
+@property (strong, nonatomic, readonly) UIFont *textFontItalic;
+@property (strong, nonatomic, readonly) UIFont *textFontBoldItalic;
 
 @end

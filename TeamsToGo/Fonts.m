@@ -29,4 +29,13 @@
     return [UIFont fontWithName:@"HelveticaNeue" size:15];
 }
 
+-(UIFont*)textFontItalic {
+    return [UIFont fontWithName:@"HelveticaNeue-Italic" size:15];
+}
+
+-(UIFont*)textFontBoldItalic {
+    return [UIFont fontWithName:@"HelveticaNeue-BoldItalic" size:15];
+}
+
+
 @end
