@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1D134E181A8815EA005510B0 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D134E171A8815EA005510B0 /* Response.m */; };
+		1D3C2AFE1AD4C74F00DD49C4 /* RsvpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3C2AFD1AD4C74F00DD49C4 /* RsvpViewController.m */; };
+		1D3C2B011AD4D1C800DD49C4 /* EditRsvpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3C2B001AD4D1C800DD49C4 /* EditRsvpCell.m */; };
+		1D3C2B041AD4DFE500DD49C4 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3C2B031AD4DFE500DD49C4 /* HeaderView.m */; };
 		1D4D27C11AB0AA3D00849911 /* TeamCowboyClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */; };
 		1D4D27D31AB2567300849911 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27D21AB2567300849911 /* ScheduleViewController.m */; };
 		1D4D27D61AB256E500849911 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4D27D51AB256E500849911 /* LoginViewController.m */; };
@@ -58,6 +61,12 @@
 /* Begin PBXFileReference section */
 		1D134E161A8815EA005510B0 /* Response.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Response.h; sourceTree = "<group>"; };
 		1D134E171A8815EA005510B0 /* Response.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Response.m; sourceTree = "<group>"; };
+		1D3C2AFC1AD4C74F00DD49C4 /* RsvpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RsvpViewController.h; sourceTree = "<group>"; };
+		1D3C2AFD1AD4C74F00DD49C4 /* RsvpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RsvpViewController.m; sourceTree = "<group>"; };
+		1D3C2AFF1AD4D1C800DD49C4 /* EditRsvpCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditRsvpCell.h; sourceTree = "<group>"; };
+		1D3C2B001AD4D1C800DD49C4 /* EditRsvpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditRsvpCell.m; sourceTree = "<group>"; };
+		1D3C2B021AD4DFE500DD49C4 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		1D3C2B031AD4DFE500DD49C4 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamCowboyClient.h; sourceTree = "<group>"; };
 		1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamCowboyClient.m; sourceTree = "<group>"; };
 		1D4D27D11AB2567300849911 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
@@ -229,6 +238,8 @@
 				1DF01FB01A807388008F514C /* NetworkController.m */,
 				1D4D27BF1AB0AA3D00849911 /* TeamCowboyClient.h */,
 				1D4D27C01AB0AA3D00849911 /* TeamCowboyClient.m */,
+				1D3C2AFC1AD4C74F00DD49C4 /* RsvpViewController.h */,
+				1D3C2AFD1AD4C74F00DD49C4 /* RsvpViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -242,6 +253,10 @@
 				1D6671591AC607C000074518 /* RosterCell.m */,
 				1DD3013E1ACB774900E2795C /* RsvpCell.h */,
 				1DD3013F1ACB774900E2795C /* RsvpCell.m */,
+				1D3C2AFF1AD4D1C800DD49C4 /* EditRsvpCell.h */,
+				1D3C2B001AD4D1C800DD49C4 /* EditRsvpCell.m */,
+				1D3C2B021AD4DFE500DD49C4 /* HeaderView.h */,
+				1D3C2B031AD4DFE500DD49C4 /* HeaderView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -382,6 +397,7 @@
 			files = (
 				1DF01F831A8068E6008F514C /* TeamsToGo.xcdatamodeld in Sources */,
 				1DF01F801A8068E6008F514C /* AppDelegate.m in Sources */,
+				1D3C2B011AD4D1C800DD49C4 /* EditRsvpCell.m in Sources */,
 				1D4D27DF1AB25C1800849911 /* MessagesViewController.m in Sources */,
 				1DF01FAA1A806BD7008F514C /* ApiKeys.m in Sources */,
 				1DD301401ACB774900E2795C /* RsvpCell.m in Sources */,
@@ -390,6 +406,7 @@
 				1D4D28101AB4E88400849911 /* TeamCowboyService.m in Sources */,
 				1D4D27D91AB25A6C00849911 /* SettingsViewController.m in Sources */,
 				1D6671571AC59EE600074518 /* TeamViewController.m in Sources */,
+				1D3C2B041AD4DFE500DD49C4 /* HeaderView.m in Sources */,
 				1DD301461AD047F600E2795C /* User.m in Sources */,
 				1D4D27DC1AB25AA800849911 /* TeamsViewController.m in Sources */,
 				1D66715D1AC9DFCF00074518 /* EventViewController.m in Sources */,
@@ -409,6 +426,7 @@
 				1DDAE4041AD1B9BF00928464 /* Location.m in Sources */,
 				1D66715A1AC607C000074518 /* RosterCell.m in Sources */,
 				1D4D27D61AB256E500849911 /* LoginViewController.m in Sources */,
+				1D3C2AFE1AD4C74F00DD49C4 /* RsvpViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

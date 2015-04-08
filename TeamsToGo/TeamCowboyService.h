@@ -27,7 +27,6 @@
 @property (strong, nonatomic) NSMutableArray *teamMembers;
 @property (strong, nonatomic) NSMutableArray *rsvps;
 
-
 -(User*)createNewUserIfNecessaryElseUpdate:(NSDictionary *)json;
 -(NSArray*)createMultipleUsersIfNecessaryElseUpdate:(NSArray*)jsonArray;
 -(NSArray*)fetchAllUsers;

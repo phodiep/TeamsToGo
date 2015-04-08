@@ -14,6 +14,7 @@
 #import "RsvpCell.h"
 #import "Fonts.h"
 #import "Location.h"
+#import "RsvpViewController.h"
 
 @interface EventViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -24,6 +25,7 @@
 @property (nonatomic) BOOL headerOverlapIsMaxed;
 
 @property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) UIButton *rsvpButton;
 
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UIView *subHeaderView;
@@ -47,10 +49,22 @@
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
     self.tableView = [[UITableView alloc] init];
+    
     self.backButton = [[UIButton alloc] init];
     [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.rsvpButton = [[UIButton alloc] init];
+    [self.rsvpButton setTitle:@"RSVP" forState:UIControlStateNormal];
+    [self.rsvpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.rsvpButton.titleLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:14];
+    [self.rsvpButton.layer setBorderWidth:1.5];
+    [self.rsvpButton.layer setBorderColor:[UIColor blackColor].CGColor];
+    [self.rsvpButton.layer setBackgroundColor:[UIColor blackColor].CGColor];
+    self.rsvpButton.layer.cornerRadius = 8;
+    self.rsvpButton.clipsToBounds = YES;
+    [self.rsvpButton addTarget:self action:@selector(rsvpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
     self.headerView = [[UIView alloc] init];
     self.headerView.backgroundColor = [UIColor orangeColor];
     self.subHeaderView = [[UIView alloc] init];
@@ -80,6 +94,7 @@
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.rsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.subHeaderView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.eventTitle setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -92,6 +107,7 @@
     [self.rootView addSubview:self.tableView];
     
     [self.headerView addSubview:self.backButton];
+    [self.headerView addSubview:self.rsvpButton];
     [self.headerView addSubview:self.eventTitle];
     [self.headerView addSubview:self.eventTime];
     [self.headerView addSubview:self.subHeaderView];
@@ -102,6 +118,7 @@
     
     self.views = @{@"tableview" : self.tableView,
                    @"back" : self.backButton,
+                   @"rsvp" : self.rsvpButton,
                    @"header" : self.headerView,
                    @"subHeader" : self.subHeaderView,
                    @"eventTitle" : self.eventTitle,
@@ -122,10 +139,11 @@
     
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[eventTitle]-[eventTime]-[subHeader]|" options:0 metrics:0 views:self.views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[comments]-[location]-[address]-8-|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[back(20)]" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(28)-[eventTitle]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
 
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]-[eventTitle]-[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
+
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[eventTime]-8-|" options:0 metrics:0 views:self.views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[comments]-8-|" options:0 metrics:0 views:self.views]];
     [self.subHeaderView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[location]-8-|" options:0 metrics:0 views:self.views]];
@@ -211,7 +229,7 @@
         
         self.locationAddress.text = address;
     }
-    
+
     [self.tableView reloadData];
 }
 
@@ -417,6 +435,14 @@
     [self dismissViewControllerAnimated:true completion:nil];
 }
 
+-(void)rsvpButtonPressed {
+    RsvpViewController *rsvpVC = [[RsvpViewController alloc] init];
+    rsvpVC.event = self.event;
+    
+    [self presentViewController:rsvpVC animated:true completion:nil];
+    
+}
+
 #pragma mark - misc
 -(NSString*)getGender:(NSString*)originalString {
     NSDictionary *fullstring = @{@"m" : @"Male",
@@ -448,7 +474,7 @@
 
 -(NSString*)formatDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"EEEE, MMM d yy 'at' h:mm aaa"];
+    [dateFormat setDateFormat:@"EEEE, MMM d yyyy '@' h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
 

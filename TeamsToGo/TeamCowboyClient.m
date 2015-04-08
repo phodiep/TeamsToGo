@@ -280,5 +280,54 @@
 }
 
 
+#pragma mark - Event_SaveRSVP
+-(void)eventSaveRsvp:(NSString*)rsvp forTeam:(NSString*)teamId forEvent:(NSString*)eventId addlMale:(NSString*)addlMale addlFemale:(NSString*)addlFemale withComments:(NSString*)comments rsvpAsUserId:(NSString*)rsvpAsUserId {
+    
+    NSString *methodCall = @"Event_SaveRSVP";
+    BOOL usingSSL = false;
+    
+    NSString *userToken = [NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userToken"]];
+
+    
+    NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithDictionary:@{@"method" : methodCall,
+                                                                                  @"timestamp" : self.timestamp,
+                                                                                  @"nonce" : self.nonce,
+                                                                                  @"userToken" : userToken,
+                                                                                  @"teamId" : teamId,
+                                                                                   @"eventId" : eventId}];
+    if ([addlMale isEqualToString:@""] || addlMale == nil) {
+        [param setObject:@"0" forKey:@"addlMale"];
+    } else {
+        [param setObject:addlMale forKey:@"addlMale"];
+    }
+
+    if ([addlFemale isEqualToString:@""] || addlFemale == nil) {
+        [param setObject:@"0" forKey:@"addlFemale"];
+    } else {
+        [param setObject:addlFemale forKey:@"addlFemale"];
+    }
+    
+    if (comments == nil) {
+        [param setObject:@"" forKey:@"comments"];
+    } else {
+        [param setObject:comments forKey:@"comments"];
+    }
+    
+    if (![rsvpAsUserId isEqualToString:@""] && rsvpAsUserId != nil) {
+        [param setObject:rsvpAsUserId forKey:@"rsvpAsUserId"];
+    }
+
+    
+    
+    [[NetworkController sharedInstance] makeApiPostRequest:methodCall
+                                             toEndPointUrl:( usingSSL ? self.httpsEndPoint : self.httpEndPoint)
+                                            withParameters:param
+                                     withCompletionHandler:^(NSObject *results) {
+                                         
+                                         NSLog(@"%@", results);
+
+                                     }];
+}
+
 
 @end
