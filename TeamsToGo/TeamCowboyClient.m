@@ -294,7 +294,8 @@
                                                                                   @"nonce" : self.nonce,
                                                                                   @"userToken" : userToken,
                                                                                   @"teamId" : teamId,
-                                                                                   @"eventId" : eventId}];
+                                                                                   @"eventId" : eventId,
+                                                                                   @"status" : rsvp}];
     if ([addlMale isEqualToString:@""] || addlMale == nil) {
         [param setObject:@"0" forKey:@"addlMale"];
     } else {
@@ -324,7 +325,15 @@
                                             withParameters:param
                                      withCompletionHandler:^(NSObject *results) {
                                          
-                                         NSLog(@"%@", results);
+                                         if (results != nil) {
+                                             NSDictionary *result = (NSDictionary*)results;
+                                             NSString *rsvpSaved = [result[@"rsvpSaved"] isEqual:@1] ? @"saved" : @"not saved";
+                                             NSString *statusCode = result[@"statusCode"];
+                                             
+                                             NSLog(@"RSVP %@; %@", rsvpSaved, statusCode);
+                                             
+                                         }
+
 
                                      }];
 }

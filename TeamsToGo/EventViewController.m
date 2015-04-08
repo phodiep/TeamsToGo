@@ -8,6 +8,7 @@
 
 #import "EventViewController.h"
 #import "TeamCowboyService.h"
+#import "TeamCowboyClient.h"
 #import "Event.h"
 #import "User.h"
 #import "Team.h"
@@ -88,11 +89,11 @@
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
 
 
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
 
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
     
     [self.headerView setupObjectsForAutolayout];
     
@@ -134,12 +135,22 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self groupRsvps];
-    
     self.headerView.event = self.event;
     [self.headerView setHeaderValues];
 
+    [self refreshRsvpList];
+}
+
+-(void)refreshRsvpList {
+    Event *event = (Event*)self.event;
+    Team * team = (Team*)event.team;
+    
+    [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:team.teamId];
+    
+    [self groupRsvps];
+    
     [self.tableView reloadData];
+    [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
 }
 
 #pragma mark - UITableView DataSource

@@ -183,9 +183,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = (Event*)self.events[indexPath.row];
-    Team * team = (Team*)event.team;
-    
-    [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:team.teamId];
     
     EventViewController *eventVC = [[EventViewController alloc] init];
     

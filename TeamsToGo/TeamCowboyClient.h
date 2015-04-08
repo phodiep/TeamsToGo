@@ -21,6 +21,7 @@
 -(void)userGetTeamEvents;
 -(void)teamGetRoster:(NSString*)teamId;
 -(void)eventGetAttendanceList:(NSString*)eventId forTeamId:(NSString*)teamId;
+-(void)eventSaveRsvp:(NSString*)rsvp forTeam:(NSString*)teamId forEvent:(NSString*)eventId addlMale:(NSString*)addlMale addlFemale:(NSString*)addlFemale withComments:(NSString*)comments rsvpAsUserId:(NSString*)rsvpAsUserId;
 
 @property (strong, nonatomic) User *user;
 @property (strong, nonatomic) NSArray *teams;
