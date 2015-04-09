@@ -103,18 +103,24 @@
     self.rsvp = [[TeamCowboyService sharedService] fetchRsvpForUserId:self.userId forEvent:self.event];
     
     if (self.rsvp != nil) {
-        if (self.rsvp.status == Yes) {
-            self.status = self.event.rsvpStatusDisplayYes;
+        
+        switch (self.rsvp.status) {
+            case Yes:
+                self.status = self.event.rsvpStatusDisplayYes;
+                break;
+            case Maybe:
+                self.status = self.event.rsvpStatusDisplayMaybe;
+                break;
+            case Available:
+                self.status = self.event.rsvpStatusDisplayAvailable;
+                break;
+            case No:
+                self.status = self.event.rsvpStatusDisplayNo;
+                break;
+            default:
+                break;
         }
-        if (self.rsvp.status == Maybe) {
-            self.status = self.event.rsvpStatusDisplayMaybe;
-        }
-        if (self.rsvp.status == Available) {
-            self.status = self.event.rsvpStatusDisplayAvailable;
-        }
-        if (self.rsvp.status == No) {
-            self.status = self.event.rsvpStatusDisplayNo;
-        }
+        
         self.addlFemale = [self.rsvp.addlFemale integerValue];
         self.addlMale = [self.rsvp.addlMale integerValue];
         self.comments = self.rsvp.comments;

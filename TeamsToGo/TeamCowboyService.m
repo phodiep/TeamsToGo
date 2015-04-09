@@ -595,23 +595,25 @@
     rsvp.addlFemale = [NSString stringWithFormat:@"%@", json[@"rsvpInfo"][@"addlFemale"]];
     rsvp.addlMale = [NSString stringWithFormat:@"%@", json[@"rsvpInfo"][@"addlMale"]];
     
-    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"yes"]) {
-        rsvp.status = Yes;
+    rsvp.status = [self determineStatus:json[@"rsvpInfo"][@"status"]];
+    return rsvp;
+}
+
+-(Status)determineStatus:(NSString*)jsonString {
+    if ([jsonString isEqualToString:@"yes"]) {
+        return Yes;
     }
-    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"no"]) {
-        rsvp.status = No;
+    if ([jsonString isEqualToString:@"no"]) {
+        return No;
     }
-    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"maybe"]) {
-        rsvp.status = Maybe;
+    if ([jsonString isEqualToString:@"maybe"]) {
+        return Maybe;
     }
-    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"available"]) {
-        rsvp.status = Available;
-    }
-    if ([json[@"rsvpInfo"][@"status"] isEqualToString:@"noresponse"]) {
-        rsvp.status = NoResponse;
+    if ([jsonString isEqualToString:@"available"]) {
+        return Available;
     }
     
-    return rsvp;
+    return NoResponse;
 }
 
 -(Rsvp*)fetchRsvpForUserId:(NSString*)userId forEvent:(Event*)event {

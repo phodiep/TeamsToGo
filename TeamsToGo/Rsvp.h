@@ -12,13 +12,21 @@
 
 @interface Rsvp : NSObject
 
-typedef NS_ENUM(NSInteger, Status) {
-    Yes = 0,
-    Maybe = 1,
-    Available = 2,
-    No = 3,
-    NoResponse = 4
-};
+typedef enum {
+    Yes,
+    Maybe,
+    Available,
+    No,
+    NoResponse
+} Status;
+
+//typedef NS_ENUM(NSInteger, Status) {
+//    Yes = 0,
+//    Maybe = 1,
+//    Available = 2,
+//    No = 3,
+//    NoResponse = 4
+//};
 
 
 @property (strong, nonatomic) TeamMember *member;
