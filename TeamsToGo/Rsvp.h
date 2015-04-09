@@ -20,15 +20,6 @@ typedef enum {
     NoResponse
 } Status;
 
-//typedef NS_ENUM(NSInteger, Status) {
-//    Yes = 0,
-//    Maybe = 1,
-//    Available = 2,
-//    No = 3,
-//    NoResponse = 4
-//};
-
-
 @property (strong, nonatomic) TeamMember *member;
 @property (strong, nonatomic) NSString *addlFemale;
 @property (strong, nonatomic) NSString *addlMale;

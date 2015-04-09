@@ -16,8 +16,6 @@
 
 @interface TeamCowboyService : NSObject
 
-//@property (strong, nonatomic) CoreDataStack *coreDataStack;
-
 +(id)sharedService;
 
 @property (strong, nonatomic) User *loginUser;

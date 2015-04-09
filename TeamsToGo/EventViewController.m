@@ -28,6 +28,7 @@
 
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *rsvpButton;
+@property (strong, nonatomic) UILabel *rsvpLabel;
 
 @property (strong, nonatomic) HeaderView *headerView;
 
@@ -53,21 +54,23 @@
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.rsvpButton = [[UIButton alloc] init];
-    [self.rsvpButton setTitle:@"RSVP" forState:UIControlStateNormal];
-    [self.rsvpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.rsvpButton.titleLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:14];
-    [self.rsvpButton.layer setBorderWidth:1.5];
-    [self.rsvpButton.layer setBorderColor:[UIColor blackColor].CGColor];
-    [self.rsvpButton.layer setBackgroundColor:[UIColor blackColor].CGColor];
-    self.rsvpButton.layer.cornerRadius = 8;
-    self.rsvpButton.clipsToBounds = YES;
+//    [self.rsvpButton setTitle:@"rsvp" forState:UIControlStateNormal];
+//    [self.rsvpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    self.rsvpButton.titleLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:10];
     [self.rsvpButton addTarget:self action:@selector(rsvpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.rsvpLabel = [[UILabel alloc] init];
+    self.rsvpLabel.text = @"RSVP";
+    self.rsvpLabel.textColor = [UIColor blackColor];
+    self.rsvpLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:10];
+    self.rsvpLabel.textAlignment = NSTextAlignmentCenter;
     
     self.headerView = [[HeaderView alloc] init];
     
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.rsvpButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.rsvpLabel setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.headerView setTranslatesAutoresizingMaskIntoConstraints:false];
 
     [self.rootView addSubview:self.headerView];
@@ -75,10 +78,12 @@
     
     [self.headerView addSubview:self.backButton];
     [self.headerView addSubview:self.rsvpButton];
+    [self.headerView addSubview:self.rsvpLabel];
     
     self.views = @{@"tableview" : self.tableView,
                    @"back" : self.backButton,
                    @"rsvp" : self.rsvpButton,
+                   @"rsvpLabel" : self.rsvpLabel,
                    @"header" : self.headerView,
                    };
     
@@ -91,12 +96,11 @@
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[header]|" options:0 metrics:0 views:self.views]];
 
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[rsvp(25)]-8-|" options:0 metrics:0 views:self.views]];
 
     [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-17-[back(25)]" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[rsvp(25)]" options:0 metrics:0 views:self.views]];
-
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(25)]" options:0 metrics:0 views:self.views]];
-    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[rsvp(45)]-8-|" options:0 metrics:0 views:self.views]];
+    [self.headerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-13-[rsvp(25)]-2-[rsvpLabel]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
     
     [self.headerView setupObjectsForAutolayout];
     
@@ -126,7 +130,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.rootView.backgroundColor = [UIColor yellowColor];
+    self.rootView.backgroundColor = [UIColor orangeColor];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -156,6 +160,28 @@
     [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:team.teamId];
     
     [self.headerView setHeaderYesCounts];
+    
+    Rsvp *userRsvp = [[TeamCowboyService sharedService] fetchRsvpForUserId:[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] forEvent:self.event];
+
+    switch (userRsvp.status) {
+        case Yes:
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+            break;
+            
+        case Maybe:
+        case Available:
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"question"] forState:UIControlStateNormal];
+            break;
+            
+        case No:
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"crossmark"] forState:UIControlStateNormal];
+            break;
+        default:
+            [self.rsvpButton setBackgroundImage:nil forState:UIControlStateNormal];
+            [self.rsvpButton layer].borderColor = [UIColor blackColor].CGColor;
+            [self.rsvpButton layer].borderWidth = 1.5;
+            break;
+    }
     
     [self groupRsvps];
     
