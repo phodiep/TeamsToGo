@@ -7,19 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 @interface EventCell : UITableViewCell
 
-@property (strong, nonatomic) UILabel *dateTimeLabel;
-@property (strong, nonatomic) UILabel *teamLabel;
-@property (strong, nonatomic) UILabel *locationLabel;
-@property (strong, nonatomic) UILabel *userStatus;
-@property (strong, nonatomic) UILabel *eventStatus;
-@property (strong, nonatomic) UILabel *ownTeamLabel;
-@property (strong, nonatomic) UILabel *homeAwayLabel;
-@property (strong, nonatomic) UILabel *otherTeamLabel;
+@property (strong, nonatomic) Event *event;
+@property (strong, nonatomic) Rsvp *userRsvp;
 
-@property (strong, nonatomic) UILabel *ownTeamColor;
-@property (strong, nonatomic) UILabel *otherTeamColor;
+
+-(void)setCellValues;
 
 @end

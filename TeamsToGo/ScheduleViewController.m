@@ -20,7 +20,6 @@
 
 @property (nonatomic) BOOL largeScreen;
 
-@property (strong, nonatomic) NSManagedObjectContext *context;
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSDictionary *views;
@@ -90,16 +89,29 @@
     if (![self.events count]) {
         [self refreshSchedule];
     }
-    
+    [self getRsvpForEvents];
 }
 
 
 -(void)getEventSchedule {
     [[TeamCowboyService sharedService] deletePastEvents];
-    [[TeamCowboyClient alloc] userGetTeamEvents];
+    [[TeamCowboyClient sharedService] userGetTeamEvents];
     self.events = [[TeamCowboyService sharedService] fetchAllEvents];
     
     [self.tableView reloadData];
+    
+}
+
+-(void)getRsvpForEvents {
+    
+    //TODO: fix this for updating user status for each event
+//    NSInteger rowIndex = 0;
+//    for (Event *event in self.events) {
+//        [[TeamCowboyClient sharedService] eventGetAttendanceList:event.eventId forTeamId:event.team.teamId];
+//        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+//
+//        rowIndex += 1;
+//    }
 }
 
 -(void)refreshSchedule {
@@ -109,7 +121,7 @@
     
     self.lastUpdated = [NSDate date];
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last Updated: %@", [self formatRefreshDate:self.lastUpdated]]];
-
+    [self getRsvpForEvents];
 }
 
 -(void)manualRefreshSchedule {
@@ -137,46 +149,8 @@
     
     Event *event = (Event*)self.events[indexPath.row];
     
-    cell.dateTimeLabel.text = [self formatDate:event.startTime];
-    cell.teamLabel.text = [(Team*)event.team name];
-    cell.locationLabel.text = event.location.name;
-    
-    //    self.userStatus = [[UILabel alloc] init];
-    
-    if (![event.status isEqualToString:@"active"]) {
-        cell.eventStatus.text = [NSString stringWithFormat:@"Status: %@", event.status];
-    } else {
-        cell.eventStatus.text = @"";
-    }
-    
-    cell.ownTeamLabel.text = [(Team*)event.team name];
-    
-    cell.homeAwayLabel.text = @"";
-    if (event.homeAway == Home) {
-        cell.homeAwayLabel.text = @"(Home)";
-    }
-    if (event.homeAway == Away) {
-        cell.homeAwayLabel.text = @"(Away)";
-    }
-    
-    cell.otherTeamLabel.text = event.title;
-    
-    if (event.teamColor != nil) {
-        cell.ownTeamColor.backgroundColor = [Color colorFromHexString:event.teamColor];
-        cell.ownTeamColor.text = @"";
-    } else {
-        cell.ownTeamColor.backgroundColor = [UIColor whiteColor];
-        cell.ownTeamColor.textAlignment = NSTextAlignmentCenter;
-        cell.ownTeamColor.text = @"?";
-    }
-    if (event.opponentColor != nil) {
-        cell.otherTeamColor.backgroundColor = [Color colorFromHexString:event.opponentColor];
-        cell.otherTeamColor.text = @"";
-    } else {
-        cell.otherTeamColor.backgroundColor = [UIColor whiteColor];
-        cell.otherTeamColor.textAlignment = NSTextAlignmentCenter;
-        cell.otherTeamColor.text = @"?";
-    }
+    cell.event = event;
+    [cell setCellValues];
     
     return cell;
 }
