@@ -13,12 +13,11 @@
 
 @interface Event : NSObject
 
-typedef NS_ENUM(NSInteger, HomeAway) {
-    Home = 0,
-    Away = 1,
-    Null = 2
-};
-
+typedef enum {
+    Home,
+    Away,
+    Null
+} HomeAway;
 
 @property (strong, nonatomic) NSString *eventId;
 @property (strong, nonatomic) Team *team;

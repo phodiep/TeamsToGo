@@ -371,10 +371,10 @@
 }
 
 -(HomeAway)determineHomeAway:(id)object {
-    if ([object isEqualToString:@"home"]) {
+    if ([object isEqualToString:@"Home"]) {
         return Home;
     }
-    if ([object isEqualToString:@"away"]) {
+    if ([object isEqualToString:@"Away"]) {
         return Away;
     }
     return Null;

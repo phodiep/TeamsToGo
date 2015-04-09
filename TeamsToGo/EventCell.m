@@ -174,12 +174,16 @@
     
     self.ownTeamLabel.text = [(Team*)self.event.team name];
     
-    self.homeAwayLabel.text = @"";
-    if (self.event.homeAway == Home) {
-        self.homeAwayLabel.text = @"(Home)";
-    }
-    if (self.event.homeAway == Away) {
-        self.homeAwayLabel.text = @"(Away)";
+    switch (self.event.homeAway) {
+        case Home:
+            self.homeAwayLabel.text = @"(Home)";
+            break;
+        case Away:
+            self.homeAwayLabel.text = @"(Away)";
+            break;
+        default:
+            self.homeAwayLabel.text = @"";
+            break;
     }
     
     self.otherTeamLabel.text = self.event.title;
