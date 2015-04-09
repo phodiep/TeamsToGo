@@ -10,11 +10,11 @@
 
 @interface User : NSObject
 
-typedef NS_ENUM(NSInteger, Gender) {
-    Male = 0,
-    Female = 1,
-    Other = 2
-};
+typedef enum {
+    Male,
+    Female,
+    Other
+} Gender;
 
 @property (strong, nonatomic) NSString *userId;
 @property (strong, nonatomic) NSString *name;
