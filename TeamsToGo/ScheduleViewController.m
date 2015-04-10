@@ -15,6 +15,7 @@
 #import "Color.h"
 #import "TeamCowboyService.h"
 #import "EventViewController.h"
+#import "Fonts.h"
 
 @interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate>
 
@@ -37,7 +38,7 @@
     
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Schedule";
-    title.font = [UIFont systemFontOfSize:20];
+    title.font = [[Fonts alloc] titleFont];
     
     self.tableView = [[UITableView alloc] init];
     
@@ -73,7 +74,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 
     [self getEventSchedule];
     self.lastUpdated = [NSDate date];
@@ -94,7 +95,7 @@
 
 
 -(void)getEventSchedule {
-    [[TeamCowboyService sharedService] deletePastEvents];
+//    [[TeamCowboyService sharedService] deletePastEvents];
     [[TeamCowboyClient sharedService] userGetTeamEvents];
     self.events = [[TeamCowboyService sharedService] fetchAllEvents];
     
@@ -163,6 +164,7 @@
     eventVC.event = event;
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView reloadData];
     [self presentViewController:eventVC animated:true completion:nil];
     
 }

@@ -10,6 +10,8 @@
 #import "TeamCowboyService.h"
 #import "Team.h"
 #import "Color.h"
+#import "Fonts.h"
+#import "Rsvp.h"
 
 
 @interface EventCell ()
@@ -52,60 +54,59 @@
     [self initAllObjects];
     [self prepAllForAutoLayout];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[cell]-13-|" options:0 metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[cell]-13-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-16-[dateTimeLabel]-8-[teamLabel]-8-[ownTeamColor(20)]-8-[otherTeamColor(20)]-8-[locationLabel]-8-[eventStatus]-[status]-16-|" options:0 metrics:0 views:self.views]];
     
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-16-[dateTimeLabel]-8-[teamLabel]-8-[ownTeamColor(20)]-8-[otherTeamColor(20)]-8-[locationLabel]-8-[eventStatus]-[status]-16-|" options:0 metrics:0 views:self.views]];
-    
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[dateTimeLabel]-(>=8)-[userStatus]-16-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-24-[teamLabel]" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[ownTeamColor(20)]-8-[ownTeamLabel]-8-[homeAwayLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[otherTeamColor(20)]-8-[otherTeamLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[locationLabel]-(>=16)-|" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[eventStatus]-(>=16)-|" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[status]-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[dateTimeLabel]-(>=8)-[userStatus]-16-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[teamLabel]" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[ownTeamColor(20)]-8-[ownTeamLabel]-8-[homeAwayLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[otherTeamColor(20)]-8-[otherTeamLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[locationLabel]-(>=16)-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[eventStatus]-(>=16)-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[status]-|" options:0 metrics:0 views:self.views]];
 
 }
 
 -(void)applyAutolayoutLarge {
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[cell]-13-|" options:0 metrics:0 views:self.views]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[cell]-13-|" options:0 metrics:0 views:self.views]];
     
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-16-[dateTimeLabel]-8-[teamLabel]-8-[ownTeamColor(20)]-8-[locationLabel]-8-[eventStatus]-[status]-16-|" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[otherTeamColor(20)]" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-16-[dateTimeLabel]-8-[teamLabel]-8-[ownTeamColor(20)]-8-[locationLabel]-8-[eventStatus]-[status]-16-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[otherTeamColor(20)]" options:0 metrics:0 views:self.views]];
     
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[dateTimeLabel]-(>=8)-[userStatus]-16-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-24-[teamLabel]" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[ownTeamColor(20)]-8-[ownTeamLabel]-8-[homeAwayLabel]-[otherTeamColor(20)]-8-[otherTeamLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[locationLabel]-(>=16)-|" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[eventStatus]-(>=16)-|" options:0 metrics:0 views:self.views]];
-    [self.cell addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[status]-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[dateTimeLabel]-(>=8)-[userStatus]-16-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[teamLabel]" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[ownTeamColor(20)]-8-[ownTeamLabel]-8-[homeAwayLabel]-[otherTeamColor(20)]-8-[otherTeamLabel]-(>=16)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[locationLabel]-(>=16)-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[eventStatus]-(>=16)-|" options:0 metrics:0 views:self.views]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-32-[status]-|" options:0 metrics:0 views:self.views]];
 }
 
 
 -(void)initAllObjects {
-    self.cell = [[UIView alloc] init];
-    self.cell.backgroundColor = [UIColor whiteColor];
-    [self.cell.layer setBorderColor:[[UIColor blackColor] CGColor]];
-    [self.cell.layer setBorderWidth:0.5];
-    
-    self.cell.layer.shadowColor = [UIColor lightGrayColor].CGColor;
-    self.cell.layer.shadowOffset = CGSizeMake(5, 5);
-    self.cell.layer.shadowOpacity = 1.0;
-    self.cell.layer.shadowRadius = 1.0;
-
-    
     self.dateTimeLabel = [[UILabel alloc] init];
-    
+    self.dateTimeLabel.font = [[Fonts alloc] headerFont];
     
     self.teamLabel = [[UILabel alloc] init];
+    self.teamLabel.font = [[Fonts alloc] textFont];
+    
     self.locationLabel = [[UILabel alloc] init];
+    self.locationLabel.font = [[Fonts alloc] textFontItalic];
+    
     self.userStatus = [[UILabel alloc] init];
+    
     self.eventStatus = [[UILabel alloc] init];
+    self.eventStatus.font = [[Fonts alloc] textFontBoldItalic];
+
     self.ownTeamLabel = [[UILabel alloc] init];
+    self.ownTeamLabel.font = [[Fonts alloc] textFont];
+    
     self.homeAwayLabel = [[UILabel alloc] init];
+    self.homeAwayLabel.font = [[Fonts alloc] textFont];
+    
     self.otherTeamLabel = [[UILabel alloc] init];
+    self.otherTeamLabel.font = [[Fonts alloc] textFont];
+    
     self.statusLabel = [[UILabel alloc] init];
+    self.statusLabel.font = [[Fonts alloc] textFontItalic];
+    self.statusLabel.textColor = [UIColor blueColor];
     
     self.ownTeamColor = [[UILabel alloc] init];
     [self.ownTeamColor.layer setBorderColor:[[UIColor lightGrayColor] CGColor]];
@@ -119,18 +120,17 @@
 }
 
 -(void)prepAllForAutoLayout {
-    [self prepObjectForAutolayout:self.cell             addToSubview:self.contentView addToDictionary:@"cell"];
-    [self prepObjectForAutolayout:self.dateTimeLabel    addToSubview:self.cell addToDictionary:@"dateTimeLabel"];
-    [self prepObjectForAutolayout:self.teamLabel        addToSubview:self.cell addToDictionary:@"teamLabel"];
-    [self prepObjectForAutolayout:self.locationLabel    addToSubview:self.cell addToDictionary:@"locationLabel"];
-    [self prepObjectForAutolayout:self.userStatus       addToSubview:self.cell addToDictionary:@"userStatus"];
-    [self prepObjectForAutolayout:self.eventStatus      addToSubview:self.cell addToDictionary:@"eventStatus"];
-    [self prepObjectForAutolayout:self.ownTeamLabel     addToSubview:self.cell addToDictionary:@"ownTeamLabel"];
-    [self prepObjectForAutolayout:self.homeAwayLabel    addToSubview:self.cell addToDictionary:@"homeAwayLabel"];
-    [self prepObjectForAutolayout:self.otherTeamLabel   addToSubview:self.cell addToDictionary:@"otherTeamLabel"];
-    [self prepObjectForAutolayout:self.ownTeamColor     addToSubview:self.cell addToDictionary:@"ownTeamColor"];
-    [self prepObjectForAutolayout:self.otherTeamColor   addToSubview:self.cell addToDictionary:@"otherTeamColor"];
-    [self prepObjectForAutolayout:self.statusLabel      addToSubview:self.cell addToDictionary:@"status"];
+    [self prepObjectForAutolayout:self.dateTimeLabel    addToSubview:self.contentView addToDictionary:@"dateTimeLabel"];
+    [self prepObjectForAutolayout:self.teamLabel        addToSubview:self.contentView addToDictionary:@"teamLabel"];
+    [self prepObjectForAutolayout:self.locationLabel    addToSubview:self.contentView addToDictionary:@"locationLabel"];
+    [self prepObjectForAutolayout:self.userStatus       addToSubview:self.contentView addToDictionary:@"userStatus"];
+    [self prepObjectForAutolayout:self.eventStatus      addToSubview:self.contentView addToDictionary:@"eventStatus"];
+    [self prepObjectForAutolayout:self.ownTeamLabel     addToSubview:self.contentView addToDictionary:@"ownTeamLabel"];
+    [self prepObjectForAutolayout:self.homeAwayLabel    addToSubview:self.contentView addToDictionary:@"homeAwayLabel"];
+    [self prepObjectForAutolayout:self.otherTeamLabel   addToSubview:self.contentView addToDictionary:@"otherTeamLabel"];
+    [self prepObjectForAutolayout:self.ownTeamColor     addToSubview:self.contentView addToDictionary:@"ownTeamColor"];
+    [self prepObjectForAutolayout:self.otherTeamColor   addToSubview:self.contentView addToDictionary:@"otherTeamColor"];
+    [self prepObjectForAutolayout:self.statusLabel      addToSubview:self.contentView addToDictionary:@"status"];
     
 }
 
@@ -145,16 +145,16 @@
     Rsvp *userRsvp = [[TeamCowboyService sharedService] fetchRsvpForUserId:userId forEvent:self.event];
     
     switch (userRsvp.status) {
-        case 0:
+        case Yes:
             self.statusLabel.text = self.event.rsvpStatusDisplayYes;
             break;
-        case 1:
+        case Maybe:
             self.statusLabel.text = self.event.rsvpStatusDisplayMaybe;
             break;
-        case 2:
+        case Available:
             self.statusLabel.text = self.event.rsvpStatusDisplayAvailable;
             break;
-        case 3:
+        case No:
             self.statusLabel.text = self.event.rsvpStatusDisplayNo;
             break;
         default:
@@ -209,7 +209,7 @@
 
 -(NSString*)formatDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"EEEE, MMM d yy 'at' h:mm aaa"];
+    [dateFormat setDateFormat:@"EEEE, MMM d yyyy '@' h:mm aaa"];
     return [dateFormat stringFromDate:date];
 }
 
