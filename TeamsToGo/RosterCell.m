@@ -7,6 +7,7 @@
 //
 
 #import "RosterCell.h"
+#import "Fonts.h"
 
 @interface RosterCell ()
 
@@ -65,13 +66,16 @@
     self.views = [[NSMutableDictionary alloc] init];
     
     self.nameLabel = [[UILabel alloc] init];
+    self.nameLabel.font = [[Fonts alloc] textFont];
     
     self.phoneLabel = [[UILabel alloc] init];
+    self.phoneLabel.font = [[Fonts alloc] textFont];
     
     self.phoneIcon = [[UIImageView alloc] init];
     self.phoneIcon.image = [UIImage imageNamed:@"phone"];
     
     self.emailLabel = [[UILabel alloc] init];
+    self.emailLabel.font = [[Fonts alloc] textFont];
     
     self.emailIcon = [[UIImageView alloc] init];
     self.emailIcon.image = [UIImage imageNamed:@"mail"];

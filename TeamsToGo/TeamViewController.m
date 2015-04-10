@@ -14,6 +14,7 @@
 #import "TeamMember.h"
 #import "Team.h"
 #import "RosterCell.h"
+#import "Fonts.h"
 
 
 @interface TeamViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
@@ -39,6 +40,7 @@
     
     UILabel *title = [[UILabel alloc] init];
     title.text = [self.team name];
+    title.font = [[Fonts alloc] titleFont];
     
     self.backButton = [[UIButton alloc] init];
     [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
