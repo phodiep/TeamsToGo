@@ -283,6 +283,29 @@
     return self.events;
 }
 
+-(NSArray*)fetchEventsForTeam:(Team*)team {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"team == %@", team];
+    
+    return [self.events filteredArrayUsingPredicate:predicate];
+}
+
+-(NSArray*)fetchTeamsFromAllEvents {
+    NSMutableArray *fetchedTeams = [[NSMutableArray alloc] init];
+    
+    for (Event *event in self.events) {
+        if (![fetchedTeams containsObject:event.team]) {
+            [fetchedTeams addObject:event.team];
+        }
+    }
+    
+    if ([fetchedTeams count] == 0) {
+        return nil;
+    }
+    
+    return fetchedTeams;
+    
+}
+
 -(Event*)updateEventInfo:(Event*)event withJson:(NSDictionary*)json {
     if (event == nil) {
         return nil;

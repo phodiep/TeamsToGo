@@ -36,11 +36,13 @@
 -(Event*)createNewEventIfNecessaryElseUpdate:(NSDictionary*)json;
 -(NSArray*)createMultipleEventsIfNecessaryElseUpdate:(NSArray *)jsonArray;
 -(NSArray*)fetchAllEvents;
+-(NSArray*)fetchEventsForTeam:(Team*)team;
 -(void)deletePastEvents;
 
 -(TeamMember*)createNewTeamMemberIfNecessaryElseUpdate:(NSDictionary*)json forTeam:(Team*)team;
 -(NSArray*)createMultipleTeamMembersIfNecessaryElseUpdate:(NSArray *)jsonArray forTeam:(NSString*)teamId;
 -(NSArray*)fetchAllTeamMembersForTeam:(Team*)team;
+-(NSArray*)fetchTeamsFromAllEvents;
 
 -(Event*)updateRsvpsForEvent:(NSString*)eventId withJson:(NSDictionary*)json;
 -(Rsvp*)fetchRsvpForUserId:(NSString*)userId forEvent:(Event*)event;

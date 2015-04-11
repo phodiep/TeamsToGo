@@ -17,14 +17,19 @@
 #import "EventViewController.h"
 #import "Fonts.h"
 
-@interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate>
+@interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic) BOOL largeScreen;
 
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UILabel *viewTitle;
+@property (strong, nonatomic) UIButton *menuButton;
 @property (strong, nonatomic) NSDictionary *views;
 @property (strong, nonatomic) NSArray *events;
+
+@property (strong, nonatomic) Team *filterTeam;
+@property (strong, nonatomic) NSArray *teams;
 
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSDate *lastUpdated;
@@ -36,23 +41,32 @@
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
-    UILabel *title = [[UILabel alloc]init];
-    title.text = @"Schedule";
-    title.font = [[Fonts alloc] titleFont];
+    self.viewTitle = [[UILabel alloc]init];
+    self.viewTitle.text = @"Schedule";
+    self.viewTitle.font = [[Fonts alloc] titleFont];
+    
+    self.menuButton = [[UIButton alloc] init];
+    [self.menuButton setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
+    [self.menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.tableView = [[UITableView alloc] init];
     
-    [title setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.viewTitle setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.menuButton setTranslatesAutoresizingMaskIntoConstraints:false];
     
-    [self.rootView addSubview:title];
+    [self.rootView addSubview:self.viewTitle];
     [self.rootView addSubview:self.tableView];
+    [self.rootView addSubview:self.menuButton];
     
-    self.views = @{@"title" : title,
-                   @"tableView" : self.tableView};
+    self.views = @{@"title" : self.viewTitle,
+                   @"tableView" : self.tableView,
+                   @"menu" : self.menuButton};
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(22)]-(>=8)-[title]" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[menu(22)]" options:0 metrics:0 views:self.views]];
     
     self.view = self.rootView;
     
@@ -97,7 +111,14 @@
 -(void)getEventSchedule {
 //    [[TeamCowboyService sharedService] deletePastEvents];
     [[TeamCowboyClient sharedService] userGetTeamEvents];
-    self.events = [[TeamCowboyService sharedService] fetchAllEvents];
+    
+    self.teams = [[TeamCowboyService sharedService] fetchTeamsFromAllEvents];
+    
+    if (self.filterTeam == nil) {
+        self.events = [[TeamCowboyService sharedService] fetchAllEvents];
+    } else {
+        self.events = [[TeamCowboyService sharedService] fetchEventsForTeam:self.filterTeam];
+    }
     
     [self.tableView reloadData];
     
@@ -138,6 +159,7 @@
     
 }
 
+#pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([self.events count]>0) {
         return [self.events count];
@@ -156,6 +178,7 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = (Event*)self.events[indexPath.row];
     
@@ -173,6 +196,31 @@
     return 200;
 }
 
+#pragma mark - UIActionSheetDelegate
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        self.filterTeam = nil;
+    } else {
+        self.filterTeam = self.teams[buttonIndex -1];
+    }
+    [self refreshSchedule];
+}
+
+#pragma mark - button actions
+-(void)menuButtonPressed {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    [actionSheet setTitle:@"Select Team To Show"];
+    [actionSheet addButtonWithTitle:@"(Show All Teams)"];
+    
+    for (Team *team in self.teams) {
+        [actionSheet addButtonWithTitle:team.name];
+    }
+    
+    [actionSheet showInView:self.view];
+}
+
+#pragma mark - misc
 -(NSString*)formatDate:(NSDate*)date {
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"EEEE, MMM d yy 'at' h:mm aaa"];
