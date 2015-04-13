@@ -44,6 +44,7 @@
     self.viewTitle = [[UILabel alloc]init];
     self.viewTitle.text = @"Schedule";
     self.viewTitle.font = [[Fonts alloc] titleFont];
+    self.viewTitle.textAlignment = NSTextAlignmentCenter;
     
     self.menuButton = [[UIButton alloc] init];
     [self.menuButton setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
@@ -64,9 +65,8 @@
                    @"menu" : self.menuButton};
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(22)]-(>=8)-[title]" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[menu(22)]" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[menu(22)]-[tableView]-55-|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(22)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
     
     self.view = self.rootView;
     
