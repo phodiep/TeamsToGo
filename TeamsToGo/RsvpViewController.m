@@ -479,6 +479,11 @@
     self.comments = textField.text;
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
+}
+
 
 #pragma mark - Button Actions
 -(void)saveButtonPressed {

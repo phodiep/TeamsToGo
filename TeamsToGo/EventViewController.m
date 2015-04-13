@@ -18,6 +18,7 @@
 #import "RsvpViewController.h"
 #import "HeaderView.h"
 
+#pragma mark - Interface
 @interface EventViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIView *rootView;
@@ -42,8 +43,10 @@
 
 @end
 
+#pragma mark - Implementation
 @implementation EventViewController
 
+#pragma mark - UIViewController Lifecycle
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
@@ -54,9 +57,6 @@
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.rsvpButton = [[UIButton alloc] init];
-//    [self.rsvpButton setTitle:@"rsvp" forState:UIControlStateNormal];
-//    [self.rsvpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    self.rsvpButton.titleLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:10];
     [self.rsvpButton addTarget:self action:@selector(rsvpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.rsvpLabel = [[UILabel alloc] init];
@@ -211,6 +211,10 @@
     return [self.groupTypes count];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 45;
+}
+
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     NSString *status = [self getStatus:self.groupTypes[section]];
@@ -294,14 +298,12 @@
     headerLabel.textColor = [UIColor whiteColor];
     [headerLabel setFont:[[Fonts alloc] headerFont]];
     
-    
-
-    
     headerLabel.text = [NSString stringWithFormat:@"%@ - %@ (%@)", status, gender, sectionCount];
     
     return header;
 }
 
+#pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
     CGPoint scrollPos = scrollView.contentOffset;
