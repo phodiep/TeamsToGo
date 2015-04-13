@@ -13,7 +13,8 @@
 #import "HeaderView.h"
 #import "TeamCowboyClient.h"
 
-@interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIAlertViewDelegate>
+#pragma mark - Interface
+@interface RsvpViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIAlertViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) Rsvp *rsvp;
 
@@ -23,8 +24,7 @@
 @property (strong, nonatomic) NSString *comments;
 @property (strong, nonatomic) NSString *rsvpAsUserId;
 
-
-
+@property (strong, nonatomic) UITextField *textField;
 
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) HeaderView *headerView;
@@ -39,8 +39,10 @@
 
 @end
 
+#pragma mark - Implementation
 @implementation RsvpViewController
 
+#pragma mark - UIViewController Lifecycle
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     self.tableView = [[UITableView alloc] init];
@@ -181,16 +183,16 @@
         case 2: //female cell
             cell = [self addFemaleCell];
             break;
-        case 3:
+        case 3: //comment cell
             cell = [self commentCell];
             break;
-        case 4:
+        case 4: // break
             cell.backgroundColor = [UIColor lightGrayColor];
             break;
-        case 5:
+        case 5: //save cell
             cell = [self saveCell];
             break;
-        case 6:
+        case 6: //remove cell
             cell = [self removeCell];
             break;
         default:
@@ -205,14 +207,14 @@
         case 0:
             [self statusCellSelected];
             break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
+//        case 1:
+//            break;
+//        case 2:
+//            break;
+//        case 3:
+//            break;
+//        case 4:
+//            break;
         case 5:
             [self saveButtonPressed];
             break;
@@ -235,6 +237,7 @@
     label.font = [[Fonts alloc] titleFont];
 
     UILabel *selectedStatus = [[UILabel alloc] init];
+    selectedStatus.font = [[Fonts alloc] textFont];
     selectedStatus.textAlignment = NSTextAlignmentRight;
     if ([self.status isEqualToString:@""] || self.status == nil) {
         selectedStatus.text = @"select status";
@@ -258,8 +261,6 @@
     [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[label]-|" options:0 metrics:0 views:views]];
     [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-(>=8)-[status]-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
 
-    
-    
     return cell;
 }
 
@@ -341,23 +342,28 @@
 
 -(EditRsvpCell*)commentCell {
     EditRsvpCell *cell = [[EditRsvpCell alloc] init];
+
+    self.textField = [[UITextField alloc] init];
+    self.textField.font = [[Fonts alloc] textFont];
+    self.textField.delegate = self;
     
-    UILabel *label = [[UILabel alloc] init];
-    label.text = @"Comment";
-    label.font = [[Fonts alloc] titleFont];
+    if ([self.comments isEqualToString:@""]) {
+
+        self.textField.placeholder = @"enter comment here";
+    } else {
+        self.textField.text = self.comments;
+    }
     
+    [self.textField setTranslatesAutoresizingMaskIntoConstraints:false];
     
-    [label setTranslatesAutoresizingMaskIntoConstraints:false];
+    [cell.contentView addSubview:self.textField];
     
-    [cell.contentView addSubview:label];
-    
-    NSDictionary *views = @{@"label" : label
+    NSDictionary *views = @{@"text" : self.textField
                             };
     
-    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[label]-|" options:0 metrics:0 views:views]];
-    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[label]-|" options:0 metrics:0 views:views]];
+    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[text]-|" options:0 metrics:0 views:views]];
+    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[text]-|" options:0 metrics:0 views:views]];
 
-    
     return cell;
     
 }
@@ -424,6 +430,7 @@
     
 }
 
+#pragma mark - UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
     switch (actionSheet.tag) {
@@ -456,6 +463,7 @@
     
 }
 
+#pragma mark - UIStepperDelegate
 -(void)addlMaleStepperChanged:(UIStepper*)stepper {
     self.addlMale = stepper.value;
     [self.tableView reloadData];
@@ -464,6 +472,11 @@
 -(void)addlFemaleStepperChanged:(UIStepper*)stepper {
     self.addlFemale = stepper.value;
     [self.tableView reloadData];
+}
+
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    self.comments = textField.text;
 }
 
 
@@ -476,7 +489,7 @@
     
     NSString *addlMale = [NSString stringWithFormat:@"%lu", (unsigned long)self.addlMale];
     NSString *addFemale = [NSString stringWithFormat:@"%lu", (unsigned long)self.addlFemale];
-    NSString *comments = self.comments;
+    NSString *comments = self.textField.text;
     NSString *userId = self.userId;
     
     [[TeamCowboyClient sharedService] eventSaveRsvp:status forTeam:teamId forEvent:eventId addlMale:addlMale addlFemale:addFemale withComments:comments rsvpAsUserId:userId];
