@@ -113,6 +113,7 @@
     [[TeamCowboyClient sharedService] userGetTeamEvents];
     
     self.teams = [[TeamCowboyService sharedService] fetchTeamsFromAllEvents];
+    self.teams = [self.teams sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]];
     
     if (self.filterTeam == nil) {
         self.events = [[TeamCowboyService sharedService] fetchAllEvents];
