@@ -17,6 +17,7 @@
 #import "EventViewController.h"
 #import "Fonts.h"
 
+#pragma make - Interface
 @interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic) BOOL largeScreen;
@@ -36,8 +37,10 @@
 
 @end
 
+#pragma mark - Implemenation
 @implementation ScheduleViewController
 
+#pragma mark - UIViewController Lifecycle
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     
@@ -48,7 +51,7 @@
     
     self.menuButton = [[UIButton alloc] init];
     [self.menuButton setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
-    [self.menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchDown];
     
     self.tableView = [[UITableView alloc] init];
     
@@ -65,8 +68,8 @@
                    @"menu" : self.menuButton};
 
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[menu(22)]-[tableView]-55-|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(22)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[menu(25)]-[tableView]-55-|" options:0 metrics:0 views:self.views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(25)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
     
     self.view = self.rootView;
     
@@ -179,6 +182,10 @@
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 200;
+}
+
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Event *event = (Event*)self.events[indexPath.row];
@@ -193,16 +200,15 @@
     
 }
 
--(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
-}
-
 #pragma mark - UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
         self.filterTeam = nil;
+        self.viewTitle.text = @"Schedule";
     } else {
-        self.filterTeam = self.teams[buttonIndex -1];
+        Team *team = self.teams[buttonIndex -1];
+        self.filterTeam = team;
+        self.viewTitle.text = [NSString stringWithFormat:@"%@ Schedule", team.name];
     }
     [self refreshSchedule];
 }

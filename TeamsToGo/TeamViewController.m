@@ -106,6 +106,9 @@
     
 }
 
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 60;
+}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -189,7 +192,7 @@
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-
+    
     if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Call"]) {
         [self callPhone:self.selectedContactPhone];
     }
@@ -199,7 +202,6 @@
     if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Email"]) {
         [self emailPlayer:self.selectedContactEmail];
     }
-    
     
 }
 

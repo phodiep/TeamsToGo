@@ -212,7 +212,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 45;
+    return 35;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -262,7 +262,6 @@
     } else {
         cell.comments.text = @"";
     }
-    
     
     if (![member.memberType isEqualToString:@"Full-time"] && ![member.memberType isEqualToString:@""]) {
         cell.typeLabel.text = [NSString stringWithFormat:@"(%@)", member.memberType];
