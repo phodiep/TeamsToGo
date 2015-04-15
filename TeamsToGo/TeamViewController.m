@@ -16,7 +16,7 @@
 #import "RosterCell.h"
 #import "Fonts.h"
 
-
+#pragma mark - Interface
 @interface TeamViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @property (strong, nonatomic) NSArray *teamMembers;
@@ -32,8 +32,10 @@
 
 @end
 
+#pragma mark - Implemenation
 @implementation TeamViewController
 
+#pragma mark - UIViewController Lifecycle
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     self.tableView = [[UITableView alloc] init];
@@ -160,6 +162,7 @@
     return header;
 }
 
+#pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *type = self.groupTypes[indexPath.section];
     
@@ -191,6 +194,7 @@
     [actionSheet showInView:self.view];
 }
 
+#pragma mark - UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Call"]) {
@@ -205,6 +209,7 @@
     
 }
 
+#pragma mark - MFMailComposeViewControllerDelegate
 - (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     switch (result) {
         case MFMailComposeResultCancelled:
@@ -226,6 +231,7 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
+#pragma mark - MFMessageComposeViewControllerDelegate
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result {
     switch (result) {
         case MessageComposeResultCancelled:
@@ -246,6 +252,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - contact methods
 -(void)callPhone:(NSString*)phone {
     if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@", phone]]]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Phone Calls!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -259,13 +266,53 @@
 }
 
 -(void)textPhone:(NSString*)phone {
-    if (![phone isEqualToString:@""] && ![MFMessageComposeViewController canSendText]) {
+    [self textMultiplePhones:@[phone]];
+    
+//    if (![phone isEqualToString:@""] && ![MFMessageComposeViewController canSendText]) {
+//        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [warningAlert show];
+//        return;
+//    }
+//    
+//    NSArray *recipents = @[phone];
+//    NSString *message = [NSString stringWithFormat:@"[%@]", self.team.name];
+//    
+//    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+//    messageController.messageComposeDelegate = self;
+//    [messageController setRecipients:recipents];
+//    [messageController setBody:message];
+//    
+//    // Present message view controller on screen
+//    [self presentViewController:messageController animated:YES completion:nil];
+}
+
+-(void)textMultiplePhones:(NSArray*)phones {
+    if (![MFMessageComposeViewController canSendText]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
     
-    NSArray *recipents = @[phone];
+    if (phones == nil) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No phone numbers selected" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
+    for (NSString *phone in phones) {
+        if (![phone isEqualToString:@""]) {
+            [phoneNumbers addObject:phone];
+        }
+    }
+
+    if ([phoneNumbers count] == 0) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No phone numbers selected" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSArray *recipents = phoneNumbers;
     NSString *message = [NSString stringWithFormat:@"[%@]", self.team.name];
     
     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
@@ -276,37 +323,73 @@
     // Present message view controller on screen
     [self presentViewController:messageController animated:YES completion:nil];
     
-
 }
 
 -(void)emailPlayer:(NSString*)email {
-    
+    [self emailMultiplePlayers:@[email]];
+//    if (![MFMailComposeViewController canSendMail]) {
+//        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [warningAlert show];
+//        return;
+//    }
+//    
+//    if (![email isEqualToString:@""] && [self validateEmail:email]) {
+//
+//        NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
+//        // Email Content
+//        NSString *messageBody = @"";
+//        // To address
+//        NSArray *toRecipents = [NSArray arrayWithObject:email];
+//        
+//        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+//        mc.mailComposeDelegate = self;
+//        [mc setSubject:emailSubject];
+//        [mc setMessageBody:messageBody isHTML:NO];
+//        [mc setToRecipients:toRecipents];
+//        
+//        // Present mail view controller on screen
+//        [self presentViewController:mc animated:YES completion:NULL];
+//
+//    }
+}
+
+-(void)emailMultiplePlayers:(NSArray*)emails {
     if (![MFMailComposeViewController canSendMail]) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;
     }
     
-    if (![email isEqualToString:@""] && [self validateEmail:email]) {
-
-        NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
-        // Email Content
-        NSString *messageBody = @"";
-        // To address
-        NSArray *toRecipents = [NSArray arrayWithObject:email];
-        
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        mc.mailComposeDelegate = self;
-        [mc setSubject:emailSubject];
-        [mc setMessageBody:messageBody isHTML:NO];
-        [mc setToRecipients:toRecipents];
-        
-        // Present mail view controller on screen
-        [self presentViewController:mc animated:YES completion:NULL];
-
+    NSMutableArray *emailAddresses = [[NSMutableArray alloc] init];
+    for (NSString *email in emails) {
+        if (![email isEqualToString:@""] && [self validateEmail:email]) {
+            [emailAddresses addObject:email];
+        }
     }
+    
+    if ([emailAddresses count] == 0) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No email addresses selected" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
+    // Email Content
+    NSString *messageBody = @"";
+    // To address
+    NSArray *toRecipents = emailAddresses;
+    
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:emailSubject];
+    [mc setMessageBody:messageBody isHTML:NO];
+    [mc setToRecipients:toRecipents];
+    
+    // Present mail view controller on screen
+    [self presentViewController:mc animated:YES completion:NULL];
+    
+    
 }
-
 
 #pragma mark - group players by type
 -(void)groupPlayersByType {

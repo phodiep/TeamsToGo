@@ -223,7 +223,7 @@
     for (Team *team in self.teams) {
         [actionSheet addButtonWithTitle:team.name];
     }
-    
+
     [actionSheet showInView:self.view];
 }
 
