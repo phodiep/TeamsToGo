@@ -23,9 +23,14 @@
 @property (strong, nonatomic) NSMutableDictionary *membersGrouped;
 @property (strong, nonatomic) NSMutableArray *groupTypes;
 
+@property (strong, nonatomic) NSMutableArray *selectedMembers;
+
 @property (strong, nonatomic) UIView *rootView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) UIButton *multiContactButton;
+@property (strong, nonatomic) UIButton *cancelMultiSelectButton;
+@property (strong, nonatomic) UIButton *contactButton;
 
 @property (strong, nonatomic) NSString *selectedContactPhone;
 @property (strong, nonatomic) NSString *selectedContactEmail;
@@ -38,6 +43,7 @@
 #pragma mark - UIViewController Lifecycle
 -(void)loadView {
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    self.selectedMembers = [[NSMutableArray alloc] init];
     self.tableView = [[UITableView alloc] init];
     
     UILabel *title = [[UILabel alloc] init];
@@ -49,23 +55,58 @@
     [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
+    self.multiContactButton = [[UIButton alloc] init];
+    self.multiContactButton.titleLabel.font = [[Fonts alloc] subTitleFont];
+    [self.multiContactButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.multiContactButton setTitle:@"Select" forState:UIControlStateNormal];
+    [self.multiContactButton addTarget:self action:@selector(multiContactButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.cancelMultiSelectButton = [[UIButton alloc] init];
+    self.cancelMultiSelectButton.titleLabel.font = [[Fonts alloc] subTitleFont];
+    self.cancelMultiSelectButton.hidden = YES;
+    [self.cancelMultiSelectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.cancelMultiSelectButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.cancelMultiSelectButton addTarget:self action:@selector(cancelMultiSelectButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.contactButton = [[UIButton alloc] init];
+    self.contactButton.titleLabel.font = [[Fonts alloc] subTitleFont];
+    self.contactButton.hidden = YES;
+    [self.contactButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.contactButton setTitle:@"Message" forState:UIControlStateNormal];
+    [self.contactButton addTarget:self action:@selector(contactButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.backButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.multiContactButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.cancelMultiSelectButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.contactButton setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [self.rootView addSubview:self.tableView];
     [self.rootView addSubview:title];
     [self.rootView addSubview:self.backButton];
+    [self.rootView addSubview:self.multiContactButton];
+    [self.rootView addSubview:self.cancelMultiSelectButton];
+    [self.rootView addSubview:self.contactButton];
     
     NSDictionary *views = @{@"title" : title,
                             @"tableView" : self.tableView,
-                            @"back" : self.backButton};
+                            @"back" : self.backButton,
+                            @"multi" : self.multiContactButton,
+                            @"cancel" : self.cancelMultiSelectButton,
+                            @"message" : self.contactButton};
     
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[title]-[tableView]-8-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[back(20)]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
-
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[cancel]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[multi]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[message]" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:views]];
     [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[back(20)]" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[cancel]" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[multi]-8-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
+    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[message]-8-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:views]];
     
     self.view = self.rootView;
 }
@@ -77,6 +118,7 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
     
     [self.tableView registerClass:RosterCell.class forCellReuseIdentifier:@"ROSTER_CELL"];
 
@@ -164,49 +206,73 @@
 
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *type = self.groupTypes[indexPath.section];
-    
-    TeamMember *member = (TeamMember*)self.membersGrouped[type][indexPath.row];
-    User *user = (User*)member.user;
-    
-    NSString *actionSheetTitle = [NSString stringWithFormat:@"Contact %@", user.name];
+    if (!self.tableView.editing) {
 
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:actionSheetTitle delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:nil];
-    
-    if (![user.phoneNumber isEqualToString:@""]) {
-        self.selectedContactPhone = [self numbersOnlyFromString:user.phoneNumber];
-        [actionSheet addButtonWithTitle:@"Call"];
-        [actionSheet addButtonWithTitle:@"Text"];
-    } else {
-        self.selectedContactPhone = @"";
+        NSString *type = self.groupTypes[indexPath.section];
+        
+        TeamMember *member = (TeamMember*)self.membersGrouped[type][indexPath.row];
+        User *user = (User*)member.user;
+        
+        NSString *actionSheetTitle = [NSString stringWithFormat:@"Contact %@", user.name];
+        
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:actionSheetTitle delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:nil];
+        
+        if (![user.phoneNumber isEqualToString:@""]) {
+            self.selectedContactPhone = [self numbersOnlyFromString:user.phoneNumber];
+            [actionSheet addButtonWithTitle:@"Call"];
+            [actionSheet addButtonWithTitle:@"Text"];
+        } else {
+            self.selectedContactPhone = @"";
+        }
+        
+        if (![user.emailAddress isEqualToString:@""]) {
+            self.selectedContactEmail = user.emailAddress;
+            [actionSheet addButtonWithTitle:@"Email"];
+        } else {
+            self.selectedContactEmail = @"";
+        }
+        
+        [actionSheet showInView:self.view];
     }
-    
-    if (![user.emailAddress isEqualToString:@""]) {
-        self.selectedContactEmail = user.emailAddress;
-        [actionSheet addButtonWithTitle:@"Email"];
-    } else {
-        self.selectedContactEmail = @"";
-    }
-
-    [actionSheet showInView:self.view];
 }
 
 #pragma mark - UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (!self.tableView.editing) {
+        if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Call"]) {
+            [self callPhone:self.selectedContactPhone];
+        }
+        if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Text"]) {
+            [self textPhone:self.selectedContactPhone];
+        }
+        if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Email"]) {
+            [self emailPlayer:self.selectedContactEmail];
+        }
+    }
     
-    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Call"]) {
-        [self callPhone:self.selectedContactPhone];
+    if (self.tableView.editing) {
+        if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Text"]) {
+            NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
+            for (TeamMember *member in self.selectedMembers) {
+                if (![member.user.phoneNumber isEqualToString:@""]) {
+                    [phoneNumbers addObject:[self numbersOnlyFromString:member.user.phoneNumber]];
+                }
+            }
+            [self textMultiplePhones:phoneNumbers];
+        }
+        if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Email"]) {
+            NSMutableArray *emailAddresses = [[NSMutableArray alloc] init];
+            for (TeamMember *member in self.selectedMembers) {
+                if (![member.user.emailAddress isEqualToString:@""]) {
+                    [emailAddresses addObject:member.user.emailAddress];
+                }
+            }
+            [self emailMultiplePlayers:emailAddresses];
+        }
     }
-    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Text"]) {
-        [self textPhone:self.selectedContactPhone];
-    }
-    if ([[actionSheet buttonTitleAtIndex:buttonIndex] isEqualToString: @"Email"]) {
-        [self emailPlayer:self.selectedContactEmail];
-    }
-    
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
@@ -267,23 +333,6 @@
 
 -(void)textPhone:(NSString*)phone {
     [self textMultiplePhones:@[phone]];
-    
-//    if (![phone isEqualToString:@""] && ![MFMessageComposeViewController canSendText]) {
-//        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [warningAlert show];
-//        return;
-//    }
-//    
-//    NSArray *recipents = @[phone];
-//    NSString *message = [NSString stringWithFormat:@"[%@]", self.team.name];
-//    
-//    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-//    messageController.messageComposeDelegate = self;
-//    [messageController setRecipients:recipents];
-//    [messageController setBody:message];
-//    
-//    // Present message view controller on screen
-//    [self presentViewController:messageController animated:YES completion:nil];
 }
 
 -(void)textMultiplePhones:(NSArray*)phones {
@@ -327,30 +376,6 @@
 
 -(void)emailPlayer:(NSString*)email {
     [self emailMultiplePlayers:@[email]];
-//    if (![MFMailComposeViewController canSendMail]) {
-//        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support Email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//        [warningAlert show];
-//        return;
-//    }
-//    
-//    if (![email isEqualToString:@""] && [self validateEmail:email]) {
-//
-//        NSString *emailSubject = [NSString stringWithFormat:@"[%@]", self.team.name];
-//        // Email Content
-//        NSString *messageBody = @"";
-//        // To address
-//        NSArray *toRecipents = [NSArray arrayWithObject:email];
-//        
-//        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-//        mc.mailComposeDelegate = self;
-//        [mc setSubject:emailSubject];
-//        [mc setMessageBody:messageBody isHTML:NO];
-//        [mc setToRecipients:toRecipents];
-//        
-//        // Present mail view controller on screen
-//        [self presentViewController:mc animated:YES completion:NULL];
-//
-//    }
 }
 
 -(void)emailMultiplePlayers:(NSArray*)emails {
@@ -435,6 +460,51 @@
 #pragma mark - button actions
 -(void)backButtonPressed {
     [self dismissViewControllerAnimated:true completion:nil];
+}
+
+-(void)multiContactButtonPressed {
+    self.backButton.hidden = YES;
+    self.multiContactButton.hidden = YES;
+    self.cancelMultiSelectButton.hidden = NO;
+    self.contactButton.hidden = NO;
+    [self.tableView setEditing:YES animated:YES];
+}
+
+-(void)cancelMultiSelectButtonPressed {
+    self.backButton.hidden = NO;
+    self.multiContactButton.hidden = NO;
+    self.cancelMultiSelectButton.hidden = YES;
+    self.contactButton.hidden = YES;
+    [self.tableView setEditing:NO animated:YES];
+}
+
+-(void)contactButtonPressed {
+    [self.selectedMembers removeAllObjects];
+    NSArray* selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    
+    if (selectedIndexPaths == nil) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"No Members Selected" message:@"Select at least 1 member to message" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        return;
+    }
+    
+    
+    for (NSIndexPath *indexPath in selectedIndexPaths) {
+        NSString *section = self.groupTypes[indexPath.section];
+        TeamMember *selectedMember = self.membersGrouped[section][indexPath.row];
+        [self.selectedMembers addObject:selectedMember];
+    }
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Select way to contact" delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:nil];
+    
+    [actionSheet addButtonWithTitle:@"Text"];
+    [actionSheet addButtonWithTitle:@"Email"];
+    
+    [actionSheet showInView:self.view];
+    
 }
 
 #pragma mark - misc
