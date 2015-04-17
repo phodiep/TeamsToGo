@@ -7,6 +7,7 @@
 //
 
 #import "CoreDataStack.h"
+#import "Color.h"
 #import "Fonts.h"
 #import "TeamsViewController.h"
 #import "Team.h"
@@ -39,6 +40,7 @@
     UILabel *title = [[UILabel alloc] init];
     title.text = @"Teams";
     title.font = [[Fonts alloc] titleFont];
+    title.textColor = [Color headerTextColor];
     
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
@@ -60,7 +62,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [Color headerColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     

@@ -11,5 +11,7 @@
 @interface Color : NSObject
 
 + (UIColor *)colorFromHexString:(NSString *)hexString;
++ (UIColor*)headerColor;
++ (UIColor*)headerTextColor;
 
 @end

@@ -48,9 +48,11 @@
     self.viewTitle.text = @"Schedule";
     self.viewTitle.font = [[Fonts alloc] titleFont];
     self.viewTitle.textAlignment = NSTextAlignmentCenter;
+    self.viewTitle.textColor = [Color headerTextColor];
+    self.viewTitle.backgroundColor = [Color headerColor];
     
     self.menuButton = [[UIButton alloc] init];
-    [self.menuButton setImage:[UIImage imageNamed:@"menu"] forState:UIControlStateNormal];
+    [self.menuButton setImage:[UIImage imageNamed:@"menu_invert"] forState:UIControlStateNormal];
     [self.menuButton addTarget:self action:@selector(menuButtonPressed) forControlEvents:UIControlEventTouchDown];
     
     self.tableView = [[UITableView alloc] init];
@@ -84,7 +86,7 @@
         self.largeScreen = false;
     }
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [Color headerColor];
     
     [self.tableView registerClass: EventCell.class forCellReuseIdentifier:@"EVENT_CELL"];
     

@@ -42,6 +42,8 @@
         [self getUserTokenIfNecessary];
     }
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     return YES;
 }
 
