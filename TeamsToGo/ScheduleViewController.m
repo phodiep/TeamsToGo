@@ -29,6 +29,8 @@
 @property (strong, nonatomic) NSDictionary *views;
 @property (strong, nonatomic) NSArray *events;
 
+@property (strong, nonatomic) NSMutableArray *rotationConstraints;
+
 @property (strong, nonatomic) Team *filterTeam;
 @property (strong, nonatomic) NSArray *teams;
 
@@ -68,10 +70,8 @@
     self.views = @{@"title" : self.viewTitle,
                    @"tableView" : self.tableView,
                    @"menu" : self.menuButton};
-
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[menu(25)]-[tableView]-55-|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(25)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views]];
+    
+    self.rotationConstraints = [[NSMutableArray alloc] init];
     
     self.view = self.rootView;
     
@@ -112,6 +112,35 @@
     [self getRsvpForEvents];
 }
 
+
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self applyRotationAutolayout];
+}
+
+-(void)applyRotationAutolayout {
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [self.rootView removeConstraints:self.rotationConstraints];
+    [self.rotationConstraints removeAllObjects];
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[menu(25)]-[tableView]-50-|" options:0 metrics:0 views:self.views]],
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(25)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views] ];
+
+        [self.rootView addConstraints:self.rotationConstraints];
+        
+    }
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[menu(25)]-[tableView]-50-|" options:0 metrics:0 views:self.views]],
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-16-[menu(25)]-[title]-(38)-|" options:NSLayoutFormatAlignAllCenterY metrics:0 views:self.views] ];
+        
+        [self.rootView addConstraints:self.rotationConstraints];
+        
+    }
+    
+}
 
 -(void)getEventSchedule {
 //    [[TeamCowboyService sharedService] deletePastEvents];

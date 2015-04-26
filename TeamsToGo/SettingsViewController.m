@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import "TeamCowboyService.h"
 #import "LoginViewController.h"
+#import "Color.h"
 
 @interface SettingsViewController () <UIAlertViewDelegate>
 
@@ -31,6 +32,7 @@
     UILabel *title = [[UILabel alloc]init];
     title.text = @"Settings";
     title.font = [UIFont systemFontOfSize:20];
+    title.textColor = [Color headerTextColor];
     
     [self.logoutButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [title setTranslatesAutoresizingMaskIntoConstraints:false];
