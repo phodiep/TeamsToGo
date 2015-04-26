@@ -10,6 +10,7 @@
 #import "TeamViewController.h"
 #import "TeamCowboyService.h"
 #import "TeamCowboyClient.h"
+#import "Color.h"
 #import "User.h"
 #import "TeamMember.h"
 #import "Team.h"
@@ -49,29 +50,31 @@
     UILabel *title = [[UILabel alloc] init];
     title.text = [self.team name];
     title.font = [[Fonts alloc] titleFont];
+    title.textColor = [Color headerTextColor];
+    title.backgroundColor = [Color headerColor];
     
     self.backButton = [[UIButton alloc] init];
-    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back_invert"] forState:UIControlStateNormal];
     [self.backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.multiContactButton = [[UIButton alloc] init];
     self.multiContactButton.titleLabel.font = [[Fonts alloc] subTitleFont];
-    [self.multiContactButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.multiContactButton setTitleColor:[Color headerTextColor] forState:UIControlStateNormal];
     [self.multiContactButton setTitle:@"Select" forState:UIControlStateNormal];
     [self.multiContactButton addTarget:self action:@selector(multiContactButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.cancelMultiSelectButton = [[UIButton alloc] init];
     self.cancelMultiSelectButton.titleLabel.font = [[Fonts alloc] subTitleFont];
     self.cancelMultiSelectButton.hidden = YES;
-    [self.cancelMultiSelectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.cancelMultiSelectButton setTitleColor:[Color headerTextColor] forState:UIControlStateNormal];
     [self.cancelMultiSelectButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.cancelMultiSelectButton addTarget:self action:@selector(cancelMultiSelectButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.contactButton = [[UIButton alloc] init];
     self.contactButton.titleLabel.font = [[Fonts alloc] subTitleFont];
     self.contactButton.hidden = YES;
-    [self.contactButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.contactButton setTitleColor:[Color headerTextColor] forState:UIControlStateNormal];
     [self.contactButton setTitle:@"Message" forState:UIControlStateNormal];
     [self.contactButton addTarget:self action:@selector(contactButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
@@ -114,7 +117,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [Color headerColor];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
