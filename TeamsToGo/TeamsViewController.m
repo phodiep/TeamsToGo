@@ -19,9 +19,12 @@
 @interface TeamsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) UIView *rootView;
-@property (strong, nonatomic) NSMutableDictionary *views;
+@property (strong, nonatomic) NSDictionary *views;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSArray *teams;
+@property (strong, nonatomic) UILabel *viewTitle;
+
+@property (strong, nonatomic) NSMutableArray *rotationConstraints;
 
 @property (strong, nonatomic) NSDate *lastUpdated;
 
@@ -37,23 +40,21 @@
     self.rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 
     
-    UILabel *title = [[UILabel alloc] init];
-    title.text = @"Teams";
-    title.font = [[Fonts alloc] titleFont];
-    title.textColor = [Color headerTextColor];
+    self.viewTitle = [[UILabel alloc] init];
+    self.viewTitle.text = @"Teams";
+    self.viewTitle.font = [[Fonts alloc] titleFont];
+    self.viewTitle.textColor = [Color headerTextColor];
     
-    [title setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.viewTitle setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.tableView setTranslatesAutoresizingMaskIntoConstraints:false];
     
-    [self.rootView addSubview:title];
+    [self.rootView addSubview:self.viewTitle];
     [self.rootView addSubview:self.tableView];
 
-    [self.views setObject:title forKey:@"title"];
-    [self.views setObject:self.tableView forKey:@"tableView"];
+    self.views = @{@"title" : self.viewTitle,
+                   @"tableView" : self.tableView};
     
-    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
-    [self.rootView addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-28-[title]-[tableView]-55-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
-
+    self.rotationConstraints = [[NSMutableArray alloc] init];
     
     self.view = self.rootView;
 }
@@ -77,6 +78,34 @@
     [self.tableView addSubview:refreshControl];
 
 }
+
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    [self applyRotationAutolayout];
+}
+
+-(void)applyRotationAutolayout {
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [self.rootView removeConstraints:self.rotationConstraints];
+    [self.rotationConstraints removeAllObjects];
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-28-[title]-[tableView]-50-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
+        
+        [self.rootView addConstraints:self.rotationConstraints];
+        
+    }
+    if (UIInterfaceOrientationIsLandscape(interfaceOrientation)) {
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[tableView]|" options:0 metrics:0 views:self.views]];
+        [self.rotationConstraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[title]-[tableView]-50-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:self.views]];
+        
+        [self.rootView addConstraints:self.rotationConstraints];
+        
+    }
+    
+}
+
 
 -(void)getAllTeams {
     [[TeamCowboyClient sharedService] userGetTeams];
