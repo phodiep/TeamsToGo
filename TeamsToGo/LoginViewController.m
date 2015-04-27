@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UITextField *password;
 
 @property (strong, nonatomic) UIButton *loginButton;
+@property (strong, nonatomic) UIButton *teamCowboyButton;
 
 @end
 
@@ -30,23 +31,26 @@
     [self.username setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.password setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.loginButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.teamCowboyButton setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [self.rootview addSubview:self.titleLabel];
     [self.rootview addSubview:self.username];
     [self.rootview addSubview:self.password];
     [self.rootview addSubview:self.loginButton];
+    [self.rootview addSubview:self.teamCowboyButton];
     
     NSDictionary *views = @{@"title" : self.titleLabel,
                             @"username" : self.username,
                             @"password" : self.password,
-                            @"login" : self.loginButton};
+                            @"login" : self.loginButton,
+                            @"newAccount" : self.teamCowboyButton};
     
-    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-45-[title]-20-[username]-8-[password]-16-[login]-(>=8)-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-45-[title]-20-[username]-8-[password]-16-[login]-30-[newAccount]-(>=8)-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[title]-|" options:0  metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[username]-|" options:0 metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[password]-|" options:0 metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[login]-|" options:0 metrics:0 views:views]];
-
+    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[newAccount]-|" options:0 metrics:0 views:views]];
     
     self.view = self.rootview;
     
@@ -78,6 +82,14 @@
     [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
     [self.loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
+    self.teamCowboyButton = [[UIButton alloc] init];
+    self.teamCowboyButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.teamCowboyButton.titleLabel.numberOfLines = 0;
+    [self.teamCowboyButton setTitle:@"Don't have an account?\nCreate a new account" forState:UIControlStateNormal];
+    [self.teamCowboyButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.teamCowboyButton addTarget:self action:@selector(teamCowboyButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+
+    
 }
 
 -(void)loginButtonPressed {
@@ -107,6 +119,12 @@
     }
 
 }
+
+-(void)teamCowboyButtonPressed {
+    NSURL *url = [[NSURL alloc] initWithString:@"https://www.teamcowboy.com/register?redirect="];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
 
 
 @end

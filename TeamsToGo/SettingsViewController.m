@@ -56,11 +56,13 @@
     self.view.backgroundColor = [UIColor lightGrayColor];
 }
 
+#pragma mark - button acitons
 -(void)logoutButtonPressed {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Please Confirm" message:@"Are you sure you want to logout of Team Cowboy?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil];
     [alertView show];
 }
 
+#pragma mark - UIAlertViewDelegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) {
         //cancel
