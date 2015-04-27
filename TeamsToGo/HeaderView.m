@@ -8,6 +8,7 @@
 
 #import "HeaderView.h"
 #import "Fonts.h"
+#import "Color.h"
 
 @interface HeaderView ()
 
@@ -37,7 +38,7 @@
 
 
 -(void)setupInitAllObjects {
-    self.backgroundColor = [UIColor orangeColor];
+    self.backgroundColor = [Color headerColor];
     self.subHeaderView = [[UIView alloc] init];
     self.subHeaderView.backgroundColor = [UIColor clearColor];
     
@@ -45,28 +46,34 @@
     self.eventTitle.numberOfLines = 0;
     self.eventTitle.font = [[Fonts alloc] titleFont];
     self.eventTitle.textAlignment = NSTextAlignmentCenter;
+    self.eventTitle.textColor = [Color headerTextColor];
     
     self.eventTime = [[UILabel alloc] init];
     self.eventTime.numberOfLines = 0;
     self.eventTime.font = [[Fonts alloc] textFont];
     self.eventTime.textAlignment = NSTextAlignmentCenter;
+    self.eventTime.textColor = [Color headerTextColor];
     
     self.comments = [[UILabel alloc] init];
     self.comments.numberOfLines = 0;
     self.comments.font = [[Fonts alloc] textFont];
+    self.comments.textColor = [Color headerTextColor];
     
     self.locationName = [[UILabel alloc] init];
     self.locationName.numberOfLines = 0;
     self.locationName.font = [[Fonts alloc] textFont];
+    self.locationName.textColor = [Color headerTextColor];
     
     self.locationAddress = [[UILabel alloc] init];
     self.locationAddress.numberOfLines = 0;
     self.locationAddress.font = [[Fonts alloc] textFont];
+    self.locationAddress.textColor = [Color headerTextColor];
     
     self.yesCountsLabel = [[UILabel alloc] init];
     self.yesCountsLabel.numberOfLines = 0;
     self.yesCountsLabel.font = [[Fonts alloc] textFontBoldItalic];
     self.yesCountsLabel.textAlignment = NSTextAlignmentCenter;
+    self.yesCountsLabel.textColor = [Color headerTextColor];
     
 }
 

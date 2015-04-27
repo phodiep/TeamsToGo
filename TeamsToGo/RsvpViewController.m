@@ -10,6 +10,7 @@
 #import "TeamCowboyService.h"
 #import "EditRsvpCell.h"
 #import "Fonts.h"
+#import "Color.h"
 #import "HeaderView.h"
 #import "TeamCowboyClient.h"
 
@@ -51,7 +52,7 @@
     self.headerView.event = self.event;
     
     self.backButton = [[UIButton alloc] init];
-    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back_invert"] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
 
@@ -87,7 +88,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [Color headerColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     

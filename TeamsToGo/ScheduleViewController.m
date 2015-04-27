@@ -17,7 +17,7 @@
 #import "EventViewController.h"
 #import "Fonts.h"
 
-#pragma make - Interface
+#pragma mark - Interface
 @interface ScheduleViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 @property (nonatomic) BOOL largeScreen;

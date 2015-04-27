@@ -12,6 +12,7 @@
 #import "Event.h"
 #import "User.h"
 #import "Team.h"
+#import "Color.h"
 #import "RsvpCell.h"
 #import "Fonts.h"
 #import "Location.h"
@@ -53,7 +54,7 @@
     self.tableView = [[UITableView alloc] init];
     
     self.backButton = [[UIButton alloc] init];
-    [self.backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"back_invert"] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     self.rsvpButton = [[UIButton alloc] init];
@@ -61,7 +62,7 @@
     
     self.rsvpLabel = [[UILabel alloc] init];
     self.rsvpLabel.text = @"RSVP";
-    self.rsvpLabel.textColor = [UIColor blackColor];
+    self.rsvpLabel.textColor = [Color headerTextColor];
     self.rsvpLabel.font = [UIFont fontWithName:@"AmericanTypewriter-Bold" size:10];
     self.rsvpLabel.textAlignment = NSTextAlignmentCenter;
     
@@ -130,7 +131,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.rootView.backgroundColor = [UIColor orangeColor];
+    self.rootView.backgroundColor = [Color headerColor];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -165,20 +166,20 @@
 
     switch (userRsvp.status) {
         case Yes:
-            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"check_invert"] forState:UIControlStateNormal];
             break;
             
         case Maybe:
         case Available:
-            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"question"] forState:UIControlStateNormal];
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"question_invert"] forState:UIControlStateNormal];
             break;
             
         case No:
-            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"crossmark"] forState:UIControlStateNormal];
+            [self.rsvpButton setBackgroundImage:[UIImage imageNamed:@"crossmark_invert"] forState:UIControlStateNormal];
             break;
         default:
             [self.rsvpButton setBackgroundImage:nil forState:UIControlStateNormal];
-            [self.rsvpButton layer].borderColor = [UIColor blackColor].CGColor;
+            [self.rsvpButton layer].borderColor = [UIColor whiteColor].CGColor;
             [self.rsvpButton layer].borderWidth = 1.5;
             break;
     }
