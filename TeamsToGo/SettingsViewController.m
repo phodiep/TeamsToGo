@@ -53,6 +53,8 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"SUBTITLE_CELL"];
 }
 
 #pragma mark - UITableView DataSource
@@ -61,7 +63,7 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    UITableViewCell *cell = nil;
 
     //map
     NSString *defaultMapApp;
@@ -79,20 +81,29 @@
     
     switch (indexPath.row) {
         case 0:
+            cell = [[UITableViewCell alloc] init];
             cell.textLabel.text = @"Logout of Team Cowboy";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
             
         case 2:
-            cell.textLabel.text = [NSString stringWithFormat:@"Default Map: %@", defaultMapApp];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"SUBTITLE_CELL"];
+            cell.textLabel.text = @"Default Map Application";
+            cell.detailTextLabel.text = defaultMapApp;
+            cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
             
         case 4:
-            cell.textLabel.text = [NSString stringWithFormat:@"Current Version: %@", version];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"SUBTITLE_CELL"];
+            cell.textLabel.text = @"Current Version";
+            cell.detailTextLabel.text = version;
+            cell.detailTextLabel.textColor = [UIColor lightGrayColor];
             break;
 
         default:
-            cell.backgroundColor = [UIColor grayColor];
+            cell = [[UITableViewCell alloc] init];
+            cell.backgroundColor = [UIColor lightGrayColor];
             break;
     }
     
