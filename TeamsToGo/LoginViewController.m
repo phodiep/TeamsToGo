@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) UIButton *loginButton;
 @property (strong, nonatomic) UIButton *teamCowboyButton;
+@property (strong, nonatomic) UIButton *resetPasswordButton;
 
 @end
 
@@ -32,25 +33,29 @@
     [self.password setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.loginButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [self.teamCowboyButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    [self.resetPasswordButton setTranslatesAutoresizingMaskIntoConstraints:false];
     
     [self.rootview addSubview:self.titleLabel];
     [self.rootview addSubview:self.username];
     [self.rootview addSubview:self.password];
     [self.rootview addSubview:self.loginButton];
     [self.rootview addSubview:self.teamCowboyButton];
+    [self.rootview addSubview:self.resetPasswordButton];
     
     NSDictionary *views = @{@"title" : self.titleLabel,
                             @"username" : self.username,
                             @"password" : self.password,
                             @"login" : self.loginButton,
-                            @"newAccount" : self.teamCowboyButton};
+                            @"newAccount" : self.teamCowboyButton,
+                            @"resetPassword" : self.resetPasswordButton};
     
-    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-45-[title]-20-[username]-8-[password]-16-[login]-30-[newAccount]-(>=8)-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
+    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-45-[title]-20-[username]-8-[password]-16-[login]-30-[newAccount]-30-[resetPassword]-(>=8)-|" options:NSLayoutFormatAlignAllCenterX metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[title]-|" options:0  metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[username]-|" options:0 metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[password]-|" options:0 metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[login]-|" options:0 metrics:0 views:views]];
     [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[newAccount]-|" options:0 metrics:0 views:views]];
+    [self.rootview addConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[resetPassword]-|" options:0 metrics:0 views:views]];
     
     self.view = self.rootview;
     
@@ -88,6 +93,13 @@
     [self.teamCowboyButton setTitle:@"Don't have an account?\nCreate a new account" forState:UIControlStateNormal];
     [self.teamCowboyButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.teamCowboyButton addTarget:self action:@selector(teamCowboyButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.resetPasswordButton = [[UIButton alloc] init];
+    self.resetPasswordButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.resetPasswordButton.titleLabel.numberOfLines = 0;
+    [self.resetPasswordButton setTitle:@"Forget password?\nReset it here" forState:UIControlStateNormal];
+    [self.resetPasswordButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.resetPasswordButton addTarget:self action:@selector(resetPasswordButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     
 }
@@ -122,6 +134,11 @@
 
 -(void)teamCowboyButtonPressed {
     NSURL *url = [[NSURL alloc] initWithString:@"https://www.teamcowboy.com/register?redirect="];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+-(void)resetPasswordButtonPressed {
+    NSURL *url = [[NSURL alloc] initWithString:@"https://www.teamcowboy.com/resetPassword"];
     [[UIApplication sharedApplication] openURL:url];
 }
 
